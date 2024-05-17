@@ -6,7 +6,7 @@
 package nasConvert
 
 import (
-	"github.com/omec-project/nas/nasMessage"
+	"github.com/5GC-DEV/nas/nasMessage"
 )
 
 // TS 24.008 10.5.7.4a

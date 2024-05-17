@@ -8,8 +8,8 @@ package nasType_test
 import (
 	"testing"
 
-	"github.com/omec-project/nas/nasMessage"
-	"github.com/omec-project/nas/nasType"
+	"github.com/5GC-DEV/nas/nasMessage"
+	"github.com/5GC-DEV/nas/nasType"
 
 	"github.com/stretchr/testify/assert"
 )
@@ -21,7 +21,7 @@ func TestNasTypeNewAllowedSSCMode(t *testing.T) {
 	assert.NotNil(t, a)
 }
 
-//var nasTypePDUSessionEstablishmentRejectAllowedSSCModeOut = (nasMessage.PDUSessionEstablishmentRejectAllowedSSCModeType & 15) << 4
+// var nasTypePDUSessionEstablishmentRejectAllowedSSCModeOut = (nasMessage.PDUSessionEstablishmentRejectAllowedSSCModeType & 15) << 4
 var nasTypePDUSessionEstablishmentRejectAllowedSSCModeTable = []NasTypeIeiData{
 	{pDUSessionEstablishmentRejectAllowedSSCModeIeiInput, pDUSessionEstablishmentRejectAllowedSSCModeIeiInput},
 }

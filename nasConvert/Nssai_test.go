@@ -8,9 +8,9 @@ package nasConvert_test
 import (
 	"testing"
 
-	"github.com/omec-project/nas/nasConvert"
-	"github.com/omec-project/nas/nasMessage"
-	"github.com/omec-project/nas/nasType"
+	"github.com/5GC-DEV/nas/nasConvert"
+	"github.com/5GC-DEV/nas/nasMessage"
+	"github.com/5GC-DEV/nas/nasType"
 	"github.com/omec-project/openapi/models"
 	"github.com/smartystreets/goconvey/convey"
 )

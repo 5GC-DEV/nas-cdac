@@ -9,7 +9,7 @@ import (
 	"bytes"
 	"encoding/binary"
 
-	"github.com/omec-project/nas/nasType"
+	"github.com/5GC-DEV/nas/nasType"
 )
 
 type RegistrationAccept struct {

@@ -6,7 +6,7 @@
 package nasConvert
 
 import (
-	"github.com/omec-project/nas/nasMessage"
+	"github.com/5GC-DEV/nas/nasMessage"
 	"github.com/omec-project/openapi/models"
 )
 

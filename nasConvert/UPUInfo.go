@@ -9,7 +9,7 @@ import (
 	"encoding/hex"
 	"fmt"
 
-	"github.com/omec-project/nas/logger"
+	"github.com/5GC-DEV/nas/logger"
 	"github.com/omec-project/openapi/models"
 )
 
