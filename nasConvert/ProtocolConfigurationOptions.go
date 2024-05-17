@@ -275,4 +275,3 @@ func (protocolConfigurationOptions *ProtocolConfigurationOptions) AddBearerContr
 		append(protocolConfigurationOptions.ProtocolOrContainerList, protocolOrContainerUnit)
 	return
 }
-
