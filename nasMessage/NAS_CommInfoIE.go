@@ -346,6 +346,10 @@ const (
 	QoSRulesWithTheLengthOfTwoOctets                     uint16 = 0x0023
 	QoSFlowDescriptionsWithTheLengthOfTwoOctets          uint16 = 0x0024
 )
+// Added by CDAC for enabling always on PDU option
+const(
+	AlwaysOnPDUSessionIndication 		uint8 = 0x81
+)
 
 func Cause5GMMToString(cause uint8) string {
 	switch cause {
