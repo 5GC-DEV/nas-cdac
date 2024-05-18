@@ -1,4 +1,4 @@
-module github.com/5GC-DEV/nas
+module github.com/5gc-dev/nas
 
 go 1.21
 
