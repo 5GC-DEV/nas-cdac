@@ -11,7 +11,7 @@ import (
 	"fmt"
 	"net"
 
-	"github.com/5GC-DEV/nas/nasType"
+	"github.com/5gc-dev/nas/nasType"
 )
 
 type DLNASTransport struct {

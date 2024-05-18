@@ -8,12 +8,12 @@ package nasMessage_test
 import (
 	"bytes"
 
-	"github.com/5GC-DEV/nas/logger"
+	"github.com/5gc-dev/nas/logger"
 
 	"testing"
 
-	"github.com/5GC-DEV/nas/nasMessage"
-	"github.com/5GC-DEV/nas/nasType"
+	"github.com/5gc-dev/nas/nasMessage"
+	"github.com/5gc-dev/nas/nasType"
 
 	"reflect"
 

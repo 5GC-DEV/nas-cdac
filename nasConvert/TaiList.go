@@ -9,7 +9,7 @@ import (
 	"encoding/hex"
 	"reflect"
 
-	"github.com/5GC-DEV/nas/logger"
+	"github.com/5gc-dev/nas/logger"
 	"github.com/omec-project/openapi/models"
 )
 

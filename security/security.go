@@ -11,8 +11,8 @@ import (
 	"encoding/binary"
 	"fmt"
 
-	"github.com/5GC-DEV/nas/logger"
-	"github.com/5GC-DEV/nas/security/snow3g"
+	"github.com/5gc-dev/nas/logger"
+	"github.com/5gc-dev/nas/security/snow3g"
 
 	"github.com/aead/cmac"
 )

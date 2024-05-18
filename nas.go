@@ -10,7 +10,7 @@ import (
 	"encoding/binary"
 	"fmt"
 
-	"github.com/5GC-DEV/nas/nasMessage"
+	"github.com/5gc-dev/nas/nasMessage"
 )
 
 // Message TODO：description
@@ -55,7 +55,8 @@ func NewGsmMessage() *GsmMessage {
 }
 
 // GmmHeader Octet1 protocolDiscriminator securityHeaderType
-//           Octet2 MessageType
+//
+//	Octet2 MessageType
 type GmmHeader struct {
 	Octet [3]uint8
 }

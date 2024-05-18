@@ -8,7 +8,7 @@ package version_test
 import (
 	"testing"
 
-	"github.com/5GC-DEV/nas/version"
+	"github.com/5gc-dev/nas/version"
 	"github.com/stretchr/testify/assert"
 )
 

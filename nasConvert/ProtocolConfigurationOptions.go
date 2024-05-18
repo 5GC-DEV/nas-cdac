@@ -12,8 +12,8 @@ import (
 	"net"
 	"strconv"
 
-	"github.com/5GC-DEV/nas/logger"
-	"github.com/5GC-DEV/nas/nasMessage"
+	"github.com/5gc-dev/nas/logger"
+	"github.com/5gc-dev/nas/nasMessage"
 )
 
 type ProtocolOrContainerUnit struct {

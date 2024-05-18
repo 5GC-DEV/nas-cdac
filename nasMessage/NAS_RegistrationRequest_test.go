@@ -11,9 +11,9 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/5GC-DEV/nas"
-	"github.com/5GC-DEV/nas/nasMessage"
-	"github.com/5GC-DEV/nas/nasType"
+	"github.com/5gc-dev/nas"
+	"github.com/5gc-dev/nas/nasMessage"
+	"github.com/5gc-dev/nas/nasType"
 
 	"github.com/stretchr/testify/assert"
 )
