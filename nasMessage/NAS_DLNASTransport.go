@@ -10,7 +10,7 @@ import (
 	"encoding/binary"
 	"net"
 
-	"github.com/omec-project/nas/nasType"
+	"github.com/5GC-DEV/nas-cdac/nasType"
 )
 
 type DLNASTransport struct {

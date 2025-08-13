@@ -8,7 +8,7 @@ package nasConvert
 import (
 	"encoding/hex"
 
-	"github.com/omec-project/nas/logger"
+	"github.com/5GC-DEV/nas-cdac/logger"
 )
 
 func AmfIdToNas(amfId string) (amfRegionId uint8, amfSetId uint16, amfPointer uint8) {

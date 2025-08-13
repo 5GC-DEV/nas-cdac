@@ -12,9 +12,9 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/omec-project/nas/logger"
-	"github.com/omec-project/nas/nasMessage"
-	"github.com/omec-project/nas/nasType"
+	"github.com/5GC-DEV/nas-cdac/logger"
+	"github.com/5GC-DEV/nas-cdac/nasMessage"
+	"github.com/5GC-DEV/nas-cdac/nasType"
 	"github.com/omec-project/openapi/models"
 )
 
@@ -227,7 +227,7 @@ func PeiToString(buf []byte) string {
 	}
 
 	// Validate TAC and SNR using the Luhn formula
-	if !isValidLuhn(digitStr[:14]) {
+	if !isValidLuhn(digitStr) {
 		logger.ConvertLog.Warnf("invalid TAC/SNR in %s: %s", prefix, digitStr[:14])
 		return ""
 	}
