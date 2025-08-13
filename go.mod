@@ -1,4 +1,4 @@
-module 	github.com/5GC-DEV/nas-cdac
+module github.com/5GC-DEV/nas-cdac
 
 go 1.24.0
 
