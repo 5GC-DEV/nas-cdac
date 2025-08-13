@@ -12,7 +12,7 @@ package zuc_test
 import (
 	"testing"
 
-	"github.com/omec-project/nas/security/zuc"
+	"github.com/5GC-DEV/nas-cdac/security/zuc"
 	"github.com/stretchr/testify/require"
 )
 

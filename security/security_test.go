@@ -12,7 +12,7 @@ package security_test
 import (
 	"testing"
 
-	"github.com/omec-project/nas/security"
+	"github.com/5GC-DEV/nas-cdac/security"
 	"github.com/stretchr/testify/require"
 )
 

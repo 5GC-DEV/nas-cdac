@@ -9,8 +9,8 @@ import (
 	"encoding/hex"
 	"fmt"
 
-	"github.com/omec-project/nas/nasMessage"
-	"github.com/omec-project/nas/nasType"
+	"github.com/5GC-DEV/nas-cdac/nasMessage"
+	"github.com/5GC-DEV/nas-cdac/nasType"
 	"github.com/omec-project/openapi/models"
 )
 
