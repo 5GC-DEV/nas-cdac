@@ -8,8 +8,8 @@ package nasConvert
 import (
 	"encoding/hex"
 
-	"github.com/omec-project/nas/logger"
-	"github.com/omec-project/nas/nasType"
+	"github.com/5GC-DEV/nas-cdac/logger"
+	"github.com/5GC-DEV/nas-cdac/nasType"
 	"github.com/omec-project/openapi/models"
 )
 
