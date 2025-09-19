@@ -57,3 +57,9 @@ func (a *AuthorizedQosRules) GetQosRule() (qosRule []uint8) {
 func (a *AuthorizedQosRules) SetQosRule(qosRule []uint8) {
 	copy(a.Buffer, qosRule)
 }
+
+func (a *AuthorizedQosRules) SetQosRulededqos(qosRule []byte) {
+    a.Buffer = make([]byte, len(qosRule)) // allocate exact size
+    copy(a.Buffer, qosRule)
+}
+
