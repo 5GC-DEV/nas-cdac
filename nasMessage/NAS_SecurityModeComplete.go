@@ -46,7 +46,7 @@ func (a *SecurityModeComplete) EncodeSecurityModeComplete(buffer *bytes.Buffer) 
 	}
 }
 
-func (a *SecurityModeComplete) DecodeSecurityModeComplete(byteArray *[]byte) {
+func (a *SecurityModeComplete) DecodeSecurityModeComplete(byteArray *[]byte) error {
 	buffer := bytes.NewBuffer(*byteArray)
 	binary.Read(buffer, binary.BigEndian, &a.ExtendedProtocolDiscriminator.Octet)
 	binary.Read(buffer, binary.BigEndian, &a.SpareHalfOctetAndSecurityHeaderType.Octet)
@@ -65,7 +65,10 @@ func (a *SecurityModeComplete) DecodeSecurityModeComplete(byteArray *[]byte) {
 			a.IMEISV = nasType.NewIMEISV(ieiN)
 			binary.Read(buffer, binary.BigEndian, &a.IMEISV.Len)
 			a.IMEISV.SetLen(a.IMEISV.GetLen())
-			binary.Read(buffer, binary.BigEndian, a.IMEISV.Octet[:a.IMEISV.GetLen()])
+			err := binary.Read(buffer, binary.BigEndian, a.IMEISV.Octet[:a.IMEISV.GetLen()])
+			if err != nil {
+				return err
+			}
 		case SecurityModeCompleteNASMessageContainerType:
 			a.NASMessageContainer = nasType.NewNASMessageContainer(ieiN)
 			binary.Read(buffer, binary.BigEndian, &a.NASMessageContainer.Len)
@@ -74,4 +77,5 @@ func (a *SecurityModeComplete) DecodeSecurityModeComplete(byteArray *[]byte) {
 		default:
 		}
 	}
+	return nil
 }
