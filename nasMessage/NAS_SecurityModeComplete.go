@@ -8,6 +8,7 @@ package nasMessage
 import (
 	"bytes"
 	"encoding/binary"
+	"fmt"
 
 	"github.com/5GC-DEV/nas-cdac/nasType"
 )
@@ -46,7 +47,7 @@ func (a *SecurityModeComplete) EncodeSecurityModeComplete(buffer *bytes.Buffer) 
 	}
 }
 
-func (a *SecurityModeComplete) DecodeSecurityModeComplete(byteArray *[]byte) {
+func (a *SecurityModeComplete) DecodeSecurityModeComplete(byteArray *[]byte) error {
 	buffer := bytes.NewBuffer(*byteArray)
 	binary.Read(buffer, binary.BigEndian, &a.ExtendedProtocolDiscriminator.Octet)
 	binary.Read(buffer, binary.BigEndian, &a.SpareHalfOctetAndSecurityHeaderType.Octet)
@@ -63,9 +64,13 @@ func (a *SecurityModeComplete) DecodeSecurityModeComplete(byteArray *[]byte) {
 		switch tmpIeiN {
 		case SecurityModeCompleteIMEISVType:
 			a.IMEISV = nasType.NewIMEISV(ieiN)
-			binary.Read(buffer, binary.BigEndian, &a.IMEISV.Len)
-			a.IMEISV.SetLen(a.IMEISV.GetLen())
-			binary.Read(buffer, binary.BigEndian, a.IMEISV.Octet[:a.IMEISV.GetLen()])
+			if a.IMEISV != nil {
+				binary.Read(buffer, binary.BigEndian, &a.IMEISV.Len)
+				a.IMEISV.SetLen(a.IMEISV.GetLen())
+				binary.Read(buffer, binary.BigEndian, a.IMEISV.Octet[:a.IMEISV.GetLen()])
+			} else {
+				return fmt.Errorf("IMEISV is nil")
+			}
 		case SecurityModeCompleteNASMessageContainerType:
 			a.NASMessageContainer = nasType.NewNASMessageContainer(ieiN)
 			binary.Read(buffer, binary.BigEndian, &a.NASMessageContainer.Len)
@@ -74,4 +79,5 @@ func (a *SecurityModeComplete) DecodeSecurityModeComplete(byteArray *[]byte) {
 		default:
 		}
 	}
+	return nil
 }

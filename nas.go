@@ -332,6 +332,10 @@ func (a *Message) GmmMessageDecode(byteArray *[]byte) error {
 	case MsgTypeSecurityModeComplete:
 		a.GmmMessage.SecurityModeComplete = nasMessage.NewSecurityModeComplete(MsgTypeSecurityModeComplete)
 		a.GmmMessage.DecodeSecurityModeComplete(byteArray)
+		err := a.GmmMessage.DecodeSecurityModeComplete(byteArray)
+		if err != nil {
+			return err
+		}
 	case MsgTypeSecurityModeReject:
 		a.GmmMessage.SecurityModeReject = nasMessage.NewSecurityModeReject(MsgTypeSecurityModeReject)
 		a.GmmMessage.DecodeSecurityModeReject(byteArray)
