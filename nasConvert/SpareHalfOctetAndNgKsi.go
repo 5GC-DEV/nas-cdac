@@ -8,7 +8,7 @@ package nasConvert
 import (
 	"github.com/5GC-DEV/nas-cdac/nasMessage"
 	"github.com/5GC-DEV/nas-cdac/nasType"
-	"github.com/omec-project/openapi/models"
+	"github.com/5GC-DEV/openapi-cdac/models"
 )
 
 func SpareHalfOctetAndNgksiToModels(ngKsiNas nasType.SpareHalfOctetAndNgksi) (ngKsiModels models.NgKsi) {
