@@ -6,7 +6,7 @@
 package nasConvert
 
 import (
-	"github.com/omec-project/openapi/models"
+	"github.com/5GC-DEV/openapi-cdac/models"
 )
 
 func LadnToModels(buf []uint8) (dnnValues []string) {

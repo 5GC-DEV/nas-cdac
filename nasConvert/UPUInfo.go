@@ -10,7 +10,7 @@ import (
 	"fmt"
 
 	"github.com/5GC-DEV/nas-cdac/logger"
-	"github.com/omec-project/openapi/models"
+	"github.com/5GC-DEV/openapi-cdac/models"
 )
 
 // subclause 9.11.3.53A in 3GPP TS 24.501.
