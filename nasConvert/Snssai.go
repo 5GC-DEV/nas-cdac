@@ -7,7 +7,6 @@ package nasConvert
 
 import (
 	"encoding/hex"
-	"fmt"
 
 	"github.com/5GC-DEV/nas-cdac/logger"
 	"github.com/5GC-DEV/nas-cdac/nasType"
@@ -24,27 +23,33 @@ func SnssaiToModels(nasSnssai *nasType.SNSSAI) (snssai models.Snssai) {
 func SnssaiToNas(snssai models.Snssai) []uint8 {
 	var buf []uint8
 
-	// DEBUG
-	fmt.Printf("[DEBUG] SnssaiToNas called: Sst=%d (0x%02x), Sd=%s\n",
-		snssai.Sst, snssai.Sst, snssai.Sd)
+	logger.ConvertLog.Infof("[SnssaiToNas] Input: Sst=%d, Sd='%s'", snssai.Sst, snssai.Sd)
+
+	// Check if SD is valid hex
+	if snssai.Sd != "" {
+		if _, err := hex.DecodeString(snssai.Sd); err != nil {
+			logger.ConvertLog.Warnf("[SnssaiToNas] Invalid SD hex string: %s", snssai.Sd)
+		}
+	}
 
 	if snssai.Sd == "" {
-		buf = append(buf, 0x01)
+		buf = append(buf, 0x01) // Length = 1 (SST only)
 		buf = append(buf, uint8(snssai.Sst))
-		fmt.Printf("[DEBUG] Output (no SD): %x\n", buf)
+		logger.ConvertLog.Infof("[SnssaiToNas] No SD: output = %x", buf)
 	} else {
-		buf = append(buf, 0x04)
-		sstByte := uint8(snssai.Sst)
-		buf = append(buf, sstByte)
-		fmt.Printf("[DEBUG] SST byte: %d -> 0x%02x\n", snssai.Sst, sstByte)
+		buf = append(buf, 0x04) // Length = 4 (SST + 3-byte SD)
+		buf = append(buf, uint8(snssai.Sst))
+		logger.ConvertLog.Infof("[SnssaiToNas] SST byte: %d -> 0x%02x", snssai.Sst, uint8(snssai.Sst))
 
 		if byteArray, err := hex.DecodeString(snssai.Sd); err != nil {
-			logger.ConvertLog.Warnf("decode snssai.sd failed: %+v", err)
+			logger.ConvertLog.Warnf("[SnssaiToNas] decode snssai.sd failed: %+v", err)
 		} else {
 			buf = append(buf, byteArray...)
+			logger.ConvertLog.Infof("[SnssaiToNas] SD bytes: %x", byteArray)
 		}
-		fmt.Printf("[DEBUG] Output (with SD): %x\n", buf)
+		logger.ConvertLog.Infof("[SnssaiToNas] With SD: output = %x", buf)
 	}
+
 	return buf
 }
 
