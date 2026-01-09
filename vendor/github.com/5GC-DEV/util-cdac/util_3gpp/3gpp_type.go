@@ -4,6 +4,8 @@
 
 package util_3gpp
 
+import "fmt"
+
 type Dnn []uint8
 
 func (d *Dnn) MarshalBinary() (data []byte, err error) {
@@ -14,6 +16,10 @@ func (d *Dnn) MarshalBinary() (data []byte, err error) {
 }
 
 func (d *Dnn) UnmarshalBinary(data []byte) error {
+	if len(data) < 2 {
+		*d = []byte{}
+		return fmt.Errorf("---invalid DNN: length=%d", len(data))
+	}
 	(*d) = data[1:]
 	return nil
 }
