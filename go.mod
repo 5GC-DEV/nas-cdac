@@ -3,7 +3,7 @@ module github.com/5GC-DEV/nas-cdac
 go 1.24.0
 
 require (
-	github.com/5GC-DEV/openapi-cdac v1.0.1-0.20250930103916-588dd800f7e9
+	github.com/5GC-DEV/openapi-cdac v0.4.1
 	github.com/5GC-DEV/util-cdac v0.0.0-20250930103432-58951725c085
 	github.com/aead/cmac v0.0.0-20160719120800-7af84192f0b1
 	github.com/smartystreets/goconvey v1.8.1

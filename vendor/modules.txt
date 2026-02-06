@@ -1,4 +1,4 @@
-# github.com/5GC-DEV/openapi-cdac v1.0.1-0.20250930103916-588dd800f7e9
+# github.com/5GC-DEV/openapi-cdac v0.4.1
 ## explicit; go 1.24.0
 github.com/5GC-DEV/openapi-cdac/models
 # github.com/5GC-DEV/util-cdac v0.0.0-20250930103432-58951725c085

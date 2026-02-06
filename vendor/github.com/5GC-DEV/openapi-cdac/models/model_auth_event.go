@@ -18,6 +18,7 @@ import (
 )
 
 type AuthEvent struct {
+	AuthEventId        string     `json:"authEventId,omitempty"`
 	NfInstanceId       string     `json:"nfInstanceId" yaml:"nfInstanceId" bson:"nfInstanceId" mapstructure:"NfInstanceId"`
 	Success            bool       `json:"success" yaml:"success" bson:"success" mapstructure:"Success"`
 	TimeStamp          *time.Time `json:"timeStamp" yaml:"timeStamp" bson:"timeStamp" mapstructure:"TimeStamp"`
