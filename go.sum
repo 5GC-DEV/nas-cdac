@@ -1,5 +1,5 @@
-github.com/5GC-DEV/openapi-cdac v1.0.1-0.20250930103916-588dd800f7e9 h1:2YOHEAAoSM0OxiKohnIsThEujuv8F5UdyDZ6tb7bXvs=
-github.com/5GC-DEV/openapi-cdac v1.0.1-0.20250930103916-588dd800f7e9/go.mod h1:AzJjwImNT/2BQHZM/XLGdrcoCrKqa3A99i9conguzHc=
+github.com/5GC-DEV/openapi-cdac v0.4.1 h1:EFGYKz6D+k2tI4fEvSDAJseVo3amgoZEK3tVrp5znec=
+github.com/5GC-DEV/openapi-cdac v0.4.1/go.mod h1:KLX5UeLe67E9SQC/vVNArCa4KK4luoDNAS0kRGkdE74=
 github.com/5GC-DEV/util-cdac v0.0.0-20250930103432-58951725c085 h1:KLL6S+ytEGgr3dX0sg6xDQ2TXZMtVt9TboPcu1j2nes=
 github.com/5GC-DEV/util-cdac v0.0.0-20250930103432-58951725c085/go.mod h1:IHTEJn2S2C/SDlKxFkgXbepYFhgxSTm7uhbxHOF42xQ=
 github.com/aead/cmac v0.0.0-20160719120800-7af84192f0b1 h1:+JkXLHME8vLJafGhOH4aoV2Iu8bR55nU6iKMVfYVLjY=
