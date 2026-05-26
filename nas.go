@@ -310,7 +310,10 @@ func (a *Message) GmmMessageDecode(byteArray *[]byte) error {
 		a.GmmMessage.DecodeAuthenticationRequest(byteArray)
 	case MsgTypeAuthenticationResponse:
 		a.GmmMessage.AuthenticationResponse = nasMessage.NewAuthenticationResponse(MsgTypeAuthenticationResponse)
-		a.GmmMessage.DecodeAuthenticationResponse(byteArray)
+		err := a.GmmMessage.DecodeAuthenticationResponse(byteArray)
+		if err != nil {
+			return err
+		}
 	case MsgTypeAuthenticationReject:
 		a.GmmMessage.AuthenticationReject = nasMessage.NewAuthenticationReject(MsgTypeAuthenticationReject)
 		a.GmmMessage.DecodeAuthenticationReject(byteArray)
@@ -331,7 +334,6 @@ func (a *Message) GmmMessageDecode(byteArray *[]byte) error {
 		a.GmmMessage.DecodeSecurityModeCommand(byteArray)
 	case MsgTypeSecurityModeComplete:
 		a.GmmMessage.SecurityModeComplete = nasMessage.NewSecurityModeComplete(MsgTypeSecurityModeComplete)
-		a.GmmMessage.DecodeSecurityModeComplete(byteArray)
 		err := a.GmmMessage.DecodeSecurityModeComplete(byteArray)
 		if err != nil {
 			return err

@@ -8,6 +8,7 @@ package nasMessage
 import (
 	"bytes"
 	"encoding/binary"
+	"fmt"
 
 	"github.com/5GC-DEV/nas-cdac/nasType"
 )
@@ -46,7 +47,7 @@ func (a *AuthenticationResponse) EncodeAuthenticationResponse(buffer *bytes.Buff
 	}
 }
 
-func (a *AuthenticationResponse) DecodeAuthenticationResponse(byteArray *[]byte) {
+func (a *AuthenticationResponse) DecodeAuthenticationResponse(byteArray *[]byte) (err error) {
 	buffer := bytes.NewBuffer(*byteArray)
 	binary.Read(buffer, binary.BigEndian, &a.ExtendedProtocolDiscriminator.Octet)
 	binary.Read(buffer, binary.BigEndian, &a.SpareHalfOctetAndSecurityHeaderType.Octet)
@@ -65,7 +66,12 @@ func (a *AuthenticationResponse) DecodeAuthenticationResponse(byteArray *[]byte)
 			a.AuthenticationResponseParameter = nasType.NewAuthenticationResponseParameter(ieiN)
 			binary.Read(buffer, binary.BigEndian, &a.AuthenticationResponseParameter.Len)
 			a.AuthenticationResponseParameter.SetLen(a.AuthenticationResponseParameter.GetLen())
-			binary.Read(buffer, binary.BigEndian, a.AuthenticationResponseParameter.Octet[:a.AuthenticationResponseParameter.GetLen()])
+			length := int(a.AuthenticationResponseParameter.GetLen())
+			if length > len(a.AuthenticationResponseParameter.Octet) {
+				return fmt.Errorf("invalid AuthenticationResponseParameter length: %d", length)
+			}
+			binary.Read(buffer, binary.BigEndian, a.AuthenticationResponseParameter.Octet[:length])
+			// binary.Read(buffer, binary.BigEndian, a.AuthenticationResponseParameter.Octet[:a.AuthenticationResponseParameter.GetLen()])
 		case AuthenticationResponseEAPMessageType:
 			a.EAPMessage = nasType.NewEAPMessage(ieiN)
 			binary.Read(buffer, binary.BigEndian, &a.EAPMessage.Len)
@@ -74,4 +80,5 @@ func (a *AuthenticationResponse) DecodeAuthenticationResponse(byteArray *[]byte)
 		default:
 		}
 	}
+	return nil
 }
