@@ -6,17 +6,19 @@
 package nasType_test
 
 import (
+	"reflect"
 	"testing"
 
-	"github.com/5GC-DEV/nas-cdac/nasType"
-	"github.com/stretchr/testify/assert"
+	"github.com/omec-project/nas/v2/nasType"
 )
 
 var SecurityModeCommandIMEISVRequestTypeIeiInput uint8 = 0x0E
 
 func TestNasTypeNewIMEISVRequest(t *testing.T) {
 	a := nasType.NewIMEISVRequest(SecurityModeCommandIMEISVRequestTypeIeiInput)
-	assert.NotNil(t, a)
+	if a == nil {
+		t.Fatal("Expected value not to be nil")
+	}
 }
 
 var nasTypePDUSessionEstablishmentRequestIMEISVRequestTable = []NasTypeIeiData{
@@ -27,7 +29,9 @@ func TestNasTypeIMEISVRequestGetSetIei(t *testing.T) {
 	a := nasType.NewIMEISVRequest(SecurityModeCommandIMEISVRequestTypeIeiInput)
 	for _, table := range nasTypePDUSessionEstablishmentRequestIMEISVRequestTable {
 		a.SetIei(table.in)
-		assert.Equal(t, table.out, a.GetIei())
+		if !reflect.DeepEqual(table.out, a.GetIei()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetIei())
+		}
 	}
 }
 
@@ -44,7 +48,9 @@ func TestNasTypeIMEISVRequestGetSetIMEISVRequestValue(t *testing.T) {
 	a := nasType.NewIMEISVRequest(SecurityModeCommandIMEISVRequestTypeIeiInput)
 	for _, table := range nasTypeIMEISVRequestIMEISVRequestValueTable {
 		a.SetIMEISVRequestValue(table.in)
-		assert.Equal(t, table.out, a.GetIMEISVRequestValue())
+		if !reflect.DeepEqual(table.out, a.GetIMEISVRequestValue()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetIMEISVRequestValue())
+		}
 	}
 }
 
@@ -70,7 +76,11 @@ func TestNasTypeIMEISVRequest(t *testing.T) {
 		a.SetIei(table.inIei)
 		a.SetIMEISVRequestValue(table.inIMEISVRequestValue)
 
-		assert.Equalf(t, table.outIei, a.GetIei(), "in(%v): out %v, actual %x", table.inIei, table.outIei, a.GetIei())
-		assert.Equalf(t, table.outIMEISVRequestValue, a.GetIMEISVRequestValue(), "in(%v): out %v, actual %x", table.inIMEISVRequestValue, table.outIMEISVRequestValue, a.GetIMEISVRequestValue())
+		if !reflect.DeepEqual(table.outIei, a.GetIei()) {
+			t.Errorf("in(%v): out %v, actual %x", table.inIei, table.outIei, a.GetIei())
+		}
+		if !reflect.DeepEqual(table.outIMEISVRequestValue, a.GetIMEISVRequestValue()) {
+			t.Errorf("in(%v): out %v, actual %x", table.inIMEISVRequestValue, table.outIMEISVRequestValue, a.GetIMEISVRequestValue())
+		}
 	}
 }

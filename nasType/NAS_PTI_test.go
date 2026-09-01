@@ -6,15 +6,17 @@
 package nasType_test
 
 import (
+	"reflect"
 	"testing"
 
-	"github.com/5GC-DEV/nas-cdac/nasType"
-	"github.com/stretchr/testify/assert"
+	"github.com/omec-project/nas/v2/nasType"
 )
 
 func TestNasTypeNewPTI(t *testing.T) {
 	a := nasType.NewPTI()
-	assert.NotNil(t, a)
+	if a == nil {
+		t.Fatal("Expected value not to be nil")
+	}
 }
 
 type nasTypePTI struct {
@@ -30,7 +32,9 @@ func TestNasTypePTIGetSetPDUSessionIdentity(t *testing.T) {
 	a := nasType.NewPTI()
 	for _, table := range nasTypePTITable {
 		a.SetPTI(table.in)
-		assert.Equal(t, table.out, a.GetPTI())
+		if !reflect.DeepEqual(table.out, a.GetPTI()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetPTI())
+		}
 	}
 }
 
@@ -57,6 +61,8 @@ func TestNasTypePTI(t *testing.T) {
 		a := nasType.NewPTI()
 
 		a.SetPTI(table.in.GetPTI())
-		assert.Equal(t, table.out.GetPTI(), a.GetPTI())
+		if !reflect.DeepEqual(table.out.GetPTI(), a.GetPTI()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out.GetPTI(), a.GetPTI())
+		}
 	}
 }

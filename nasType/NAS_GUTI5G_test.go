@@ -6,16 +6,18 @@
 package nasType_test
 
 import (
+	"reflect"
 	"testing"
 
-	"github.com/5GC-DEV/nas-cdac/nasMessage"
-	"github.com/5GC-DEV/nas-cdac/nasType"
-	"github.com/stretchr/testify/assert"
+	"github.com/omec-project/nas/v2/nasMessage"
+	"github.com/omec-project/nas/v2/nasType"
 )
 
 func TestNasTypeNewGUTI5G(t *testing.T) {
 	a := nasType.NewGUTI5G(nasMessage.ConfigurationUpdateCommandGUTI5GType)
-	assert.NotNil(t, a)
+	if a == nil {
+		t.Fatal("Expected value not to be nil")
+	}
 }
 
 var nasTypeConfigurationUpdateCommandGUTI5GTable = []NasTypeIeiData{
@@ -26,7 +28,9 @@ func TestNasTypeGUTI5GGetSetIei(t *testing.T) {
 	a := nasType.NewGUTI5G(nasMessage.ConfigurationUpdateCommandGUTI5GType)
 	for _, table := range nasTypeConfigurationUpdateCommandGUTI5GTable {
 		a.SetIei(table.in)
-		assert.Equal(t, table.out, a.GetIei())
+		if !reflect.DeepEqual(table.out, a.GetIei()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetIei())
+		}
 	}
 }
 
@@ -38,7 +42,9 @@ func TestNasTypeGUTI5GGetSetLen(t *testing.T) {
 	a := nasType.NewGUTI5G(nasMessage.ConfigurationUpdateCommandGUTI5GType)
 	for _, table := range nasTypeGUTI5GLenTable {
 		a.SetLen(table.in)
-		assert.Equal(t, table.out, a.GetLen())
+		if !reflect.DeepEqual(table.out, a.GetLen()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetLen())
+		}
 	}
 }
 
@@ -57,7 +63,9 @@ func TestNasTypeGUTI5GGetSetSpare(t *testing.T) {
 	for _, table := range nasTypeGUTI5GSpareTable {
 		a.SetLen(table.inLen)
 		a.SetSpare(table.in)
-		assert.Equal(t, table.out, a.GetSpare())
+		if !reflect.DeepEqual(table.out, a.GetSpare()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetSpare())
+		}
 	}
 }
 
@@ -76,7 +84,9 @@ func TestNasTypeGUTI5GGetSetTypeOfIdentity(t *testing.T) {
 	for _, table := range nasTypeGUTI5GTypeOfIdentityTable {
 		a.SetLen(table.inLen)
 		a.SetTypeOfIdentity(table.in)
-		assert.Equal(t, table.out, a.GetTypeOfIdentity())
+		if !reflect.DeepEqual(table.out, a.GetTypeOfIdentity()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetTypeOfIdentity())
+		}
 	}
 }
 
@@ -95,7 +105,9 @@ func TestNasTypeGUTI5GGetSetMCCDigit2(t *testing.T) {
 	for _, table := range nasTypeGUTI5GMCCDigit2Table {
 		a.SetLen(table.inLen)
 		a.SetMCCDigit2(table.in)
-		assert.Equal(t, table.out, a.GetMCCDigit2())
+		if !reflect.DeepEqual(table.out, a.GetMCCDigit2()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetMCCDigit2())
+		}
 	}
 }
 
@@ -114,7 +126,9 @@ func TestNasTypeGUTI5GGetSetMCCDigit1(t *testing.T) {
 	for _, table := range nasTypeGUTI5GMCCDigit1Table {
 		a.SetLen(table.inLen)
 		a.SetMCCDigit1(table.in)
-		assert.Equal(t, table.out, a.GetMCCDigit1())
+		if !reflect.DeepEqual(table.out, a.GetMCCDigit1()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetMCCDigit1())
+		}
 	}
 }
 
@@ -133,7 +147,9 @@ func TestNasTypeGUTI5GGetSetMNCDigit3(t *testing.T) {
 	for _, table := range nasTypeGUTI5GMNCDigit3Table {
 		a.SetLen(table.inLen)
 		a.SetMNCDigit3(table.in)
-		assert.Equal(t, table.out, a.GetMNCDigit3())
+		if !reflect.DeepEqual(table.out, a.GetMNCDigit3()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetMNCDigit3())
+		}
 	}
 }
 
@@ -152,7 +168,9 @@ func TestNasTypeGUTI5GGetSetMCCDigit3(t *testing.T) {
 	for _, table := range nasTypeGUTI5GMCCDigit3Table {
 		a.SetLen(table.inLen)
 		a.SetMCCDigit3(table.in)
-		assert.Equal(t, table.out, a.GetMCCDigit3())
+		if !reflect.DeepEqual(table.out, a.GetMCCDigit3()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetMCCDigit3())
+		}
 	}
 }
 
@@ -171,7 +189,9 @@ func TestNasTypeGUTI5GGetSetMNCDigit2(t *testing.T) {
 	for _, table := range nasTypeGUTI5GMNCDigit2Table {
 		a.SetLen(table.inLen)
 		a.SetMNCDigit2(table.in)
-		assert.Equal(t, table.out, a.GetMNCDigit2())
+		if !reflect.DeepEqual(table.out, a.GetMNCDigit2()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetMNCDigit2())
+		}
 	}
 }
 
@@ -190,7 +210,9 @@ func TestNasTypeGUTI5GGetSetMNCDigit1(t *testing.T) {
 	for _, table := range nasTypeGUTI5GMNCDigit1Table {
 		a.SetLen(table.inLen)
 		a.SetMNCDigit1(table.in)
-		assert.Equal(t, table.out, a.GetMNCDigit1())
+		if !reflect.DeepEqual(table.out, a.GetMNCDigit1()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetMNCDigit1())
+		}
 	}
 }
 
@@ -209,7 +231,9 @@ func TestNasTypeGUTI5GGetSetAMFRegionID(t *testing.T) {
 	for _, table := range nasTypeGUTI5GAMFRegionIDTable {
 		a.SetLen(table.inLen)
 		a.SetAMFRegionID(table.in)
-		assert.Equal(t, table.out, a.GetAMFRegionID())
+		if !reflect.DeepEqual(table.out, a.GetAMFRegionID()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetAMFRegionID())
+		}
 	}
 }
 
@@ -228,7 +252,9 @@ func TestNasTypeGUTI5GGetSetAMFSetID(t *testing.T) {
 	for _, table := range nasTypeGUTI5GAMFSetIDTable {
 		a.SetLen(table.inLen)
 		a.SetAMFSetID(table.in)
-		assert.Equal(t, table.out, a.GetAMFSetID())
+		if !reflect.DeepEqual(table.out, a.GetAMFSetID()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetAMFSetID())
+		}
 	}
 }
 
@@ -247,7 +273,9 @@ func TestNasTypeGUTI5GGetSetAMFPointer(t *testing.T) {
 	for _, table := range nasTypeGUTI5GAMFPointerTable {
 		a.SetLen(table.inLen)
 		a.SetAMFPointer(table.in)
-		assert.Equal(t, table.out, a.GetAMFPointer())
+		if !reflect.DeepEqual(table.out, a.GetAMFPointer()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetAMFPointer())
+		}
 	}
 }
 
@@ -266,7 +294,9 @@ func TestNasTypeGUTI5GGetSetTMSI5G(t *testing.T) {
 	for _, table := range nasTypeGUTI5GTMSI5GTable {
 		a.SetLen(table.inLen)
 		a.SetTMSI5G(table.in)
-		assert.Equal(t, table.out, a.GetTMSI5G())
+		if !reflect.DeepEqual(table.out, a.GetTMSI5G()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetTMSI5G())
+		}
 	}
 }
 
@@ -331,19 +361,47 @@ func TestNasTypeGUTI5G(t *testing.T) {
 		a.SetAMFPointer(table.inAMFPointer)
 		a.SetTMSI5G(table.inTMSI5G)
 
-		assert.Equalf(t, table.outIei, a.GetIei(), "in(%v): out %v, actual %x", table.inIei, table.outIei, a.GetIei())
-		assert.Equalf(t, table.outLen, a.GetLen(), "in(%v): out %v, actual %x", table.inLen, table.outLen, a.GetLen())
-		assert.Equalf(t, table.outSpare, a.GetSpare(), "in(%v): out %v, actual %x", table.inSpare, table.outSpare, a.GetSpare())
-		assert.Equalf(t, table.outTypeOfIdentity, a.GetTypeOfIdentity(), "in(%v): out %v, actual %x", table.inTypeOfIdentity, table.outTypeOfIdentity, a.GetTypeOfIdentity())
-		assert.Equalf(t, table.outMCCDigit2, a.GetMCCDigit2(), "in(%v): out %v, actual %x", table.inMCCDigit2, table.outMCCDigit2, a.GetMCCDigit2())
-		assert.Equalf(t, table.outMCCDigit1, a.GetMCCDigit1(), "in(%v): out %v, actual %x", table.inMCCDigit1, table.outMCCDigit1, a.GetMCCDigit1())
-		assert.Equalf(t, table.outMNCDigit3, a.GetMNCDigit3(), "in(%v): out %v, actual %x", table.inMNCDigit3, table.outMNCDigit3, a.GetMNCDigit3())
-		assert.Equalf(t, table.outMCCDigit3, a.GetMCCDigit3(), "in(%v): out %v, actual %x", table.inMCCDigit3, table.outMCCDigit3, a.GetMCCDigit3())
-		assert.Equalf(t, table.outMNCDigit2, a.GetMNCDigit2(), "in(%v): out %v, actual %x", table.inMNCDigit2, table.outMNCDigit2, a.GetMNCDigit2())
-		assert.Equalf(t, table.outMNCDigit1, a.GetMNCDigit1(), "in(%v): out %v, actual %x", table.inMNCDigit1, table.outMNCDigit1, a.GetMNCDigit1())
-		assert.Equalf(t, table.outAMFRegionID, a.GetAMFRegionID(), "in(%v): out %v, actual %x", table.inAMFRegionID, table.outAMFRegionID, a.GetAMFRegionID())
-		assert.Equalf(t, table.outAMFSetID, a.GetAMFSetID(), "in(%v): out %v, actual %x", table.inAMFSetID, table.outAMFSetID, a.GetAMFSetID())
-		assert.Equalf(t, table.outAMFPointer, a.GetAMFPointer(), "in(%v): out %v, actual %x", table.inAMFPointer, table.outAMFPointer, a.GetAMFPointer())
-		assert.Equalf(t, table.outTMSI5G, a.GetTMSI5G(), "in(%v): out %v, actual %x", table.inTMSI5G, table.outTMSI5G, a.GetTMSI5G())
+		if !reflect.DeepEqual(table.outIei, a.GetIei()) {
+			t.Errorf("in(%v): out %v, actual %x", table.inIei, table.outIei, a.GetIei())
+		}
+		if !reflect.DeepEqual(table.outLen, a.GetLen()) {
+			t.Errorf("in(%v): out %v, actual %x", table.inLen, table.outLen, a.GetLen())
+		}
+		if !reflect.DeepEqual(table.outSpare, a.GetSpare()) {
+			t.Errorf("in(%v): out %v, actual %x", table.inSpare, table.outSpare, a.GetSpare())
+		}
+		if !reflect.DeepEqual(table.outTypeOfIdentity, a.GetTypeOfIdentity()) {
+			t.Errorf("in(%v): out %v, actual %x", table.inTypeOfIdentity, table.outTypeOfIdentity, a.GetTypeOfIdentity())
+		}
+		if !reflect.DeepEqual(table.outMCCDigit2, a.GetMCCDigit2()) {
+			t.Errorf("in(%v): out %v, actual %x", table.inMCCDigit2, table.outMCCDigit2, a.GetMCCDigit2())
+		}
+		if !reflect.DeepEqual(table.outMCCDigit1, a.GetMCCDigit1()) {
+			t.Errorf("in(%v): out %v, actual %x", table.inMCCDigit1, table.outMCCDigit1, a.GetMCCDigit1())
+		}
+		if !reflect.DeepEqual(table.outMNCDigit3, a.GetMNCDigit3()) {
+			t.Errorf("in(%v): out %v, actual %x", table.inMNCDigit3, table.outMNCDigit3, a.GetMNCDigit3())
+		}
+		if !reflect.DeepEqual(table.outMCCDigit3, a.GetMCCDigit3()) {
+			t.Errorf("in(%v): out %v, actual %x", table.inMCCDigit3, table.outMCCDigit3, a.GetMCCDigit3())
+		}
+		if !reflect.DeepEqual(table.outMNCDigit2, a.GetMNCDigit2()) {
+			t.Errorf("in(%v): out %v, actual %x", table.inMNCDigit2, table.outMNCDigit2, a.GetMNCDigit2())
+		}
+		if !reflect.DeepEqual(table.outMNCDigit1, a.GetMNCDigit1()) {
+			t.Errorf("in(%v): out %v, actual %x", table.inMNCDigit1, table.outMNCDigit1, a.GetMNCDigit1())
+		}
+		if !reflect.DeepEqual(table.outAMFRegionID, a.GetAMFRegionID()) {
+			t.Errorf("in(%v): out %v, actual %x", table.inAMFRegionID, table.outAMFRegionID, a.GetAMFRegionID())
+		}
+		if !reflect.DeepEqual(table.outAMFSetID, a.GetAMFSetID()) {
+			t.Errorf("in(%v): out %v, actual %x", table.inAMFSetID, table.outAMFSetID, a.GetAMFSetID())
+		}
+		if !reflect.DeepEqual(table.outAMFPointer, a.GetAMFPointer()) {
+			t.Errorf("in(%v): out %v, actual %x", table.inAMFPointer, table.outAMFPointer, a.GetAMFPointer())
+		}
+		if !reflect.DeepEqual(table.outTMSI5G, a.GetTMSI5G()) {
+			t.Errorf("in(%v): out %v, actual %x", table.inTMSI5G, table.outTMSI5G, a.GetTMSI5G())
+		}
 	}
 }

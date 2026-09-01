@@ -9,8 +9,8 @@ import (
 	"encoding/hex"
 	"reflect"
 
-	"github.com/5GC-DEV/nas-cdac/logger"
-	"github.com/5GC-DEV/openapi-cdac/models"
+	"github.com/omec-project/nas/v2/logger"
+	"github.com/omec-project/openapi/v2/models"
 )
 
 // TS 24.501 9.11.3.9
@@ -31,7 +31,7 @@ func TaiListToNas(taiList []models.Tai) []uint8 {
 
 	switch typeOfList {
 	case 0x00:
-		plmnNas := PlmnIDToNas(*plmnId)
+		plmnNas := PlmnIDToNas(plmnId)
 		taiListNas = append(taiListNas, plmnNas...)
 
 		for _, tai := range taiList {
@@ -43,7 +43,7 @@ func TaiListToNas(taiList []models.Tai) []uint8 {
 		}
 	case 0x02:
 		for _, tai := range taiList {
-			plmnNas := PlmnIDToNas(*tai.PlmnId)
+			plmnNas := PlmnIDToNas(tai.PlmnId)
 			if tacBytes, err := hex.DecodeString(tai.Tac); err != nil {
 				logger.ConvertLog.Warnf("decode tac failed: %+v", err)
 			} else {

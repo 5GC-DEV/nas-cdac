@@ -6,15 +6,17 @@
 package nasType_test
 
 import (
+	"reflect"
 	"testing"
 
-	"github.com/5GC-DEV/nas-cdac/nasType"
-	"github.com/stretchr/testify/assert"
+	"github.com/omec-project/nas/v2/nasType"
 )
 
 func TestNasTypeNewExtendedProtocolDiscriminatort(t *testing.T) {
 	a := nasType.NewExtendedProtocolDiscriminator()
-	assert.NotNil(t, a)
+	if a == nil {
+		t.Fatal("Expected value not to be nil")
+	}
 }
 
 type nasTypeExtendedProtocolDiscriminatorData struct {
@@ -30,6 +32,8 @@ func TestNasTypeGetSetExtendedProtocolDiscriminator(t *testing.T) {
 	a := nasType.NewExtendedProtocolDiscriminator()
 	for _, table := range nasTypeExtendedProtocolDiscriminatorTable {
 		a.SetExtendedProtocolDiscriminator(table.in)
-		assert.Equal(t, table.out, a.GetExtendedProtocolDiscriminator())
+		if !reflect.DeepEqual(table.out, a.GetExtendedProtocolDiscriminator()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetExtendedProtocolDiscriminator())
+		}
 	}
 }

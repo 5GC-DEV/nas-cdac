@@ -9,7 +9,7 @@ import (
 	"bytes"
 	"encoding/binary"
 
-	"github.com/5GC-DEV/nas-cdac/nasType"
+	"github.com/omec-project/nas/v2/nasType"
 )
 
 type SecurityModeCommand struct {
@@ -25,6 +25,7 @@ type SecurityModeCommand struct {
 	*nasType.EAPMessage
 	*nasType.ABBA
 	*nasType.ReplayedS1UESecurityCapabilities
+	*nasType.MasterSessionKey
 }
 
 func NewSecurityModeCommand(iei uint8) (securityModeCommand *SecurityModeCommand) {
@@ -39,6 +40,7 @@ const (
 	SecurityModeCommandEAPMessageType                       uint8 = 0x78
 	SecurityModeCommandABBAType                             uint8 = 0x38
 	SecurityModeCommandReplayedS1UESecurityCapabilitiesType uint8 = 0x19
+	SecurityModeCommandMasterSessionKeyType                 uint8 = 0x55
 )
 
 func (a *SecurityModeCommand) EncodeSecurityModeCommand(buffer *bytes.Buffer) {
@@ -75,6 +77,11 @@ func (a *SecurityModeCommand) EncodeSecurityModeCommand(buffer *bytes.Buffer) {
 		binary.Write(buffer, binary.BigEndian, a.ReplayedS1UESecurityCapabilities.GetIei())
 		binary.Write(buffer, binary.BigEndian, a.ReplayedS1UESecurityCapabilities.GetLen())
 		binary.Write(buffer, binary.BigEndian, &a.ReplayedS1UESecurityCapabilities.Buffer)
+	}
+	if a.MasterSessionKey != nil {
+		binary.Write(buffer, binary.BigEndian, a.MasterSessionKey.GetIei())
+		binary.Write(buffer, binary.BigEndian, a.MasterSessionKey.GetLen())
+		binary.Write(buffer, binary.BigEndian, &a.MasterSessionKey.Buffer)
 	}
 }
 
@@ -124,6 +131,11 @@ func (a *SecurityModeCommand) DecodeSecurityModeCommand(byteArray *[]byte) {
 			binary.Read(buffer, binary.BigEndian, &a.ReplayedS1UESecurityCapabilities.Len)
 			a.ReplayedS1UESecurityCapabilities.SetLen(a.ReplayedS1UESecurityCapabilities.GetLen())
 			binary.Read(buffer, binary.BigEndian, a.ReplayedS1UESecurityCapabilities.Buffer[:a.ReplayedS1UESecurityCapabilities.GetLen()])
+		case SecurityModeCommandMasterSessionKeyType:
+			a.MasterSessionKey = nasType.NewMasterSessionKey(ieiN)
+			binary.Read(buffer, binary.BigEndian, &a.MasterSessionKey.Len)
+			a.MasterSessionKey.SetLen(a.MasterSessionKey.GetLen())
+			binary.Read(buffer, binary.BigEndian, a.MasterSessionKey.Buffer[:a.MasterSessionKey.GetLen()])
 		default:
 		}
 	}

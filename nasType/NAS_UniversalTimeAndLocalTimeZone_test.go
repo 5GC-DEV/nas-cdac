@@ -6,16 +6,18 @@
 package nasType_test
 
 import (
+	"reflect"
 	"testing"
 
-	"github.com/5GC-DEV/nas-cdac/nasMessage"
-	"github.com/5GC-DEV/nas-cdac/nasType"
-	"github.com/stretchr/testify/assert"
+	"github.com/omec-project/nas/v2/nasMessage"
+	"github.com/omec-project/nas/v2/nasType"
 )
 
 func TestNasTypeNewUniversalTimeAndLocalTimeZone(t *testing.T) {
 	a := nasType.NewUniversalTimeAndLocalTimeZone(nasMessage.ConfigurationUpdateCommandUniversalTimeAndLocalTimeZoneType)
-	assert.NotNil(t, a)
+	if a == nil {
+		t.Fatal("Expected value not to be nil")
+	}
 }
 
 var nasTypeServiceRequestUniversalTimeAndLocalTimeZoneTable = []NasTypeIeiData{
@@ -26,7 +28,9 @@ func TestNasTypeUniversalTimeAndLocalTimeZoneGetSetIei(t *testing.T) {
 	a := nasType.NewUniversalTimeAndLocalTimeZone(nasMessage.ConfigurationUpdateCommandUniversalTimeAndLocalTimeZoneType)
 	for _, table := range nasTypeServiceRequestUniversalTimeAndLocalTimeZoneTable {
 		a.SetIei(table.in)
-		assert.Equal(t, table.out, a.GetIei())
+		if !reflect.DeepEqual(table.out, a.GetIei()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetIei())
+		}
 	}
 }
 
@@ -46,7 +50,9 @@ func TestNasTypeUniversalTimeAndLocalTimeZoneGetSetYear(t *testing.T) {
 
 		a.SetYear(table.in)
 
-		assert.Equal(t, table.out, a.GetYear())
+		if !reflect.DeepEqual(table.out, a.GetYear()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetYear())
+		}
 	}
 }
 
@@ -65,7 +71,9 @@ func TestNasTypeUniversalTimeAndLocalTimeZoneGetSetMonth(t *testing.T) {
 	for _, table := range nasTypeUniversalTimeAndLocalTimeZoneMonthTable {
 		a.SetMonth(table.in)
 
-		assert.Equal(t, table.out, a.GetMonth())
+		if !reflect.DeepEqual(table.out, a.GetMonth()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetMonth())
+		}
 	}
 }
 
@@ -84,7 +92,9 @@ func TestNasTypeUniversalTimeAndLocalTimeZoneGetSetDay(t *testing.T) {
 	for _, table := range nasTypeUniversalTimeAndLocalTimeZoneDayTable {
 		a.SetDay(table.in)
 
-		assert.Equal(t, table.out, a.GetDay())
+		if !reflect.DeepEqual(table.out, a.GetDay()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetDay())
+		}
 	}
 }
 
@@ -103,7 +113,9 @@ func TestNasTypeUniversalTimeAndLocalTimeZoneGetSetHour(t *testing.T) {
 	for _, table := range nasTypeUniversalTimeAndLocalTimeZoneHourTable {
 		a.SetHour(table.in)
 
-		assert.Equal(t, table.out, a.GetHour())
+		if !reflect.DeepEqual(table.out, a.GetHour()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetHour())
+		}
 	}
 }
 
@@ -123,7 +135,9 @@ func TestNasTypeUniversalTimeAndLocalTimeZoneGetSetMinute(t *testing.T) {
 
 		a.SetMinute(table.in)
 
-		assert.Equal(t, table.out, a.GetMinute())
+		if !reflect.DeepEqual(table.out, a.GetMinute()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetMinute())
+		}
 	}
 }
 
@@ -143,7 +157,9 @@ func TestNasTypeUniversalTimeAndLocalTimeZoneGetSetSecond(t *testing.T) {
 
 		a.SetSecond(table.in)
 
-		assert.Equal(t, table.out, a.GetSecond())
+		if !reflect.DeepEqual(table.out, a.GetSecond()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetSecond())
+		}
 	}
 }
 
@@ -163,7 +179,9 @@ func TestNasTypeUniversalTimeAndLocalTimeZoneGetSetTimeZone(t *testing.T) {
 
 		a.SetTimeZone(table.in)
 
-		assert.Equal(t, table.out, a.GetTimeZone())
+		if !reflect.DeepEqual(table.out, a.GetTimeZone()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetTimeZone())
+		}
 	}
 }
 
@@ -195,7 +213,11 @@ func TestNasTypeUniversalTimeAndLocalTimeZone(t *testing.T) {
 		a.SetSecond(0x01)
 		a.SetTimeZone(0x01)
 
-		assert.Equal(t, table.out.Iei, a.Iei)
-		assert.Equal(t, table.out.Octet, a.Octet)
+		if !reflect.DeepEqual(table.out.Iei, a.Iei) {
+			t.Errorf("Not equal: expected %v, got %v", table.out.Iei, a.Iei)
+		}
+		if !reflect.DeepEqual(table.out.Octet, a.Octet) {
+			t.Errorf("Not equal: expected %v, got %v", table.out.Octet, a.Octet)
+		}
 	}
 }

@@ -6,16 +6,18 @@
 package nasType_test
 
 import (
+	"reflect"
 	"testing"
 
-	"github.com/5GC-DEV/nas-cdac/nasMessage"
-	"github.com/5GC-DEV/nas-cdac/nasType"
-	"github.com/stretchr/testify/assert"
+	"github.com/omec-project/nas/v2/nasMessage"
+	"github.com/omec-project/nas/v2/nasType"
 )
 
 func TestNasTypeNewOldPDUSessionID(t *testing.T) {
 	a := nasType.NewOldPDUSessionID(nasMessage.ULNASTransportOldPDUSessionIDType)
-	assert.NotNil(t, a)
+	if a == nil {
+		t.Fatal("Expected value not to be nil")
+	}
 }
 
 var nasTypeOldPDUSessionIDULNASTransportOldPDUSessionIDTypeTable = []NasTypeIeiData{
@@ -26,7 +28,9 @@ func TestNasTypeOldPDUSessionIDGetSetIei(t *testing.T) {
 	a := nasType.NewOldPDUSessionID(nasMessage.ULNASTransportOldPDUSessionIDType)
 	for _, table := range nasTypeOldPDUSessionIDULNASTransportOldPDUSessionIDTypeTable {
 		a.SetIei(table.in)
-		assert.Equal(t, table.out, a.GetIei())
+		if !reflect.DeepEqual(table.out, a.GetIei()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetIei())
+		}
 	}
 }
 
@@ -43,7 +47,9 @@ func TestNasTypeOldPDUSessionIDGetSetOldPDUSessionID(t *testing.T) {
 	a := nasType.NewOldPDUSessionID(nasMessage.ULNASTransportOldPDUSessionIDType)
 	for _, table := range nasTypeOldPDUSessionIDPduSessionIdentity2ValueTable {
 		a.SetOldPDUSessionID(table.in)
-		assert.Equal(t, table.out, a.GetOldPDUSessionID())
+		if !reflect.DeepEqual(table.out, a.GetOldPDUSessionID()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetOldPDUSessionID())
+		}
 	}
 }
 
@@ -66,7 +72,11 @@ func TestNasTypeOldPDUSessionID(t *testing.T) {
 	for _, table := range nasTypeOldPDUSessionIDTable {
 		a.SetIei(table.inIei)
 		a.SetOldPDUSessionID(table.inPduSessionIdentity2Value)
-		assert.Equal(t, table.outIei, a.GetIei())
-		assert.Equal(t, table.outPduSessionIdentity2Value, a.GetOldPDUSessionID())
+		if !reflect.DeepEqual(table.outIei, a.GetIei()) {
+			t.Errorf("Not equal: expected %v, got %v", table.outIei, a.GetIei())
+		}
+		if !reflect.DeepEqual(table.outPduSessionIdentity2Value, a.GetOldPDUSessionID()) {
+			t.Errorf("Not equal: expected %v, got %v", table.outPduSessionIdentity2Value, a.GetOldPDUSessionID())
+		}
 	}
 }

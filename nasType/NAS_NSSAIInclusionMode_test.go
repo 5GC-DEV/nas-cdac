@@ -6,17 +6,19 @@
 package nasType_test
 
 import (
+	"reflect"
 	"testing"
 
-	"github.com/5GC-DEV/nas-cdac/nasType"
-	"github.com/stretchr/testify/assert"
+	"github.com/omec-project/nas/v2/nasType"
 )
 
 var RegistrationAcceptNSSAIInclusionModeTypeIeiInput uint8 = 0x0A
 
 func TestNasTypeNewNSSAIInclusionMode(t *testing.T) {
 	a := nasType.NewNSSAIInclusionMode(RegistrationAcceptNSSAIInclusionModeTypeIeiInput)
-	assert.NotNil(t, a)
+	if a == nil {
+		t.Fatal("Expected value not to be nil")
+	}
 }
 
 var nasTypeNSSAIInclusionModeRegistrationAcceptNSSAIInclusionModeTypeTable = []NasTypeIeiData{
@@ -27,7 +29,9 @@ func TestNasTypeNSSAIInclusionModeGetSetIei(t *testing.T) {
 	a := nasType.NewNSSAIInclusionMode(RegistrationAcceptNSSAIInclusionModeTypeIeiInput)
 	for _, table := range nasTypeNSSAIInclusionModeRegistrationAcceptNSSAIInclusionModeTypeTable {
 		a.SetIei(table.in)
-		assert.Equal(t, table.out, a.GetIei())
+		if !reflect.DeepEqual(table.out, a.GetIei()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetIei())
+		}
 	}
 }
 
@@ -51,7 +55,11 @@ func TestNasTypeNSSAIInclusionMode(t *testing.T) {
 
 		a.SetNSSAIInclusionMode(table.inNSSAIInclusionMode)
 
-		assert.Equal(t, table.outIei, a.GetIei())
-		assert.Equal(t, table.outNSSAIInclusionMode, a.GetNSSAIInclusionMode())
+		if !reflect.DeepEqual(table.outIei, a.GetIei()) {
+			t.Errorf("Not equal: expected %v, got %v", table.outIei, a.GetIei())
+		}
+		if !reflect.DeepEqual(table.outNSSAIInclusionMode, a.GetNSSAIInclusionMode()) {
+			t.Errorf("Not equal: expected %v, got %v", table.outNSSAIInclusionMode, a.GetNSSAIInclusionMode())
+		}
 	}
 }

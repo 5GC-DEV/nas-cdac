@@ -6,16 +6,18 @@
 package nasType_test
 
 import (
+	"reflect"
 	"testing"
 
-	"github.com/5GC-DEV/nas-cdac/nasMessage"
-	"github.com/5GC-DEV/nas-cdac/nasType"
-	"github.com/stretchr/testify/assert"
+	"github.com/omec-project/nas/v2/nasMessage"
+	"github.com/omec-project/nas/v2/nasType"
 )
 
 func TestNasTypeNewLocalTimeZone(t *testing.T) {
 	a := nasType.NewLocalTimeZone(nasMessage.ConfigurationUpdateCommandLocalTimeZoneType)
-	assert.NotNil(t, a)
+	if a == nil {
+		t.Fatal("Expected value not to be nil")
+	}
 }
 
 var nasTypeConfigurationUpdateCommandLocalTimeZoneTable = []NasTypeIeiData{
@@ -26,7 +28,9 @@ func TestNasTypeLocalTimeZoneGetSetIei(t *testing.T) {
 	a := nasType.NewLocalTimeZone(nasMessage.ConfigurationUpdateCommandLocalTimeZoneType)
 	for _, table := range nasTypeConfigurationUpdateCommandLocalTimeZoneTable {
 		a.SetIei(table.in)
-		assert.Equal(t, table.out, a.GetIei())
+		if !reflect.DeepEqual(table.out, a.GetIei()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetIei())
+		}
 	}
 }
 
@@ -43,7 +47,9 @@ func TestNasTypeLocalTimeZoneGetSetTimeZone(t *testing.T) {
 	a := nasType.NewLocalTimeZone(nasMessage.ConfigurationUpdateCommandLocalTimeZoneType)
 	for _, table := range nasTypeLocalTimeZoneOctetTable {
 		a.SetTimeZone(table.in)
-		assert.Equal(t, table.out, a.GetTimeZone())
+		if !reflect.DeepEqual(table.out, a.GetTimeZone()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetTimeZone())
+		}
 	}
 }
 
@@ -72,8 +78,12 @@ func TestNasTypeLocalTimeZone(t *testing.T) {
 		a.SetIei(table.in.GetIei())
 		a.SetTimeZone(table.in.Octet)
 
-		assert.Equalf(t, table.out.Iei, a.Iei, "in(%v): out %v, actual %x", table.in.Iei, table.out.Iei, a.Iei)
-		assert.Equalf(t, table.out.Octet, a.Octet, "in(%v): out %v, actual %x", table.in.Octet, table.out.Octet, a.Octet)
+		if !reflect.DeepEqual(table.out.Iei, a.Iei) {
+			t.Errorf("in(%v): out %v, actual %x", table.in.Iei, table.out.Iei, a.Iei)
+		}
+		if !reflect.DeepEqual(table.out.Octet, a.Octet) {
+			t.Errorf("in(%v): out %v, actual %x", table.in.Octet, table.out.Octet, a.Octet)
+		}
 
 	}
 }

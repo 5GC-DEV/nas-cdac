@@ -1,7 +1,6 @@
+// Copyright (C) 2026 Intel Corporation
 // Copyright 2019 free5GC.org
-//
 // SPDX-License-Identifier: Apache-2.0
-//
 
 package nasMessage_test
 
@@ -10,11 +9,10 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/5GC-DEV/nas-cdac"
-	"github.com/5GC-DEV/nas-cdac/logger"
-	"github.com/5GC-DEV/nas-cdac/nasMessage"
-	"github.com/5GC-DEV/nas-cdac/nasType"
-	"github.com/stretchr/testify/assert"
+	"github.com/omec-project/nas/v2"
+	"github.com/omec-project/nas/v2/logger"
+	"github.com/omec-project/nas/v2/nasMessage"
+	"github.com/omec-project/nas/v2/nasType"
 )
 
 type nasMessageRegistrationAcceptData struct {
@@ -178,7 +176,9 @@ var nasMessageRegistrationAcceptTable = []nasMessageRegistrationAcceptData{
 
 func TestNasTypeNewRegistrationAccept(t *testing.T) {
 	a := nasMessage.NewRegistrationAccept(0)
-	assert.NotNil(t, a)
+	if a == nil {
+		t.Fatal("Expected value not to be nil")
+	}
 }
 
 func TestNasTypeNewRegistrationAcceptMessage(t *testing.T) {
@@ -186,8 +186,12 @@ func TestNasTypeNewRegistrationAcceptMessage(t *testing.T) {
 		t.Logf("Test Cnt:%d", i)
 		a := nasMessage.NewRegistrationAccept(0)
 		b := nasMessage.NewRegistrationAccept(0)
-		assert.NotNil(t, a)
-		assert.NotNil(t, b)
+		if a == nil {
+			t.Fatal("Expected value not to be nil")
+		}
+		if b == nil {
+			t.Fatal("Expected value not to be nil")
+		}
 
 		a.ExtendedProtocolDiscriminator.SetExtendedProtocolDiscriminator(table.inExtendedProtocolDiscriminator)
 		a.SpareHalfOctetAndSecurityHeaderType.SetSecurityHeaderType(table.inSecurityHeader)
@@ -285,5 +289,58 @@ func TestNasTypeNewRegistrationAcceptMessage(t *testing.T) {
 			t.Errorf("Not correct")
 		}
 
+	}
+}
+
+func TestRegistrationAcceptNewIEsEncodeDecode(t *testing.T) {
+	a := nasMessage.NewRegistrationAccept(0)
+	b := nasMessage.NewRegistrationAccept(0)
+	if a == nil {
+		t.Fatal("Expected value not to be nil")
+	}
+	if b == nil {
+		t.Fatal("Expected value not to be nil")
+	}
+
+	a.ExtendedProtocolDiscriminator.SetExtendedProtocolDiscriminator(nasMessage.Epd5GSMobilityManagementMessage)
+	a.SpareHalfOctetAndSecurityHeaderType.SetSecurityHeaderType(0x00)
+	a.SpareHalfOctetAndSecurityHeaderType.SetSpareHalfOctet(0x00)
+	a.RegistrationAcceptMessageIdentity.SetMessageType(nas.MsgTypeRegistrationAccept)
+	a.RegistrationResult5GS = nasType.RegistrationResult5GS{Len: 1, Octet: 0x01}
+
+	a.EPSBearerContextStatus = nasType.NewEPSBearerContextStatus(nasMessage.RegistrationAcceptEPSBearerContextStatusType)
+	a.EPSBearerContextStatus.SetLen(2)
+	copy(a.EPSBearerContextStatus.Buffer, []byte{0x0E, 0x00})
+
+	a.UERadioCapabilityID = nasType.NewUERadioCapabilityID(nasMessage.RegistrationAcceptUERadioCapabilityIDType)
+	a.UERadioCapabilityID.SetLen(3)
+	copy(a.UERadioCapabilityID.Buffer, []byte{0x01, 0x02, 0x03})
+
+	a.ExtendedDRXParameters = nasType.NewExtendedDRXParameters(nasMessage.RegistrationAcceptExtendedDRXParametersType)
+	a.ExtendedDRXParameters.SetLen(1)
+	a.ExtendedDRXParameters.Buffer[0] = 0x25
+
+	a.UERadioCapabilityIDDeletionIndicationIE = nasType.NewUERadioCapabilityIDDeletionIndicationIE(nasMessage.RegistrationAcceptUERadioCapabilityIDDeletionIndicationType)
+	a.UERadioCapabilityIDDeletionIndicationIE.SetDeletionIndicationValue(0x01)
+
+	a.DisasterReturnWaitRange = nasType.NewRegistrationWaitRange(nasMessage.RegistrationAcceptDisasterReturnWaitRangeType)
+	a.DisasterReturnWaitRange.SetLen(2)
+	copy(a.DisasterReturnWaitRange.Buffer, []byte{0x05, 0x0A})
+
+	a.ExtendedCAGInformationList = nasType.NewExtendedCAGInformationList(nasMessage.RegistrationAcceptExtendedCAGInformationListType)
+	a.ExtendedCAGInformationList.SetLen(3)
+	copy(a.ExtendedCAGInformationList.Buffer, []byte{0x01, 0x02, 0x03})
+
+	buff := new(bytes.Buffer)
+	a.EncodeRegistrationAccept(buff)
+	logger.NasMsgLog.Debugln("Encode: ", a)
+
+	data := make([]byte, buff.Len())
+	buff.Read(data)
+	b.DecodeRegistrationAccept(&data)
+	logger.NasMsgLog.Debugln("Decode: ", b)
+
+	if reflect.DeepEqual(a, b) != true {
+		t.Errorf("RegistrationAccept new IEs encode/decode mismatch")
 	}
 }

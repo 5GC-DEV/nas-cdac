@@ -6,16 +6,18 @@
 package nasType_test
 
 import (
+	"reflect"
 	"testing"
 
-	"github.com/5GC-DEV/nas-cdac"
-	"github.com/5GC-DEV/nas-cdac/nasType"
-	"github.com/stretchr/testify/assert"
+	"github.com/omec-project/nas/v2"
+	"github.com/omec-project/nas/v2/nasType"
 )
 
 func TestNasTypeNewPDUSESSIONMODIFICATIONCOMMANDREJECTMessageIdentity(t *testing.T) {
 	a := nasType.NewPDUSESSIONMODIFICATIONCOMMANDREJECTMessageIdentity()
-	assert.NotNil(t, a)
+	if a == nil {
+		t.Fatal("Expected value not to be nil")
+	}
 }
 
 type nasTypePDUSESSIONMODIFICATIONCOMMANDREJECTMessageIdentityMessageType struct {
@@ -31,6 +33,8 @@ func TestNasTypeGetSetPDUSESSIONMODIFICATIONCOMMANDREJECTMessageIdentityMessageT
 	a := nasType.NewPDUSESSIONMODIFICATIONCOMMANDREJECTMessageIdentity()
 	for _, table := range nasTypePDUSESSIONMODIFICATIONCOMMANDREJECTMessageIdentityMessageTypeTable {
 		a.SetMessageType(table.in)
-		assert.Equal(t, table.out, a.GetMessageType())
+		if !reflect.DeepEqual(table.out, a.GetMessageType()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetMessageType())
+		}
 	}
 }

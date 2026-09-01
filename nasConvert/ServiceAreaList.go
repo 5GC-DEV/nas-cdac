@@ -8,9 +8,9 @@ package nasConvert
 import (
 	"encoding/hex"
 
-	"github.com/5GC-DEV/nas-cdac/logger"
-	"github.com/5GC-DEV/nas-cdac/nasMessage"
-	"github.com/5GC-DEV/openapi-cdac/models"
+	"github.com/omec-project/nas/v2/logger"
+	"github.com/omec-project/nas/v2/nasMessage"
+	"github.com/omec-project/openapi/v2/models"
 )
 
 // TS 24.501 9.11.3.49
@@ -18,7 +18,7 @@ func PartialServiceAreaListToNas(plmnID models.PlmnId, serviceAreaRestriction mo
 	var partialServiceAreaList []byte
 	var allowedType uint8
 
-	if serviceAreaRestriction.RestrictionType == models.RestrictionType_ALLOWED_AREAS {
+	if serviceAreaRestriction.RestrictionType != nil && *serviceAreaRestriction.RestrictionType == models.RESTRICTIONTYPE_ALLOWED_AREAS {
 		allowedType = nasMessage.AllowedTypeAllowedArea
 	} else {
 		allowedType = nasMessage.AllowedTypeNonAllowedArea

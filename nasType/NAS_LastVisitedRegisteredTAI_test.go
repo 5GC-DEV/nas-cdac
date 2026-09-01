@@ -6,16 +6,18 @@
 package nasType_test
 
 import (
+	"reflect"
 	"testing"
 
-	"github.com/5GC-DEV/nas-cdac/nasMessage"
-	"github.com/5GC-DEV/nas-cdac/nasType"
-	"github.com/stretchr/testify/assert"
+	"github.com/omec-project/nas/v2/nasMessage"
+	"github.com/omec-project/nas/v2/nasType"
 )
 
 func TestNasTypeNewLastVisitedRegisteredTAI(t *testing.T) {
 	a := nasType.NewLastVisitedRegisteredTAI(nasMessage.RegistrationRequestLastVisitedRegisteredTAIType)
-	assert.NotNil(t, a)
+	if a == nil {
+		t.Fatal("Expected value not to be nil")
+	}
 }
 
 var nasTypeRegistrationRequestLastVisitedRegisteredTAITable = []NasTypeIeiData{
@@ -26,7 +28,9 @@ func TestNasTypeLastVisitedRegisteredTAIGetSetIei(t *testing.T) {
 	a := nasType.NewLastVisitedRegisteredTAI(nasMessage.RegistrationRequestLastVisitedRegisteredTAIType)
 	for _, table := range nasTypeRegistrationRequestLastVisitedRegisteredTAITable {
 		a.SetIei(table.in)
-		assert.Equal(t, table.out, a.GetIei())
+		if !reflect.DeepEqual(table.out, a.GetIei()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetIei())
+		}
 	}
 }
 
@@ -43,7 +47,9 @@ func TestNasTypeLastVisitedRegisteredTAIGetSetMCCDigit2(t *testing.T) {
 	a := nasType.NewLastVisitedRegisteredTAI(nasMessage.RegistrationRequestLastVisitedRegisteredTAIType)
 	for _, table := range nasTypeLastVisitedRegisteredTAIMCCDigit2Table {
 		a.SetMCCDigit2(table.in)
-		assert.Equal(t, table.out, a.GetMCCDigit2())
+		if !reflect.DeepEqual(table.out, a.GetMCCDigit2()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetMCCDigit2())
+		}
 	}
 }
 
@@ -60,7 +66,9 @@ func TestNasTypeLastVisitedRegisteredTAIGetSetMCCDigit1(t *testing.T) {
 	a := nasType.NewLastVisitedRegisteredTAI(nasMessage.RegistrationRequestLastVisitedRegisteredTAIType)
 	for _, table := range nasTypeLastVisitedRegisteredTAIMCCDigit1Table {
 		a.SetMCCDigit1(table.in)
-		assert.Equal(t, table.out, a.GetMCCDigit1())
+		if !reflect.DeepEqual(table.out, a.GetMCCDigit1()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetMCCDigit1())
+		}
 	}
 }
 
@@ -77,7 +85,9 @@ func TestNasTypeLastVisitedRegisteredTAIGetSetMNCDigit3(t *testing.T) {
 	a := nasType.NewLastVisitedRegisteredTAI(nasMessage.RegistrationRequestLastVisitedRegisteredTAIType)
 	for _, table := range nasTypeLastVisitedRegisteredTAIMNCDigit3Table {
 		a.SetMNCDigit3(table.in)
-		assert.Equal(t, table.out, a.GetMNCDigit3())
+		if !reflect.DeepEqual(table.out, a.GetMNCDigit3()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetMNCDigit3())
+		}
 	}
 }
 
@@ -94,7 +104,9 @@ func TestNasTypeLastVisitedRegisteredTAIGetSetMCCDigit3(t *testing.T) {
 	a := nasType.NewLastVisitedRegisteredTAI(nasMessage.RegistrationRequestLastVisitedRegisteredTAIType)
 	for _, table := range nasTypeLastVisitedRegisteredTAIMCCDigit3Table {
 		a.SetMCCDigit3(table.in)
-		assert.Equal(t, table.out, a.GetMCCDigit3())
+		if !reflect.DeepEqual(table.out, a.GetMCCDigit3()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetMCCDigit3())
+		}
 	}
 }
 
@@ -111,7 +123,9 @@ func TestNasTypeLastVisitedRegisteredTAIGetSetMNCDigit2(t *testing.T) {
 	a := nasType.NewLastVisitedRegisteredTAI(nasMessage.RegistrationRequestLastVisitedRegisteredTAIType)
 	for _, table := range nasTypeLastVisitedRegisteredTAIMNCDigit2Table {
 		a.SetMNCDigit2(table.in)
-		assert.Equal(t, table.out, a.GetMNCDigit2())
+		if !reflect.DeepEqual(table.out, a.GetMNCDigit2()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetMNCDigit2())
+		}
 	}
 }
 
@@ -128,7 +142,9 @@ func TestNasTypeLastVisitedRegisteredTAIGetSetMNCDigit1(t *testing.T) {
 	a := nasType.NewLastVisitedRegisteredTAI(nasMessage.RegistrationRequestLastVisitedRegisteredTAIType)
 	for _, table := range nasTypeLastVisitedRegisteredTAIMNCDigit1Table {
 		a.SetMNCDigit1(table.in)
-		assert.Equal(t, table.out, a.GetMNCDigit1())
+		if !reflect.DeepEqual(table.out, a.GetMNCDigit1()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetMNCDigit1())
+		}
 	}
 }
 
@@ -145,7 +161,9 @@ func TestNasTypeLastVisitedRegisteredTAIGetSetTAC(t *testing.T) {
 	a := nasType.NewLastVisitedRegisteredTAI(nasMessage.RegistrationRequestLastVisitedRegisteredTAIType)
 	for _, table := range nasTypeLastVisitedRegisteredTAITACTable {
 		a.SetTAC(table.in)
-		assert.Equal(t, table.out, a.GetTAC())
+		if !reflect.DeepEqual(table.out, a.GetTAC()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetTAC())
+		}
 	}
 }
 
@@ -192,13 +210,29 @@ func TestNasTypeLastVisitedRegisteredTAI(t *testing.T) {
 		a.SetMNCDigit1(table.inMNCDigit1)
 		a.SetTAC(table.inTAC)
 
-		assert.Equalf(t, table.outIei, a.Iei, "in(%v): out %v, actual %x", table.inIei, table.outIei, a.Iei)
-		assert.Equalf(t, table.outMCCDigit2, a.GetMCCDigit2(), "in(%v): out %v, actual %x", table.inMCCDigit2, table.outMCCDigit2, a.GetMCCDigit2())
-		assert.Equalf(t, table.outMCCDigit1, a.GetMCCDigit1(), "in(%v): out %v, actual %x", table.inMCCDigit1, table.outMCCDigit1, a.GetMCCDigit1())
-		assert.Equalf(t, table.outMNCDigit3, a.GetMNCDigit3(), "in(%v): out %v, actual %x", table.inMNCDigit3, table.outMNCDigit3, a.GetMNCDigit3())
-		assert.Equalf(t, table.outMCCDigit3, a.GetMCCDigit3(), "in(%v): out %v, actual %x", table.inMCCDigit3, table.outMCCDigit3, a.GetMCCDigit3())
-		assert.Equalf(t, table.outMNCDigit2, a.GetMNCDigit2(), "in(%v): out %v, actual %x", table.inMNCDigit2, table.outMNCDigit2, a.GetMNCDigit2())
-		assert.Equalf(t, table.outMNCDigit1, a.GetMNCDigit1(), "in(%v): out %v, actual %x", table.inMNCDigit1, table.outMNCDigit1, a.GetMNCDigit1())
-		assert.Equalf(t, table.outTAC, a.GetTAC(), "in(%v): out %v, actual %x", table.inTAC, table.outTAC, a.GetTAC())
+		if !reflect.DeepEqual(table.outIei, a.Iei) {
+			t.Errorf("in(%v): out %v, actual %x", table.inIei, table.outIei, a.Iei)
+		}
+		if !reflect.DeepEqual(table.outMCCDigit2, a.GetMCCDigit2()) {
+			t.Errorf("in(%v): out %v, actual %x", table.inMCCDigit2, table.outMCCDigit2, a.GetMCCDigit2())
+		}
+		if !reflect.DeepEqual(table.outMCCDigit1, a.GetMCCDigit1()) {
+			t.Errorf("in(%v): out %v, actual %x", table.inMCCDigit1, table.outMCCDigit1, a.GetMCCDigit1())
+		}
+		if !reflect.DeepEqual(table.outMNCDigit3, a.GetMNCDigit3()) {
+			t.Errorf("in(%v): out %v, actual %x", table.inMNCDigit3, table.outMNCDigit3, a.GetMNCDigit3())
+		}
+		if !reflect.DeepEqual(table.outMCCDigit3, a.GetMCCDigit3()) {
+			t.Errorf("in(%v): out %v, actual %x", table.inMCCDigit3, table.outMCCDigit3, a.GetMCCDigit3())
+		}
+		if !reflect.DeepEqual(table.outMNCDigit2, a.GetMNCDigit2()) {
+			t.Errorf("in(%v): out %v, actual %x", table.inMNCDigit2, table.outMNCDigit2, a.GetMNCDigit2())
+		}
+		if !reflect.DeepEqual(table.outMNCDigit1, a.GetMNCDigit1()) {
+			t.Errorf("in(%v): out %v, actual %x", table.inMNCDigit1, table.outMNCDigit1, a.GetMNCDigit1())
+		}
+		if !reflect.DeepEqual(table.outTAC, a.GetTAC()) {
+			t.Errorf("in(%v): out %v, actual %x", table.inTAC, table.outTAC, a.GetTAC())
+		}
 	}
 }

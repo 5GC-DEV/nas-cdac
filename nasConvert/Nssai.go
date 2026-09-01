@@ -9,9 +9,10 @@ import (
 	"encoding/hex"
 	"fmt"
 
-	"github.com/5GC-DEV/nas-cdac/nasMessage"
-	"github.com/5GC-DEV/nas-cdac/nasType"
-	"github.com/5GC-DEV/openapi-cdac/models"
+	"github.com/omec-project/nas/v2/nasMessage"
+	"github.com/omec-project/nas/v2/nasType"
+	"github.com/omec-project/openapi/v2"
+	"github.com/omec-project/openapi/v2/models"
 )
 
 // TS 24.501 9.11.3.37
@@ -41,41 +42,41 @@ func snssaiToModels(lengthOfSnssaiContents uint8, buf []byte) (models.MappingOfS
 
 	switch lengthOfSnssaiContents {
 	case 0x01: // SST
-		snssai.ServingSnssai = &models.Snssai{
+		snssai.ServingSnssai = models.Snssai{
 			Sst: int32(buf[1]),
 		}
 		return snssai, nil
 	case 0x02: // SST and mapped HPLMN SST
-		snssai.ServingSnssai = &models.Snssai{
+		snssai.ServingSnssai = models.Snssai{
 			Sst: int32(buf[1]),
 		}
-		snssai.HomeSnssai = &models.Snssai{
+		snssai.HomeSnssai = models.Snssai{
 			Sst: int32(buf[2]),
 		}
 		return snssai, nil
 	case 0x04: // SST and SD
-		snssai.ServingSnssai = &models.Snssai{
+		snssai.ServingSnssai = models.Snssai{
 			Sst: int32(buf[1]),
-			Sd:  hex.EncodeToString(buf[2:5]),
+			Sd:  openapi.PtrString(hex.EncodeToString(buf[2:5])),
 		}
 		return snssai, nil
 	case 0x05: // SST, SD and mapped HPLMN SST
-		snssai.ServingSnssai = &models.Snssai{
+		snssai.ServingSnssai = models.Snssai{
 			Sst: int32(buf[1]),
-			Sd:  hex.EncodeToString(buf[2:5]),
+			Sd:  openapi.PtrString(hex.EncodeToString(buf[2:5])),
 		}
-		snssai.HomeSnssai = &models.Snssai{
+		snssai.HomeSnssai = models.Snssai{
 			Sst: int32(buf[5]),
 		}
 		return snssai, nil
 	case 0x08: // SST, SD, mapped HPLMN SST and mapped HPLMN SD
-		snssai.ServingSnssai = &models.Snssai{
+		snssai.ServingSnssai = models.Snssai{
 			Sst: int32(buf[1]),
-			Sd:  hex.EncodeToString(buf[2:5]),
+			Sd:  openapi.PtrString(hex.EncodeToString(buf[2:5])),
 		}
-		snssai.HomeSnssai = &models.Snssai{
+		snssai.HomeSnssai = models.Snssai{
 			Sst: int32(buf[5]),
-			Sd:  hex.EncodeToString(buf[6:9]),
+			Sd:  openapi.PtrString(hex.EncodeToString(buf[6:9])),
 		}
 		return snssai, nil
 	default:

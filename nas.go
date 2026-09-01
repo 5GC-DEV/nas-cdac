@@ -1,7 +1,6 @@
+// Copyright (C) 2026 Intel Corporation
 // Copyright 2019 free5GC.org
-//
 // SPDX-License-Identifier: Apache-2.0
-//
 
 package nas
 
@@ -10,7 +9,7 @@ import (
 	"encoding/binary"
 	"fmt"
 
-	"github.com/5GC-DEV/nas-cdac/nasMessage"
+	"github.com/omec-project/nas/v2/nasMessage"
 )
 
 // Message TODO：description
@@ -142,6 +141,15 @@ type GmmMessage struct {
 	*nasMessage.SecurityModeReject                               // 8.2.27
 	*nasMessage.SecurityProtected5GSNASMessage                   // 8.2.28
 	*nasMessage.Status5GMM                                       // 8.2.29
+	*nasMessage.ControlPlaneServiceRequest                       // 8.2.30
+	*nasMessage.NetworkSliceSpecificAuthenticationCommand        // 8.2.31
+	*nasMessage.NetworkSliceSpecificAuthenticationComplete       // 8.2.32
+	*nasMessage.NetworkSliceSpecificAuthenticationResult         // 8.2.33
+	*nasMessage.RelayKeyRequest                                  // 8.2.34
+	*nasMessage.RelayKeyAccept                                   // 8.2.35
+	*nasMessage.RelayKeyReject                                   // 8.2.36
+	*nasMessage.RelayAuthenticationRequest                       // 8.2.37
+	*nasMessage.RelayAuthenticationResponse                      // 8.2.38
 }
 
 const (
@@ -173,6 +181,15 @@ const (
 	MsgTypeNotificationResponse                             uint8 = 102
 	MsgTypeULNASTransport                                   uint8 = 103
 	MsgTypeDLNASTransport                                   uint8 = 104
+	MsgTypeControlPlaneServiceRequest                       uint8 = 79
+	MsgTypeNetworkSliceSpecificAuthenticationCommand        uint8 = 80
+	MsgTypeNetworkSliceSpecificAuthenticationComplete       uint8 = 81
+	MsgTypeNetworkSliceSpecificAuthenticationResult         uint8 = 82
+	MsgTypeRelayKeyRequest                                  uint8 = 105
+	MsgTypeRelayKeyAccept                                   uint8 = 106
+	MsgTypeRelayKeyReject                                   uint8 = 107
+	MsgTypeRelayAuthenticationRequest                       uint8 = 108
+	MsgTypeRelayAuthenticationResponse                      uint8 = 109
 )
 
 func MessageName(code uint8) string {
@@ -233,6 +250,32 @@ func MessageName(code uint8) string {
 		return "ULNASTransport"
 	case MsgTypeDLNASTransport:
 		return "DLNASTransport"
+	case MsgTypeControlPlaneServiceRequest:
+		return "ControlPlaneServiceRequest"
+	case MsgTypeNetworkSliceSpecificAuthenticationCommand:
+		return "NetworkSliceSpecificAuthenticationCommand"
+	case MsgTypeNetworkSliceSpecificAuthenticationComplete:
+		return "NetworkSliceSpecificAuthenticationComplete"
+	case MsgTypeNetworkSliceSpecificAuthenticationResult:
+		return "NetworkSliceSpecificAuthenticationResult"
+	case MsgTypeRelayKeyRequest:
+		return "RelayKeyRequest"
+	case MsgTypeRelayKeyAccept:
+		return "RelayKeyAccept"
+	case MsgTypeRelayKeyReject:
+		return "RelayKeyReject"
+	case MsgTypeRelayAuthenticationRequest:
+		return "RelayAuthenticationRequest"
+	case MsgTypeRelayAuthenticationResponse:
+		return "RelayAuthenticationResponse"
+	case MsgTypeServiceLevelAuthenticationCommand:
+		return "ServiceLevelAuthenticationCommand"
+	case MsgTypeServiceLevelAuthenticationComplete:
+		return "ServiceLevelAuthenticationComplete"
+	case MsgTypeRemoteUEReport:
+		return "RemoteUEReport"
+	case MsgTypeRemoteUEReportResponse:
+		return "RemoteUEReportResponse"
 	default:
 		return fmt.Sprintf("Unknown message type: %d", code)
 	}
@@ -354,6 +397,33 @@ func (a *Message) GmmMessageDecode(byteArray *[]byte) error {
 	case MsgTypeDLNASTransport:
 		a.GmmMessage.DLNASTransport = nasMessage.NewDLNASTransport(MsgTypeDLNASTransport)
 		a.GmmMessage.DecodeDLNASTransport(byteArray)
+	case MsgTypeControlPlaneServiceRequest:
+		a.GmmMessage.ControlPlaneServiceRequest = nasMessage.NewControlPlaneServiceRequest(MsgTypeControlPlaneServiceRequest)
+		a.GmmMessage.DecodeControlPlaneServiceRequest(byteArray)
+	case MsgTypeNetworkSliceSpecificAuthenticationCommand:
+		a.GmmMessage.NetworkSliceSpecificAuthenticationCommand = nasMessage.NewNetworkSliceSpecificAuthenticationCommand(MsgTypeNetworkSliceSpecificAuthenticationCommand)
+		a.GmmMessage.DecodeNetworkSliceSpecificAuthenticationCommand(byteArray)
+	case MsgTypeNetworkSliceSpecificAuthenticationComplete:
+		a.GmmMessage.NetworkSliceSpecificAuthenticationComplete = nasMessage.NewNetworkSliceSpecificAuthenticationComplete(MsgTypeNetworkSliceSpecificAuthenticationComplete)
+		a.GmmMessage.DecodeNetworkSliceSpecificAuthenticationComplete(byteArray)
+	case MsgTypeNetworkSliceSpecificAuthenticationResult:
+		a.GmmMessage.NetworkSliceSpecificAuthenticationResult = nasMessage.NewNetworkSliceSpecificAuthenticationResult(MsgTypeNetworkSliceSpecificAuthenticationResult)
+		a.GmmMessage.DecodeNetworkSliceSpecificAuthenticationResult(byteArray)
+	case MsgTypeRelayKeyRequest:
+		a.GmmMessage.RelayKeyRequest = nasMessage.NewRelayKeyRequest(MsgTypeRelayKeyRequest)
+		a.GmmMessage.DecodeRelayKeyRequest(byteArray)
+	case MsgTypeRelayKeyAccept:
+		a.GmmMessage.RelayKeyAccept = nasMessage.NewRelayKeyAccept(MsgTypeRelayKeyAccept)
+		a.GmmMessage.DecodeRelayKeyAccept(byteArray)
+	case MsgTypeRelayKeyReject:
+		a.GmmMessage.RelayKeyReject = nasMessage.NewRelayKeyReject(MsgTypeRelayKeyReject)
+		a.GmmMessage.DecodeRelayKeyReject(byteArray)
+	case MsgTypeRelayAuthenticationRequest:
+		a.GmmMessage.RelayAuthenticationRequest = nasMessage.NewRelayAuthenticationRequest(MsgTypeRelayAuthenticationRequest)
+		a.GmmMessage.DecodeRelayAuthenticationRequest(byteArray)
+	case MsgTypeRelayAuthenticationResponse:
+		a.GmmMessage.RelayAuthenticationResponse = nasMessage.NewRelayAuthenticationResponse(MsgTypeRelayAuthenticationResponse)
+		a.GmmMessage.DecodeRelayAuthenticationResponse(byteArray)
 	default:
 		return fmt.Errorf("NAS decode fail: MsgType[%d] does not exist in GMM Message", a.GmmMessage.GmmHeader.GetMessageType())
 	}
@@ -418,6 +488,24 @@ func (a *Message) GmmMessageEncode(buffer *bytes.Buffer) error {
 		a.GmmMessage.EncodeULNASTransport(buffer)
 	case MsgTypeDLNASTransport:
 		a.GmmMessage.EncodeDLNASTransport(buffer)
+	case MsgTypeControlPlaneServiceRequest:
+		a.GmmMessage.EncodeControlPlaneServiceRequest(buffer)
+	case MsgTypeNetworkSliceSpecificAuthenticationCommand:
+		a.GmmMessage.EncodeNetworkSliceSpecificAuthenticationCommand(buffer)
+	case MsgTypeNetworkSliceSpecificAuthenticationComplete:
+		a.GmmMessage.EncodeNetworkSliceSpecificAuthenticationComplete(buffer)
+	case MsgTypeNetworkSliceSpecificAuthenticationResult:
+		a.GmmMessage.EncodeNetworkSliceSpecificAuthenticationResult(buffer)
+	case MsgTypeRelayKeyRequest:
+		a.GmmMessage.EncodeRelayKeyRequest(buffer)
+	case MsgTypeRelayKeyAccept:
+		a.GmmMessage.EncodeRelayKeyAccept(buffer)
+	case MsgTypeRelayKeyReject:
+		a.GmmMessage.EncodeRelayKeyReject(buffer)
+	case MsgTypeRelayAuthenticationRequest:
+		a.GmmMessage.EncodeRelayAuthenticationRequest(buffer)
+	case MsgTypeRelayAuthenticationResponse:
+		a.GmmMessage.EncodeRelayAuthenticationResponse(buffer)
 	default:
 		return fmt.Errorf("NAS encode fail: MsgType[%d] does not exist in GMM Message", a.GmmMessage.GmmHeader.GetMessageType())
 	}
@@ -442,6 +530,10 @@ type GsmMessage struct {
 	*nasMessage.PDUSessionReleaseCommand            // 8.3.14
 	*nasMessage.PDUSessionReleaseComplete           // 8.3.15
 	*nasMessage.Status5GSM                          // 8.3.16
+	*nasMessage.ServiceLevelAuthenticationCommand   // 8.3.17
+	*nasMessage.ServiceLevelAuthenticationComplete  // 8.3.18
+	*nasMessage.RemoteUEReport                      // 8.3.19
+	*nasMessage.RemoteUEReportResponse              // 8.3.20
 }
 
 const (
@@ -461,6 +553,10 @@ const (
 	MsgTypePDUSessionReleaseCommand            uint8 = 211
 	MsgTypePDUSessionReleaseComplete           uint8 = 212
 	MsgTypeStatus5GSM                          uint8 = 214
+	MsgTypeServiceLevelAuthenticationCommand   uint8 = 216
+	MsgTypeServiceLevelAuthenticationComplete  uint8 = 217
+	MsgTypeRemoteUEReport                      uint8 = 218
+	MsgTypeRemoteUEReportResponse              uint8 = 219
 )
 
 func (a *Message) GsmMessageDecode(byteArray *[]byte) error {
@@ -516,6 +612,18 @@ func (a *Message) GsmMessageDecode(byteArray *[]byte) error {
 	case MsgTypeStatus5GSM:
 		a.GsmMessage.Status5GSM = nasMessage.NewStatus5GSM(MsgTypeStatus5GSM)
 		a.GsmMessage.DecodeStatus5GSM(byteArray)
+	case MsgTypeServiceLevelAuthenticationCommand:
+		a.GsmMessage.ServiceLevelAuthenticationCommand = nasMessage.NewServiceLevelAuthenticationCommand(MsgTypeServiceLevelAuthenticationCommand)
+		a.GsmMessage.DecodeServiceLevelAuthenticationCommand(byteArray)
+	case MsgTypeServiceLevelAuthenticationComplete:
+		a.GsmMessage.ServiceLevelAuthenticationComplete = nasMessage.NewServiceLevelAuthenticationComplete(MsgTypeServiceLevelAuthenticationComplete)
+		a.GsmMessage.DecodeServiceLevelAuthenticationComplete(byteArray)
+	case MsgTypeRemoteUEReport:
+		a.GsmMessage.RemoteUEReport = nasMessage.NewRemoteUEReport(MsgTypeRemoteUEReport)
+		a.GsmMessage.DecodeRemoteUEReport(byteArray)
+	case MsgTypeRemoteUEReportResponse:
+		a.GsmMessage.RemoteUEReportResponse = nasMessage.NewRemoteUEReportResponse(MsgTypeRemoteUEReportResponse)
+		a.GsmMessage.DecodeRemoteUEReportResponse(byteArray)
 	default:
 		return fmt.Errorf("NAS decode fail: MsgType[%d] does not exist in GSM Message", a.GsmMessage.GsmHeader.GetMessageType())
 	}
@@ -556,6 +664,14 @@ func (a *Message) GsmMessageEncode(buffer *bytes.Buffer) error {
 		a.GsmMessage.EncodePDUSessionReleaseComplete(buffer)
 	case MsgTypeStatus5GSM:
 		a.GsmMessage.EncodeStatus5GSM(buffer)
+	case MsgTypeServiceLevelAuthenticationCommand:
+		a.GsmMessage.EncodeServiceLevelAuthenticationCommand(buffer)
+	case MsgTypeServiceLevelAuthenticationComplete:
+		a.GsmMessage.EncodeServiceLevelAuthenticationComplete(buffer)
+	case MsgTypeRemoteUEReport:
+		a.GsmMessage.EncodeRemoteUEReport(buffer)
+	case MsgTypeRemoteUEReportResponse:
+		a.GsmMessage.EncodeRemoteUEReportResponse(buffer)
 	default:
 		return fmt.Errorf("NAS encode fail: MsgType[%d] does not exist in GSM Message", a.GsmMessage.GsmHeader.GetMessageType())
 	}

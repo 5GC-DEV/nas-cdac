@@ -6,16 +6,18 @@
 package nasType_test
 
 import (
+	"reflect"
 	"testing"
 
-	"github.com/5GC-DEV/nas-cdac/nasMessage"
-	"github.com/5GC-DEV/nas-cdac/nasType"
-	"github.com/stretchr/testify/assert"
+	"github.com/omec-project/nas/v2/nasMessage"
+	"github.com/omec-project/nas/v2/nasType"
 )
 
 func TestNasTypeNewRequestType(t *testing.T) {
 	a := nasType.NewRequestType(nasMessage.ULNASTransportRequestTypeType)
-	assert.NotNil(t, a)
+	if a == nil {
+		t.Fatal("Expected value not to be nil")
+	}
 }
 
 var nasTypeRequestTypeIeiTable = []NasTypeIeiData{
@@ -24,10 +26,14 @@ var nasTypeRequestTypeIeiTable = []NasTypeIeiData{
 
 func TestNasTypeRequestTypeGetSetIei(t *testing.T) {
 	a := nasType.NewRequestType(nasMessage.ULNASTransportRequestTypeType)
-	assert.NotNil(t, a)
+	if a == nil {
+		t.Fatal("Expected value not to be nil")
+	}
 	for _, table := range nasTypeRequestTypeIeiTable {
 		a.SetIei(table.in)
-		assert.Equal(t, table.out, a.GetIei())
+		if !reflect.DeepEqual(table.out, a.GetIei()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetIei())
+		}
 	}
 }
 
@@ -44,7 +50,9 @@ func TestNasTypeRequestTypeGetSetRequestTypeValue(t *testing.T) {
 	a := nasType.NewRequestType(nasMessage.ULNASTransportRequestTypeType)
 	for _, table := range nasTypeRequestTypeRequestTypeValueTable {
 		a.SetRequestTypeValue(table.in)
-		assert.Equal(t, table.out, a.GetRequestTypeValue())
+		if !reflect.DeepEqual(table.out, a.GetRequestTypeValue()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetRequestTypeValue())
+		}
 	}
 }
 
@@ -72,7 +80,9 @@ func TestNasTypeRequestType(t *testing.T) {
 		a.SetIei(0x08)
 		a.SetRequestTypeValue(0x01)
 
-		assert.Equal(t, table.out.Octet, a.Octet)
+		if !reflect.DeepEqual(table.out.Octet, a.Octet) {
+			t.Errorf("Not equal: expected %v, got %v", table.out.Octet, a.Octet)
+		}
 
 	}
 }

@@ -1,7 +1,6 @@
+// Copyright (C) 2026 Intel Corporation
 // Copyright 2019 free5GC.org
-//
 // SPDX-License-Identifier: Apache-2.0
-//
 
 package nasMessage
 
@@ -432,3 +431,11 @@ func Cause5GMMToString(cause uint8) string {
 		return ""
 	}
 }
+
+// TS 24.501 9.11.3.18D
+const (
+	ControlPlaneServiceTypeMobileOriginatingRequest  uint8 = 0x00
+	ControlPlaneServiceTypeMobileTerminatingRequest  uint8 = 0x01
+	ControlPlaneServiceTypeEmergencyServices         uint8 = 0x02
+	ControlPlaneServiceTypeEmergencyServicesFallback uint8 = 0x03
+)

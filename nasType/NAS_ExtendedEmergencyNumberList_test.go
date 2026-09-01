@@ -6,16 +6,18 @@
 package nasType_test
 
 import (
+	"reflect"
 	"testing"
 
-	"github.com/5GC-DEV/nas-cdac/nasMessage"
-	"github.com/5GC-DEV/nas-cdac/nasType"
-	"github.com/stretchr/testify/assert"
+	"github.com/omec-project/nas/v2/nasMessage"
+	"github.com/omec-project/nas/v2/nasType"
 )
 
 func TestNasTypeNewExtendedEmergencyNumberList(t *testing.T) {
 	a := nasType.NewExtendedEmergencyNumberList(nasMessage.RegistrationAcceptExtendedEmergencyNumberListType)
-	assert.NotNil(t, a)
+	if a == nil {
+		t.Fatal("Expected value not to be nil")
+	}
 }
 
 var nasTypeRegistrationAcceptExtendedEmergencyNumberListIeiTable = []NasTypeIeiData{
@@ -26,7 +28,9 @@ func TestNasTypeExtendedEmergencyNumberListGetSetIei(t *testing.T) {
 	a := nasType.NewExtendedEmergencyNumberList(nasMessage.RegistrationAcceptExtendedEmergencyNumberListType)
 	for _, table := range nasTypeRegistrationAcceptExtendedEmergencyNumberListIeiTable {
 		a.SetIei(table.in)
-		assert.Equal(t, table.out, a.GetIei())
+		if !reflect.DeepEqual(table.out, a.GetIei()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetIei())
+		}
 	}
 }
 
@@ -38,7 +42,9 @@ func TestNasTypeExtendedEmergencyNumberListGetSetLen(t *testing.T) {
 	a := nasType.NewExtendedEmergencyNumberList(nasMessage.RegistrationAcceptExtendedEmergencyNumberListType)
 	for _, table := range nasTypeExtendedEmergencyNumberListLenTable {
 		a.SetLen(table.in)
-		assert.Equal(t, table.out, a.GetLen())
+		if !reflect.DeepEqual(table.out, a.GetLen()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetLen())
+		}
 	}
 }
 
@@ -57,7 +63,9 @@ func TestNasTypeExtendedEmergencyNumberListGetSetEENL(t *testing.T) {
 	for _, table := range nasTypeExtendedEmergencyNumberListEENLTable {
 		a.SetLen(table.inLen)
 		a.SetEENL(table.in)
-		assert.Equalf(t, table.out, a.GetEENL(), "in(%v): out %v, actual %x", table.in, table.out, a.GetEENL())
+		if !reflect.DeepEqual(table.out, a.GetEENL()) {
+			t.Errorf("in(%v): out %v, actual %x", table.in, table.out, a.GetEENL())
+		}
 	}
 }
 
@@ -76,7 +84,11 @@ func TestNasTypeExtendedEmergencyNumberListGetSetExtendedEmergencyNumberList(t *
 	for _, table := range nasTypeExtendedEmergencyNumberListEmergencyInformationTable {
 		a.SetLen(table.inLen)
 		a.SetEmergencyInformation(table.in)
-		assert.Equalf(t, table.out, a.GetEmergencyInformation(), "in(%v): out %v, actual %x", table.in, table.out, a.GetEmergencyInformation())
-		assert.Equalf(t, table.out, a.Buffer, "in(%v): out %v, actual %x", table.in, table.out, a.Buffer)
+		if !reflect.DeepEqual(table.out, a.GetEmergencyInformation()) {
+			t.Errorf("in(%v): out %v, actual %x", table.in, table.out, a.GetEmergencyInformation())
+		}
+		if !reflect.DeepEqual(table.out, a.Buffer) {
+			t.Errorf("in(%v): out %v, actual %x", table.in, table.out, a.Buffer)
+		}
 	}
 }

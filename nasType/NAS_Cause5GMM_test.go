@@ -6,16 +6,18 @@
 package nasType_test
 
 import (
+	"reflect"
 	"testing"
 
-	"github.com/5GC-DEV/nas-cdac/nasMessage"
-	"github.com/5GC-DEV/nas-cdac/nasType"
-	"github.com/stretchr/testify/assert"
+	"github.com/omec-project/nas/v2/nasMessage"
+	"github.com/omec-project/nas/v2/nasType"
 )
 
 func TestNasTypeNewCause5GMM(t *testing.T) {
 	a := nasType.NewCause5GMM(nasMessage.DeregistrationRequestUETerminatedDeregistrationCause5GMMType)
-	assert.NotNil(t, a)
+	if a == nil {
+		t.Fatal("Expected value not to be nil")
+	}
 }
 
 var nasTypeDeregistrationRequestUETerminatedDeregistrationCause5GMMTable = []NasTypeIeiData{
@@ -26,7 +28,9 @@ func TestNasTypeCause5GMMGetSetIei(t *testing.T) {
 	a := nasType.NewCause5GMM(nasMessage.DeregistrationRequestUETerminatedDeregistrationCause5GMMType)
 	for _, table := range nasTypeDeregistrationRequestUETerminatedDeregistrationCause5GMMTable {
 		a.SetIei(table.in)
-		assert.Equal(t, table.out, a.GetIei())
+		if !reflect.DeepEqual(table.out, a.GetIei()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetIei())
+		}
 	}
 }
 
@@ -43,7 +47,9 @@ func TestNasTypeCause5GMMGetSetCauseValue(t *testing.T) {
 	a := nasType.NewCause5GMM(nasMessage.DeregistrationRequestUETerminatedDeregistrationCause5GMMType)
 	for _, table := range nasTypeCause5GMMOctetTable {
 		a.SetCauseValue(table.in)
-		assert.Equal(t, table.out, a.GetCauseValue())
+		if !reflect.DeepEqual(table.out, a.GetCauseValue()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetCauseValue())
+		}
 	}
 }
 
@@ -72,8 +78,12 @@ func TestNasTypeCause5GMM(t *testing.T) {
 		a.SetIei(table.in.GetIei())
 		a.SetCauseValue(table.in.Octet)
 
-		assert.Equalf(t, table.out.Iei, a.Iei, "in(%v): out %v, actual %x", table.in.Iei, table.out.Iei, a.Iei)
-		assert.Equalf(t, table.out.Octet, a.Octet, "in(%v): out %v, actual %x", table.in.Octet, table.out.Octet, a.Octet)
+		if !reflect.DeepEqual(table.out.Iei, a.Iei) {
+			t.Errorf("in(%v): out %v, actual %x", table.in.Iei, table.out.Iei, a.Iei)
+		}
+		if !reflect.DeepEqual(table.out.Octet, a.Octet) {
+			t.Errorf("in(%v): out %v, actual %x", table.in.Octet, table.out.Octet, a.Octet)
+		}
 
 	}
 }

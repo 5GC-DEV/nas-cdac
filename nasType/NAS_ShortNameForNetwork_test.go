@@ -6,16 +6,18 @@
 package nasType_test
 
 import (
+	"reflect"
 	"testing"
 
-	"github.com/5GC-DEV/nas-cdac/nasMessage"
-	"github.com/5GC-DEV/nas-cdac/nasType"
-	"github.com/stretchr/testify/assert"
+	"github.com/omec-project/nas/v2/nasMessage"
+	"github.com/omec-project/nas/v2/nasType"
 )
 
 func TestNasTypeNewShortNameForNetwork(t *testing.T) {
 	a := nasType.NewShortNameForNetwork(nasMessage.ConfigurationUpdateCommandShortNameForNetworkType)
-	assert.NotNil(t, a)
+	if a == nil {
+		t.Fatal("Expected value not to be nil")
+	}
 }
 
 var nasTypeShortNameForNetworkTable = []NasTypeIeiData{
@@ -26,7 +28,9 @@ func TestNasTypeShortNameForNetworkGetSetIei(t *testing.T) {
 	a := nasType.NewShortNameForNetwork(nasMessage.ConfigurationUpdateCommandShortNameForNetworkType)
 	for _, table := range nasTypeShortNameForNetworkTable {
 		a.SetIei(table.in)
-		assert.Equal(t, table.out, a.GetIei())
+		if !reflect.DeepEqual(table.out, a.GetIei()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetIei())
+		}
 	}
 }
 
@@ -38,7 +42,9 @@ func TestNasTypeShortNameForNetworkGetSetLen(t *testing.T) {
 	a := nasType.NewShortNameForNetwork(nasMessage.ConfigurationUpdateCommandShortNameForNetworkType)
 	for _, table := range nasTypeShortNameForNetworkLenTable {
 		a.SetLen(table.in)
-		assert.Equal(t, table.out, a.GetLen())
+		if !reflect.DeepEqual(table.out, a.GetLen()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetLen())
+		}
 	}
 }
 
@@ -57,7 +63,9 @@ func TestNasTypeShortNameForNetworkGetSetExt(t *testing.T) {
 	for _, table := range nasTypeShortNameForNetworkExtTable {
 		a.SetLen(table.inLen) // fix it, set input length
 		a.SetExt(table.in)
-		assert.Equalf(t, table.out, a.GetExt(), "in(%v): out %v, actual %x", table.in, table.out, a.GetExt())
+		if !reflect.DeepEqual(table.out, a.GetExt()) {
+			t.Errorf("in(%v): out %v, actual %x", table.in, table.out, a.GetExt())
+		}
 	}
 }
 
@@ -76,7 +84,9 @@ func TestNasTypeShortNameForNetworkGetSetCodingScheme(t *testing.T) {
 	for _, table := range nasTypeShortNameForNetworkCodingSchemeTable {
 		a.SetLen(table.inLen)
 		a.SetCodingScheme(table.in)
-		assert.Equalf(t, table.out, a.GetCodingScheme(), "in(%v): out %v, actual %x", table.in, table.out, a.GetCodingScheme())
+		if !reflect.DeepEqual(table.out, a.GetCodingScheme()) {
+			t.Errorf("in(%v): out %v, actual %x", table.in, table.out, a.GetCodingScheme())
+		}
 	}
 }
 
@@ -95,7 +105,9 @@ func TestNasTypeShortNameForNetworkGetSetAddCI(t *testing.T) {
 	for _, table := range nasTypeShortNameForNetworkAddCITable {
 		a.SetLen(table.inLen)
 		a.SetAddCI(table.in)
-		assert.Equalf(t, table.out, a.GetAddCI(), "in(%v): out %v, actual %x", table.in, table.out, a.GetAddCI())
+		if !reflect.DeepEqual(table.out, a.GetAddCI()) {
+			t.Errorf("in(%v): out %v, actual %x", table.in, table.out, a.GetAddCI())
+		}
 	}
 }
 
@@ -114,7 +126,9 @@ func TestNasTypeShortNameForNetworkGetSetNumberOfSpareBitsInLastOctet(t *testing
 	for _, table := range nasTypeShortNameForNetworkNumberOfSpareBitsInLastOctetTable {
 		a.SetLen(table.inLen)
 		a.SetNumberOfSpareBitsInLastOctet(table.in)
-		assert.Equalf(t, table.out, a.GetNumberOfSpareBitsInLastOctet(), "in(%v): out %v, actual %x", table.in, table.out, a.GetNumberOfSpareBitsInLastOctet())
+		if !reflect.DeepEqual(table.out, a.GetNumberOfSpareBitsInLastOctet()) {
+			t.Errorf("in(%v): out %v, actual %x", table.in, table.out, a.GetNumberOfSpareBitsInLastOctet())
+		}
 	}
 }
 
@@ -133,7 +147,9 @@ func TestNasTypeShortNameForNetworkGetSetTextString(t *testing.T) {
 	for _, table := range nasTypeShortNameForNetworkTextStringTable {
 		a.SetLen(table.inLen)
 		a.SetTextString(table.in)
-		assert.Equalf(t, table.out, a.GetTextString(), "in(%v): out %v, actual %x", table.in, table.out, a.GetTextString())
+		if !reflect.DeepEqual(table.out, a.GetTextString()) {
+			t.Errorf("in(%v): out %v, actual %x", table.in, table.out, a.GetTextString())
+		}
 	}
 }
 
@@ -167,9 +183,15 @@ func TestNasTypeShortNameForNetwork(t *testing.T) {
 		a.SetNumberOfSpareBitsInLastOctet(0x01)
 		a.SetTextString([]uint8{0x01, 0x01})
 
-		assert.Equalf(t, table.out.Iei, a.Iei, "in(%v): out %v, actual %x", table.in.Iei, table.out.Iei, a.Iei)
-		assert.Equalf(t, table.out.Len, a.Len, "in(%v): out %v, actual %x", table.in.Len, table.out.Len, a.Len)
-		assert.Equalf(t, table.out.Buffer, a.Buffer, "in(%v): out %v, actual %x", table.in.Buffer, table.out.Buffer, a.Buffer)
+		if !reflect.DeepEqual(table.out.Iei, a.Iei) {
+			t.Errorf("in(%v): out %v, actual %x", table.in.Iei, table.out.Iei, a.Iei)
+		}
+		if !reflect.DeepEqual(table.out.Len, a.Len) {
+			t.Errorf("in(%v): out %v, actual %x", table.in.Len, table.out.Len, a.Len)
+		}
+		if !reflect.DeepEqual(table.out.Buffer, a.Buffer) {
+			t.Errorf("in(%v): out %v, actual %x", table.in.Buffer, table.out.Buffer, a.Buffer)
+		}
 
 	}
 }

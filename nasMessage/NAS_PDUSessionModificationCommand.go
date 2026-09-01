@@ -9,7 +9,7 @@ import (
 	"bytes"
 	"encoding/binary"
 
-	"github.com/5GC-DEV/nas-cdac/nasType"
+	"github.com/omec-project/nas/v2/nasType"
 )
 
 type PDUSessionModificationCommand struct {
@@ -25,6 +25,14 @@ type PDUSessionModificationCommand struct {
 	*nasType.MappedEPSBearerContexts
 	*nasType.AuthorizedQosFlowDescriptions
 	*nasType.ExtendedProtocolConfigurationOptions
+	*nasType.ATSSSContainer
+	*nasType.IPHeaderCompressionConfiguration
+	*nasType.ServingPLMNRateControl
+	*nasType.EthernetHeaderCompressionConfiguration
+	*nasType.ReceivedMBSContainer
+	*nasType.ServiceLevelAAContainer
+	AlternativeSNSSAI *nasType.SNSSAI
+	*nasType.N3QAI
 }
 
 func NewPDUSessionModificationCommand(iei uint8) (pDUSessionModificationCommand *PDUSessionModificationCommand) {
@@ -41,6 +49,14 @@ const (
 	PDUSessionModificationCommandMappedEPSBearerContextsType              uint8 = 0x7F
 	PDUSessionModificationCommandAuthorizedQosFlowDescriptionsType        uint8 = 0x79
 	PDUSessionModificationCommandExtendedProtocolConfigurationOptionsType uint8 = 0x7B
+	PDUSessionModificationCommandATSSSContainerType                       uint8 = 0x77
+	PDUSessionModificationCommandIPHeaderCompressionConfigurationType     uint8 = 0x66
+	PDUSessionModificationCommandServingPLMNRateControlType               uint8 = 0x1E
+	PDUSessionModificationCommandEthernetHeaderCompressionConfigType      uint8 = 0x1F
+	PDUSessionModificationCommandReceivedMBSContainerType                 uint8 = 0x71
+	PDUSessionModificationCommandServiceLevelAAContainerType              uint8 = 0x72
+	PDUSessionModificationCommandAlternativeSNSSAIType                    uint8 = 0x5A
+	PDUSessionModificationCommandN3QAIType                                uint8 = 0x70
 )
 
 func (a *PDUSessionModificationCommand) EncodePDUSessionModificationCommand(buffer *bytes.Buffer) {
@@ -83,6 +99,46 @@ func (a *PDUSessionModificationCommand) EncodePDUSessionModificationCommand(buff
 		binary.Write(buffer, binary.BigEndian, a.ExtendedProtocolConfigurationOptions.GetIei())
 		binary.Write(buffer, binary.BigEndian, a.ExtendedProtocolConfigurationOptions.GetLen())
 		binary.Write(buffer, binary.BigEndian, &a.ExtendedProtocolConfigurationOptions.Buffer)
+	}
+	if a.ATSSSContainer != nil {
+		binary.Write(buffer, binary.BigEndian, a.ATSSSContainer.GetIei())
+		binary.Write(buffer, binary.BigEndian, a.ATSSSContainer.GetLen())
+		binary.Write(buffer, binary.BigEndian, &a.ATSSSContainer.Buffer)
+	}
+	if a.IPHeaderCompressionConfiguration != nil {
+		binary.Write(buffer, binary.BigEndian, a.IPHeaderCompressionConfiguration.GetIei())
+		binary.Write(buffer, binary.BigEndian, a.IPHeaderCompressionConfiguration.GetLen())
+		binary.Write(buffer, binary.BigEndian, &a.IPHeaderCompressionConfiguration.Buffer)
+	}
+	if a.ServingPLMNRateControl != nil {
+		binary.Write(buffer, binary.BigEndian, a.ServingPLMNRateControl.GetIei())
+		binary.Write(buffer, binary.BigEndian, a.ServingPLMNRateControl.GetLen())
+		binary.Write(buffer, binary.BigEndian, &a.ServingPLMNRateControl.Buffer)
+	}
+	if a.EthernetHeaderCompressionConfiguration != nil {
+		binary.Write(buffer, binary.BigEndian, a.EthernetHeaderCompressionConfiguration.GetIei())
+		binary.Write(buffer, binary.BigEndian, a.EthernetHeaderCompressionConfiguration.GetLen())
+		binary.Write(buffer, binary.BigEndian, &a.EthernetHeaderCompressionConfiguration.Octet)
+	}
+	if a.ReceivedMBSContainer != nil {
+		binary.Write(buffer, binary.BigEndian, a.ReceivedMBSContainer.GetIei())
+		binary.Write(buffer, binary.BigEndian, a.ReceivedMBSContainer.GetLen())
+		binary.Write(buffer, binary.BigEndian, &a.ReceivedMBSContainer.Buffer)
+	}
+	if a.ServiceLevelAAContainer != nil {
+		binary.Write(buffer, binary.BigEndian, a.ServiceLevelAAContainer.GetIei())
+		binary.Write(buffer, binary.BigEndian, a.ServiceLevelAAContainer.GetLen())
+		binary.Write(buffer, binary.BigEndian, &a.ServiceLevelAAContainer.Buffer)
+	}
+	if a.AlternativeSNSSAI != nil {
+		binary.Write(buffer, binary.BigEndian, a.AlternativeSNSSAI.GetIei())
+		binary.Write(buffer, binary.BigEndian, a.AlternativeSNSSAI.GetLen())
+		binary.Write(buffer, binary.BigEndian, a.AlternativeSNSSAI.Octet[:a.AlternativeSNSSAI.GetLen()])
+	}
+	if a.N3QAI != nil {
+		binary.Write(buffer, binary.BigEndian, a.N3QAI.GetIei())
+		binary.Write(buffer, binary.BigEndian, a.N3QAI.GetLen())
+		binary.Write(buffer, binary.BigEndian, &a.N3QAI.Buffer)
 	}
 }
 
@@ -136,6 +192,46 @@ func (a *PDUSessionModificationCommand) DecodePDUSessionModificationCommand(byte
 			binary.Read(buffer, binary.BigEndian, &a.ExtendedProtocolConfigurationOptions.Len)
 			a.ExtendedProtocolConfigurationOptions.SetLen(a.ExtendedProtocolConfigurationOptions.GetLen())
 			binary.Read(buffer, binary.BigEndian, a.ExtendedProtocolConfigurationOptions.Buffer[:a.ExtendedProtocolConfigurationOptions.GetLen()])
+		case PDUSessionModificationCommandATSSSContainerType:
+			a.ATSSSContainer = nasType.NewATSSSContainer(ieiN)
+			binary.Read(buffer, binary.BigEndian, &a.ATSSSContainer.Len)
+			a.ATSSSContainer.SetLen(a.ATSSSContainer.GetLen())
+			binary.Read(buffer, binary.BigEndian, a.ATSSSContainer.Buffer[:a.ATSSSContainer.GetLen()])
+		case PDUSessionModificationCommandIPHeaderCompressionConfigurationType:
+			a.IPHeaderCompressionConfiguration = nasType.NewIPHeaderCompressionConfiguration(ieiN)
+			binary.Read(buffer, binary.BigEndian, &a.IPHeaderCompressionConfiguration.Len)
+			a.IPHeaderCompressionConfiguration.SetLen(a.IPHeaderCompressionConfiguration.GetLen())
+			binary.Read(buffer, binary.BigEndian, a.IPHeaderCompressionConfiguration.Buffer[:a.IPHeaderCompressionConfiguration.GetLen()])
+		case PDUSessionModificationCommandServingPLMNRateControlType:
+			a.ServingPLMNRateControl = nasType.NewServingPLMNRateControl(ieiN)
+			binary.Read(buffer, binary.BigEndian, &a.ServingPLMNRateControl.Len)
+			a.ServingPLMNRateControl.SetLen(a.ServingPLMNRateControl.GetLen())
+			binary.Read(buffer, binary.BigEndian, a.ServingPLMNRateControl.Buffer[:a.ServingPLMNRateControl.GetLen()])
+		case PDUSessionModificationCommandEthernetHeaderCompressionConfigType:
+			a.EthernetHeaderCompressionConfiguration = nasType.NewEthernetHeaderCompressionConfiguration(ieiN)
+			binary.Read(buffer, binary.BigEndian, &a.EthernetHeaderCompressionConfiguration.Len)
+			a.EthernetHeaderCompressionConfiguration.SetLen(a.EthernetHeaderCompressionConfiguration.GetLen())
+			binary.Read(buffer, binary.BigEndian, &a.EthernetHeaderCompressionConfiguration.Octet)
+		case PDUSessionModificationCommandReceivedMBSContainerType:
+			a.ReceivedMBSContainer = nasType.NewReceivedMBSContainer(ieiN)
+			binary.Read(buffer, binary.BigEndian, &a.ReceivedMBSContainer.Len)
+			a.ReceivedMBSContainer.SetLen(a.ReceivedMBSContainer.GetLen())
+			binary.Read(buffer, binary.BigEndian, a.ReceivedMBSContainer.Buffer[:a.ReceivedMBSContainer.GetLen()])
+		case PDUSessionModificationCommandServiceLevelAAContainerType:
+			a.ServiceLevelAAContainer = nasType.NewServiceLevelAAContainer(ieiN)
+			binary.Read(buffer, binary.BigEndian, &a.ServiceLevelAAContainer.Len)
+			a.ServiceLevelAAContainer.SetLen(a.ServiceLevelAAContainer.GetLen())
+			binary.Read(buffer, binary.BigEndian, a.ServiceLevelAAContainer.Buffer[:a.ServiceLevelAAContainer.GetLen()])
+		case PDUSessionModificationCommandAlternativeSNSSAIType:
+			a.AlternativeSNSSAI = nasType.NewSNSSAI(ieiN)
+			binary.Read(buffer, binary.BigEndian, &a.AlternativeSNSSAI.Len)
+			a.AlternativeSNSSAI.SetLen(a.AlternativeSNSSAI.GetLen())
+			binary.Read(buffer, binary.BigEndian, a.AlternativeSNSSAI.Octet[:a.AlternativeSNSSAI.GetLen()])
+		case PDUSessionModificationCommandN3QAIType:
+			a.N3QAI = nasType.NewN3QAI(ieiN)
+			binary.Read(buffer, binary.BigEndian, &a.N3QAI.Len)
+			a.N3QAI.SetLen(a.N3QAI.GetLen())
+			binary.Read(buffer, binary.BigEndian, a.N3QAI.Buffer[:a.N3QAI.GetLen()])
 		default:
 		}
 	}

@@ -6,18 +6,20 @@
 package nasType_test
 
 import (
+	"reflect"
 	"testing"
 
-	"github.com/5GC-DEV/nas-cdac/nasMessage"
-	"github.com/5GC-DEV/nas-cdac/nasType"
-	"github.com/stretchr/testify/assert"
+	"github.com/omec-project/nas/v2/nasMessage"
+	"github.com/omec-project/nas/v2/nasType"
 )
 
 var AlwaysonPDUSessionRequestedIeiInput uint8 = 0x0B
 
 func TestNasTypeNewAlwaysonPDUSessionRequested(t *testing.T) {
 	a := nasType.NewAlwaysonPDUSessionRequested(AlwaysonPDUSessionRequestedIeiInput)
-	assert.NotNil(t, a)
+	if a == nil {
+		t.Fatal("Expected value not to be nil")
+	}
 }
 
 var nasTypePDUSessionEstablishmentRequestAlwaysonPDUSessionRequestedTable = []NasTypeIeiData{
@@ -28,7 +30,9 @@ func TestNasTypeAlwaysonPDUSessionRequestedGetSetIei(t *testing.T) {
 	a := nasType.NewAlwaysonPDUSessionRequested(AlwaysonPDUSessionRequestedIeiInput)
 	for _, table := range nasTypePDUSessionEstablishmentRequestAlwaysonPDUSessionRequestedTable {
 		a.SetIei(table.in)
-		assert.Equal(t, table.out, a.GetIei())
+		if !reflect.DeepEqual(table.out, a.GetIei()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetIei())
+		}
 	}
 }
 
@@ -45,7 +49,9 @@ func TestNasTypeAlwaysonPDUSessionRequestedGetSetAPSR(t *testing.T) {
 	a := nasType.NewAlwaysonPDUSessionRequested(nasMessage.PDUSessionEstablishmentRequestAlwaysonPDUSessionRequestedType)
 	for _, table := range nasTypeAlwaysonPDUSessionRequestedAPSRTable {
 		a.SetAPSR(table.in)
-		assert.Equal(t, table.out, a.GetAPSR())
+		if !reflect.DeepEqual(table.out, a.GetAPSR()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetAPSR())
+		}
 	}
 }
 
@@ -73,7 +79,9 @@ func TestNasTypeAlwaysonPDUSessionRequested(t *testing.T) {
 		a.SetIei(AlwaysonPDUSessionRequestedIeiInput)
 		a.SetAPSR(table.in.GetAPSR())
 
-		assert.Equal(t, table.out.Octet, a.Octet)
+		if !reflect.DeepEqual(table.out.Octet, a.Octet) {
+			t.Errorf("Not equal: expected %v, got %v", table.out.Octet, a.Octet)
+		}
 
 	}
 }

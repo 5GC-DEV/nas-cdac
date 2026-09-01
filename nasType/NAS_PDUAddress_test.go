@@ -6,16 +6,18 @@
 package nasType_test
 
 import (
+	"reflect"
 	"testing"
 
-	"github.com/5GC-DEV/nas-cdac/nasMessage"
-	"github.com/5GC-DEV/nas-cdac/nasType"
-	"github.com/stretchr/testify/assert"
+	"github.com/omec-project/nas/v2/nasMessage"
+	"github.com/omec-project/nas/v2/nasType"
 )
 
 func TestNasTypeNewPDUAddress(t *testing.T) {
 	a := nasType.NewPDUAddress(nasMessage.PDUSessionEstablishmentAcceptPDUAddressType)
-	assert.NotNil(t, a)
+	if a == nil {
+		t.Fatal("Expected value not to be nil")
+	}
 }
 
 var nasTypePDUAddressPDUSessionEstablishmentAcceptPDUAddressTypeTable = []NasTypeIeiData{
@@ -26,7 +28,9 @@ func TestNasTypePDUAddressGetSetIei(t *testing.T) {
 	a := nasType.NewPDUAddress(nasMessage.PDUSessionEstablishmentAcceptPDUAddressType)
 	for _, table := range nasTypePDUAddressPDUSessionEstablishmentAcceptPDUAddressTypeTable {
 		a.SetIei(table.in)
-		assert.Equal(t, table.out, a.GetIei())
+		if !reflect.DeepEqual(table.out, a.GetIei()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetIei())
+		}
 	}
 }
 
@@ -38,7 +42,9 @@ func TestNasTypePDUAddressGetSetLen(t *testing.T) {
 	a := nasType.NewPDUAddress(nasMessage.PDUSessionEstablishmentAcceptPDUAddressType)
 	for _, table := range nasTypePDUAddressLenTable {
 		a.SetLen(table.in)
-		assert.Equal(t, table.out, a.GetLen())
+		if !reflect.DeepEqual(table.out, a.GetLen()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetLen())
+		}
 	}
 }
 
@@ -57,7 +63,9 @@ func TestNasTypePDUAddressGetSetPDUSessionTypeValue(t *testing.T) {
 	for _, table := range nasTypePDUAddressPDUSessionTypeValueTable {
 		a.SetLen(table.inLen)
 		a.SetPDUSessionTypeValue(table.in)
-		assert.Equal(t, table.out, a.GetPDUSessionTypeValue())
+		if !reflect.DeepEqual(table.out, a.GetPDUSessionTypeValue()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetPDUSessionTypeValue())
+		}
 	}
 }
 
@@ -76,7 +84,9 @@ func TestNasTypePDUAddressGetSetPDUAddressInformation(t *testing.T) {
 	for _, table := range nasTypePDUAddressPDUAddressInformationTable {
 		a.SetLen(table.inLen)
 		a.SetPDUAddressInformation(table.in)
-		assert.Equal(t, table.out, a.GetPDUAddressInformation())
+		if !reflect.DeepEqual(table.out, a.GetPDUAddressInformation()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetPDUAddressInformation())
+		}
 	}
 }
 
@@ -110,9 +120,17 @@ func TestNasTypePDUAddress(t *testing.T) {
 		a.SetPDUSessionTypeValue(table.inPDUSessionTypeValue)
 		a.SetPDUAddressInformation(table.inPDUAddressInformation)
 
-		assert.Equalf(t, table.outIei, a.Iei, "in(%v): out %v, actual %x", table.inIei, table.outIei, a.Iei)
-		assert.Equalf(t, table.outLen, a.Len, "in(%v): out %v, actual %x", table.inLen, table.outLen, a.Len)
-		assert.Equalf(t, table.outPDUSessionTypeValue, a.GetPDUSessionTypeValue(), "in(%v): out %v, actual %x", table.inPDUSessionTypeValue, table.outPDUSessionTypeValue, a.GetPDUSessionTypeValue())
-		assert.Equalf(t, table.outPDUAddressInformation, a.GetPDUAddressInformation(), "in(%v): out %v, actual %x", table.inPDUAddressInformation, table.outPDUAddressInformation, a.GetPDUAddressInformation())
+		if !reflect.DeepEqual(table.outIei, a.Iei) {
+			t.Errorf("in(%v): out %v, actual %x", table.inIei, table.outIei, a.Iei)
+		}
+		if !reflect.DeepEqual(table.outLen, a.Len) {
+			t.Errorf("in(%v): out %v, actual %x", table.inLen, table.outLen, a.Len)
+		}
+		if !reflect.DeepEqual(table.outPDUSessionTypeValue, a.GetPDUSessionTypeValue()) {
+			t.Errorf("in(%v): out %v, actual %x", table.inPDUSessionTypeValue, table.outPDUSessionTypeValue, a.GetPDUSessionTypeValue())
+		}
+		if !reflect.DeepEqual(table.outPDUAddressInformation, a.GetPDUAddressInformation()) {
+			t.Errorf("in(%v): out %v, actual %x", table.inPDUAddressInformation, table.outPDUAddressInformation, a.GetPDUAddressInformation())
+		}
 	}
 }

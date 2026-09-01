@@ -6,18 +6,20 @@
 package nasType_test
 
 import (
+	"reflect"
 	"testing"
 
-	"github.com/5GC-DEV/nas-cdac/nasMessage"
-	"github.com/5GC-DEV/nas-cdac/nasType"
-	"github.com/stretchr/testify/assert"
+	"github.com/omec-project/nas/v2/nasMessage"
+	"github.com/omec-project/nas/v2/nasType"
 )
 
 var PDUSessionEstablishmentAcceptAlwaysonPDUSessionIndicationTypeIeiInput uint8 = 0x08
 
 func TestNasTypeNewAlwaysonPDUSessionIndication(t *testing.T) {
 	a := nasType.NewAlwaysonPDUSessionIndication(PDUSessionEstablishmentAcceptAlwaysonPDUSessionIndicationTypeIeiInput)
-	assert.NotNil(t, a)
+	if a == nil {
+		t.Fatal("Expected value not to be nil")
+	}
 }
 
 var nasTypePDUSessionEstablishmentRequestAlwaysonPDUSessionIndicationTable = []NasTypeIeiData{
@@ -28,7 +30,9 @@ func TestNasTypeAlwaysonPDUSessionIndicationGetSetIei(t *testing.T) {
 	a := nasType.NewAlwaysonPDUSessionIndication(nasMessage.PDUSessionEstablishmentAcceptAlwaysonPDUSessionIndicationType)
 	for _, table := range nasTypePDUSessionEstablishmentRequestAlwaysonPDUSessionIndicationTable {
 		a.SetIei(table.in)
-		assert.Equal(t, table.out, a.GetIei())
+		if !reflect.DeepEqual(table.out, a.GetIei()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetIei())
+		}
 	}
 }
 
@@ -45,7 +49,9 @@ func TestNasTypeAlwaysonPDUSessionIndicationGetSetAPSI(t *testing.T) {
 	a := nasType.NewAlwaysonPDUSessionIndication(nasMessage.PDUSessionEstablishmentAcceptAlwaysonPDUSessionIndicationType)
 	for _, table := range nasTypeAlwaysonPDUSessionIndicationAPSITable {
 		a.SetAPSI(table.in)
-		assert.Equal(t, table.out, a.GetAPSI())
+		if !reflect.DeepEqual(table.out, a.GetAPSI()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetAPSI())
+		}
 	}
 }
 
@@ -73,7 +79,9 @@ func TestNasTypeAlwaysonPDUSessionIndication(t *testing.T) {
 		a.SetIei(PDUSessionEstablishmentAcceptAlwaysonPDUSessionIndicationTypeIeiInput)
 		a.SetAPSI(table.in.GetAPSI())
 
-		assert.Equal(t, table.out.Octet, a.Octet)
+		if !reflect.DeepEqual(table.out.Octet, a.Octet) {
+			t.Errorf("Not equal: expected %v, got %v", table.out.Octet, a.Octet)
+		}
 
 	}
 }

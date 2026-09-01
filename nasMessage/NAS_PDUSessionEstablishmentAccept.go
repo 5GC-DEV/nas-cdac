@@ -9,7 +9,7 @@ import (
 	"bytes"
 	"encoding/binary"
 
-	"github.com/5GC-DEV/nas-cdac/nasType"
+	"github.com/omec-project/nas/v2/nasType"
 )
 
 type PDUSessionEstablishmentAccept struct {
@@ -30,6 +30,15 @@ type PDUSessionEstablishmentAccept struct {
 	*nasType.AuthorizedQosFlowDescriptions
 	*nasType.ExtendedProtocolConfigurationOptions
 	*nasType.DNN
+	*nasType.FiveGSMNetworkFeatureSupport
+	*nasType.ServingPLMNRateControl
+	*nasType.ATSSSContainer
+	*nasType.ControlPlaneOnlyIndication
+	*nasType.IPHeaderCompressionConfiguration
+	*nasType.EthernetHeaderCompressionConfiguration
+	*nasType.ServiceLevelAAContainer
+	*nasType.ReceivedMBSContainer
+	*nasType.N3QAI
 }
 
 func NewPDUSessionEstablishmentAccept(iei uint8) (pDUSessionEstablishmentAccept *PDUSessionEstablishmentAccept) {
@@ -48,6 +57,15 @@ const (
 	PDUSessionEstablishmentAcceptAuthorizedQosFlowDescriptionsType        uint8 = 0x79
 	PDUSessionEstablishmentAcceptExtendedProtocolConfigurationOptionsType uint8 = 0x7B
 	PDUSessionEstablishmentAcceptDNNType                                  uint8 = 0x25
+	PDUSessionEstablishmentAcceptFiveGSMNetworkFeatureSupportType         uint8 = 0x17
+	PDUSessionEstablishmentAcceptServingPLMNRateControlType               uint8 = 0x18
+	PDUSessionEstablishmentAcceptATSSSContainerType                       uint8 = 0x77
+	PDUSessionEstablishmentAcceptControlPlaneOnlyIndicationType           uint8 = 0x0C
+	PDUSessionEstablishmentAcceptIPHeaderCompressionConfigurationType     uint8 = 0x66
+	PDUSessionEstablishmentAcceptEthernetHeaderCompressionConfigType      uint8 = 0x1F
+	PDUSessionEstablishmentAcceptServiceLevelAAContainerType              uint8 = 0x72
+	PDUSessionEstablishmentAcceptReceivedMBSContainerType                 uint8 = 0x71
+	PDUSessionEstablishmentAcceptN3QAIType                                uint8 = 0x70
 )
 
 func (a *PDUSessionEstablishmentAccept) EncodePDUSessionEstablishmentAccept(buffer *bytes.Buffer) {
@@ -105,6 +123,49 @@ func (a *PDUSessionEstablishmentAccept) EncodePDUSessionEstablishmentAccept(buff
 		binary.Write(buffer, binary.BigEndian, a.DNN.GetIei())
 		binary.Write(buffer, binary.BigEndian, a.DNN.GetLen())
 		binary.Write(buffer, binary.BigEndian, &a.DNN.Buffer)
+	}
+	if a.FiveGSMNetworkFeatureSupport != nil {
+		binary.Write(buffer, binary.BigEndian, a.FiveGSMNetworkFeatureSupport.GetIei())
+		binary.Write(buffer, binary.BigEndian, a.FiveGSMNetworkFeatureSupport.GetLen())
+		binary.Write(buffer, binary.BigEndian, &a.FiveGSMNetworkFeatureSupport.Buffer)
+	}
+	if a.ServingPLMNRateControl != nil {
+		binary.Write(buffer, binary.BigEndian, a.ServingPLMNRateControl.GetIei())
+		binary.Write(buffer, binary.BigEndian, a.ServingPLMNRateControl.GetLen())
+		binary.Write(buffer, binary.BigEndian, &a.ServingPLMNRateControl.Buffer)
+	}
+	if a.ATSSSContainer != nil {
+		binary.Write(buffer, binary.BigEndian, a.ATSSSContainer.GetIei())
+		binary.Write(buffer, binary.BigEndian, a.ATSSSContainer.GetLen())
+		binary.Write(buffer, binary.BigEndian, &a.ATSSSContainer.Buffer)
+	}
+	if a.ControlPlaneOnlyIndication != nil {
+		binary.Write(buffer, binary.BigEndian, &a.ControlPlaneOnlyIndication.Octet)
+	}
+	if a.IPHeaderCompressionConfiguration != nil {
+		binary.Write(buffer, binary.BigEndian, a.IPHeaderCompressionConfiguration.GetIei())
+		binary.Write(buffer, binary.BigEndian, a.IPHeaderCompressionConfiguration.GetLen())
+		binary.Write(buffer, binary.BigEndian, &a.IPHeaderCompressionConfiguration.Buffer)
+	}
+	if a.EthernetHeaderCompressionConfiguration != nil {
+		binary.Write(buffer, binary.BigEndian, a.EthernetHeaderCompressionConfiguration.GetIei())
+		binary.Write(buffer, binary.BigEndian, a.EthernetHeaderCompressionConfiguration.GetLen())
+		binary.Write(buffer, binary.BigEndian, &a.EthernetHeaderCompressionConfiguration.Octet)
+	}
+	if a.ServiceLevelAAContainer != nil {
+		binary.Write(buffer, binary.BigEndian, a.ServiceLevelAAContainer.GetIei())
+		binary.Write(buffer, binary.BigEndian, a.ServiceLevelAAContainer.GetLen())
+		binary.Write(buffer, binary.BigEndian, &a.ServiceLevelAAContainer.Buffer)
+	}
+	if a.ReceivedMBSContainer != nil {
+		binary.Write(buffer, binary.BigEndian, a.ReceivedMBSContainer.GetIei())
+		binary.Write(buffer, binary.BigEndian, a.ReceivedMBSContainer.GetLen())
+		binary.Write(buffer, binary.BigEndian, &a.ReceivedMBSContainer.Buffer)
+	}
+	if a.N3QAI != nil {
+		binary.Write(buffer, binary.BigEndian, a.N3QAI.GetIei())
+		binary.Write(buffer, binary.BigEndian, a.N3QAI.GetLen())
+		binary.Write(buffer, binary.BigEndian, &a.N3QAI.Buffer)
 	}
 }
 
@@ -175,6 +236,49 @@ func (a *PDUSessionEstablishmentAccept) DecodePDUSessionEstablishmentAccept(byte
 			binary.Read(buffer, binary.BigEndian, &a.DNN.Len)
 			a.DNN.SetLen(a.DNN.GetLen())
 			binary.Read(buffer, binary.BigEndian, a.DNN.Buffer[:a.DNN.GetLen()])
+		case PDUSessionEstablishmentAcceptFiveGSMNetworkFeatureSupportType:
+			a.FiveGSMNetworkFeatureSupport = nasType.NewFiveGSMNetworkFeatureSupport(ieiN)
+			binary.Read(buffer, binary.BigEndian, &a.FiveGSMNetworkFeatureSupport.Len)
+			a.FiveGSMNetworkFeatureSupport.SetLen(a.FiveGSMNetworkFeatureSupport.GetLen())
+			binary.Read(buffer, binary.BigEndian, a.FiveGSMNetworkFeatureSupport.Buffer[:a.FiveGSMNetworkFeatureSupport.GetLen()])
+		case PDUSessionEstablishmentAcceptServingPLMNRateControlType:
+			a.ServingPLMNRateControl = nasType.NewServingPLMNRateControl(ieiN)
+			binary.Read(buffer, binary.BigEndian, &a.ServingPLMNRateControl.Len)
+			a.ServingPLMNRateControl.SetLen(a.ServingPLMNRateControl.GetLen())
+			binary.Read(buffer, binary.BigEndian, a.ServingPLMNRateControl.Buffer[:a.ServingPLMNRateControl.GetLen()])
+		case PDUSessionEstablishmentAcceptATSSSContainerType:
+			a.ATSSSContainer = nasType.NewATSSSContainer(ieiN)
+			binary.Read(buffer, binary.BigEndian, &a.ATSSSContainer.Len)
+			a.ATSSSContainer.SetLen(a.ATSSSContainer.GetLen())
+			binary.Read(buffer, binary.BigEndian, a.ATSSSContainer.Buffer[:a.ATSSSContainer.GetLen()])
+		case PDUSessionEstablishmentAcceptControlPlaneOnlyIndicationType:
+			a.ControlPlaneOnlyIndication = nasType.NewControlPlaneOnlyIndication(ieiN)
+			a.ControlPlaneOnlyIndication.Octet = ieiN
+		case PDUSessionEstablishmentAcceptIPHeaderCompressionConfigurationType:
+			a.IPHeaderCompressionConfiguration = nasType.NewIPHeaderCompressionConfiguration(ieiN)
+			binary.Read(buffer, binary.BigEndian, &a.IPHeaderCompressionConfiguration.Len)
+			a.IPHeaderCompressionConfiguration.SetLen(a.IPHeaderCompressionConfiguration.GetLen())
+			binary.Read(buffer, binary.BigEndian, a.IPHeaderCompressionConfiguration.Buffer[:a.IPHeaderCompressionConfiguration.GetLen()])
+		case PDUSessionEstablishmentAcceptEthernetHeaderCompressionConfigType:
+			a.EthernetHeaderCompressionConfiguration = nasType.NewEthernetHeaderCompressionConfiguration(ieiN)
+			binary.Read(buffer, binary.BigEndian, &a.EthernetHeaderCompressionConfiguration.Len)
+			a.EthernetHeaderCompressionConfiguration.SetLen(a.EthernetHeaderCompressionConfiguration.GetLen())
+			binary.Read(buffer, binary.BigEndian, &a.EthernetHeaderCompressionConfiguration.Octet)
+		case PDUSessionEstablishmentAcceptServiceLevelAAContainerType:
+			a.ServiceLevelAAContainer = nasType.NewServiceLevelAAContainer(ieiN)
+			binary.Read(buffer, binary.BigEndian, &a.ServiceLevelAAContainer.Len)
+			a.ServiceLevelAAContainer.SetLen(a.ServiceLevelAAContainer.GetLen())
+			binary.Read(buffer, binary.BigEndian, a.ServiceLevelAAContainer.Buffer[:a.ServiceLevelAAContainer.GetLen()])
+		case PDUSessionEstablishmentAcceptReceivedMBSContainerType:
+			a.ReceivedMBSContainer = nasType.NewReceivedMBSContainer(ieiN)
+			binary.Read(buffer, binary.BigEndian, &a.ReceivedMBSContainer.Len)
+			a.ReceivedMBSContainer.SetLen(a.ReceivedMBSContainer.GetLen())
+			binary.Read(buffer, binary.BigEndian, a.ReceivedMBSContainer.Buffer[:a.ReceivedMBSContainer.GetLen()])
+		case PDUSessionEstablishmentAcceptN3QAIType:
+			a.N3QAI = nasType.NewN3QAI(ieiN)
+			binary.Read(buffer, binary.BigEndian, &a.N3QAI.Len)
+			a.N3QAI.SetLen(a.N3QAI.GetLen())
+			binary.Read(buffer, binary.BigEndian, a.N3QAI.Buffer[:a.N3QAI.GetLen()])
 		default:
 		}
 	}

@@ -6,15 +6,17 @@
 package nasType_test
 
 import (
+	"reflect"
 	"testing"
 
-	"github.com/5GC-DEV/nas-cdac/nasType"
-	"github.com/stretchr/testify/assert"
+	"github.com/omec-project/nas/v2/nasType"
 )
 
 func TestNasTypeNewTMSI5GS(t *testing.T) {
 	a := nasType.NewTMSI5GS(0x01)
-	assert.NotNil(t, a)
+	if a == nil {
+		t.Fatal("Expected value not to be nil")
+	}
 }
 
 var nasTypeServiceRequestTMSI5GSTable = []NasTypeIeiData{
@@ -25,7 +27,9 @@ func TestNasTypeTMSI5GSGetSetIei(t *testing.T) {
 	a := nasType.NewTMSI5GS(0x01)
 	for _, table := range nasTypeServiceRequestTMSI5GSTable {
 		a.SetIei(table.in)
-		assert.Equal(t, table.out, a.GetIei())
+		if !reflect.DeepEqual(table.out, a.GetIei()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetIei())
+		}
 	}
 }
 
@@ -42,7 +46,9 @@ func TestNasTypeTMSI5GSGetSetLen(t *testing.T) {
 	a := nasType.NewTMSI5GS(0x01)
 	for _, table := range nasTypeServiceRequestTMSI5GSLenTable {
 		a.SetLen(table.in)
-		assert.Equal(t, table.out, a.GetLen())
+		if !reflect.DeepEqual(table.out, a.GetLen()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetLen())
+		}
 	}
 }
 
@@ -62,7 +68,9 @@ func TestNasTypeTMSI5GSGetSetSpare(t *testing.T) {
 		a.SetLen(table.inLen)
 		a.SetSpare(table.in)
 
-		assert.Equal(t, table.out, a.GetSpare())
+		if !reflect.DeepEqual(table.out, a.GetSpare()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetSpare())
+		}
 	}
 }
 
@@ -82,7 +90,9 @@ func TestNasTypeTMSI5GSGetSetTypeOfIdentity(t *testing.T) {
 		a.SetLen(table.inLen)
 		a.SetTypeOfIdentity(table.in)
 
-		assert.Equal(t, table.out, a.GetTypeOfIdentity())
+		if !reflect.DeepEqual(table.out, a.GetTypeOfIdentity()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetTypeOfIdentity())
+		}
 	}
 }
 
@@ -102,7 +112,9 @@ func TestNasTypeTMSI5GSGetSetAMFSetID(t *testing.T) {
 		a.SetLen(table.inLen)
 		a.SetAMFSetID(table.in)
 
-		assert.Equal(t, table.out, a.GetAMFSetID())
+		if !reflect.DeepEqual(table.out, a.GetAMFSetID()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetAMFSetID())
+		}
 	}
 }
 
@@ -122,7 +134,9 @@ func TestNasTypeTMSI5GSGetSetAMFPointer(t *testing.T) {
 		a.SetLen(table.inLen)
 		a.SetAMFPointer(table.in)
 
-		assert.Equal(t, table.out, a.GetAMFPointer())
+		if !reflect.DeepEqual(table.out, a.GetAMFPointer()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetAMFPointer())
+		}
 	}
 }
 
@@ -142,7 +156,9 @@ func TestNasTypeTMSI5GSGetSetTMSI5G(t *testing.T) {
 		a.SetLen(table.inLen)
 		a.SetTMSI5G(table.in)
 
-		assert.Equal(t, table.out, a.GetTMSI5G())
+		if !reflect.DeepEqual(table.out, a.GetTMSI5G()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetTMSI5G())
+		}
 	}
 }
 
@@ -173,8 +189,14 @@ func TestNasTypeTMSI5GS(t *testing.T) {
 		a.SetAMFPointer(0x01)
 		a.SetTMSI5G([4]uint8{0x01, 0x01, 0x01, 0x01})
 
-		assert.Equal(t, table.out.Iei, a.Iei)
-		assert.Equal(t, table.out.Len, a.Len)
-		assert.Equal(t, table.out.Octet, a.Octet)
+		if !reflect.DeepEqual(table.out.Iei, a.Iei) {
+			t.Errorf("Not equal: expected %v, got %v", table.out.Iei, a.Iei)
+		}
+		if !reflect.DeepEqual(table.out.Len, a.Len) {
+			t.Errorf("Not equal: expected %v, got %v", table.out.Len, a.Len)
+		}
+		if !reflect.DeepEqual(table.out.Octet, a.Octet) {
+			t.Errorf("Not equal: expected %v, got %v", table.out.Octet, a.Octet)
+		}
 	}
 }

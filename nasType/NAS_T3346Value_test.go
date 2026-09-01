@@ -6,23 +6,27 @@
 package nasType_test
 
 import (
+	"reflect"
 	"testing"
 
-	"github.com/5GC-DEV/nas-cdac/nasMessage"
-	"github.com/5GC-DEV/nas-cdac/nasType"
-	"github.com/stretchr/testify/assert"
+	"github.com/omec-project/nas/v2/nasMessage"
+	"github.com/omec-project/nas/v2/nasType"
 )
 
 func TestNasTypeNewT3346Value(t *testing.T) {
 	a := nasType.NewT3346Value(nasMessage.RegistrationRejectT3346ValueType)
-	assert.NotNil(t, a)
+	if a == nil {
+		t.Fatal("Expected value not to be nil")
+	}
 }
 
 func TestNasTypeT3346ValueGetSetIei(t *testing.T) {
 	a := nasType.NewT3346Value(nasMessage.RegistrationRejectT3346ValueType)
 	for _, table := range nasTypeRegistrationAcceptNetworkFeatureSupport5GSTable {
 		a.SetIei(table.in)
-		assert.Equal(t, table.out, a.GetIei())
+		if !reflect.DeepEqual(table.out, a.GetIei()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetIei())
+		}
 	}
 }
 
@@ -30,7 +34,9 @@ func TestNasTypeT3346ValueGetSetLen(t *testing.T) {
 	a := nasType.NewT3346Value(nasMessage.RegistrationRejectT3346ValueType)
 	for _, table := range nasTypeRegistrationAcceptNetworkFeatureSupport5GSLenTable {
 		a.SetLen(table.in)
-		assert.Equal(t, table.out, a.GetLen())
+		if !reflect.DeepEqual(table.out, a.GetLen()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetLen())
+		}
 	}
 }
 
@@ -47,7 +53,9 @@ func TestNasTypeT3346ValueGetSetGPRSTimer2Value(t *testing.T) {
 	a := nasType.NewT3346Value(nasMessage.RegistrationRejectT3346ValueType)
 	for _, table := range nasTypeT3346ValueGPRSTimer2ValueTable {
 		a.SetGPRSTimer2Value(table.in)
-		assert.Equal(t, table.out, a.GetGPRSTimer2Value())
+		if !reflect.DeepEqual(table.out, a.GetGPRSTimer2Value()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetGPRSTimer2Value())
+		}
 	}
 }
 
@@ -74,8 +82,14 @@ func TestNasTypeT3346Value(t *testing.T) {
 		a.SetIei(table.in.Iei)
 		a.SetLen(table.in.Len)
 		a.SetGPRSTimer2Value(0x05)
-		assert.Equal(t, table.out.Iei, a.Iei)
-		assert.Equal(t, table.out.Len, a.Len)
-		assert.Equal(t, table.out.Octet, a.Octet)
+		if !reflect.DeepEqual(table.out.Iei, a.Iei) {
+			t.Errorf("Not equal: expected %v, got %v", table.out.Iei, a.Iei)
+		}
+		if !reflect.DeepEqual(table.out.Len, a.Len) {
+			t.Errorf("Not equal: expected %v, got %v", table.out.Len, a.Len)
+		}
+		if !reflect.DeepEqual(table.out.Octet, a.Octet) {
+			t.Errorf("Not equal: expected %v, got %v", table.out.Octet, a.Octet)
+		}
 	}
 }

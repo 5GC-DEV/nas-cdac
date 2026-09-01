@@ -6,10 +6,10 @@
 package nasType_test
 
 import (
+	"reflect"
 	"testing"
 
-	"github.com/5GC-DEV/nas-cdac/nasType"
-	"github.com/stretchr/testify/assert"
+	"github.com/omec-project/nas/v2/nasType"
 )
 
 type nasTypeMessageAuthenticationCodeMACData struct {
@@ -23,13 +23,17 @@ var nasTypeMessageAuthenticationCodeMACTable = []nasTypeMessageAuthenticationCod
 
 func TestNasTypeNewMessageAuthenticationCode(t *testing.T) {
 	a := nasType.NewMessageAuthenticationCode()
-	assert.NotNil(t, a)
+	if a == nil {
+		t.Fatal("Expected value not to be nil")
+	}
 }
 
 func TestNasTypeMessageAuthenticationCode(t *testing.T) {
 	a := nasType.NewMessageAuthenticationCode()
 	for _, table := range nasTypeMessageAuthenticationCodeMACTable {
 		a.SetMAC(table.in)
-		assert.Equal(t, table.out, a.GetMAC())
+		if !reflect.DeepEqual(table.out, a.GetMAC()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetMAC())
+		}
 	}
 }

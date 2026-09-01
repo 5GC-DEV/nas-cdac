@@ -6,16 +6,18 @@
 package nasType_test
 
 import (
+	"reflect"
 	"testing"
 
-	"github.com/5GC-DEV/nas-cdac/nasMessage"
-	"github.com/5GC-DEV/nas-cdac/nasType"
-	"github.com/stretchr/testify/assert"
+	"github.com/omec-project/nas/v2/nasMessage"
+	"github.com/omec-project/nas/v2/nasType"
 )
 
 func TestNasTypeNewSORTransparentContainer(t *testing.T) {
 	a := nasType.NewSORTransparentContainer(nasMessage.RegistrationAcceptSORTransparentContainerType)
-	assert.NotNil(t, a)
+	if a == nil {
+		t.Fatal("Expected value not to be nil")
+	}
 }
 
 var nasTypeSORTransparentContainerTable = []NasTypeIeiData{
@@ -26,7 +28,9 @@ func TestNasTypeSORTransparentContainerGetSetIei(t *testing.T) {
 	a := nasType.NewSORTransparentContainer(nasMessage.RegistrationAcceptSORTransparentContainerType)
 	for _, table := range nasTypeSORTransparentContainerTable {
 		a.SetIei(table.in)
-		assert.Equal(t, table.out, a.GetIei())
+		if !reflect.DeepEqual(table.out, a.GetIei()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetIei())
+		}
 	}
 }
 
@@ -43,7 +47,9 @@ func TestNasTypeSORTransparentContainerGetSetLen(t *testing.T) {
 	a := nasType.NewSORTransparentContainer(nasMessage.RegistrationAcceptSORTransparentContainerType)
 	for _, table := range nasTypeSORTransparentContainerLenTable {
 		a.SetLen(table.in)
-		assert.Equal(t, table.out, a.GetLen())
+		if !reflect.DeepEqual(table.out, a.GetLen()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetLen())
+		}
 	}
 }
 
@@ -62,7 +68,9 @@ func TestNasTypeSORTransparentContainerGetSetSORContent(t *testing.T) {
 	for _, table := range nasTypeSORTransparentContainerSORContentTable {
 		a.SetLen(table.inLen)
 		a.SetSORContent(table.in)
-		assert.Equalf(t, table.out, a.GetSORContent(), "in(%v): out %v, actual %x", table.in, table.out, a.GetSORContent())
+		if !reflect.DeepEqual(table.out, a.GetSORContent()) {
+			t.Errorf("in(%v): out %v, actual %x", table.in, table.out, a.GetSORContent())
+		}
 	}
 }
 
@@ -92,9 +100,15 @@ func TestNasTypeSORTransparentContainer(t *testing.T) {
 		a.SetLen(table.in.Len)
 		a.SetSORContent([]uint8{0x01, 0x01})
 
-		assert.Equalf(t, table.out.Iei, a.Iei, "in(%v): out %v, actual %x", table.in.Iei, table.out.Iei, a.Iei)
-		assert.Equalf(t, table.out.Len, a.Len, "in(%v): out %v, actual %x", table.in.Len, table.out.Len, a.Len)
-		assert.Equalf(t, table.out.Buffer, a.Buffer, "in(%v): out %v, actual %x", table.in.Buffer, table.out.Buffer, a.Buffer)
+		if !reflect.DeepEqual(table.out.Iei, a.Iei) {
+			t.Errorf("in(%v): out %v, actual %x", table.in.Iei, table.out.Iei, a.Iei)
+		}
+		if !reflect.DeepEqual(table.out.Len, a.Len) {
+			t.Errorf("in(%v): out %v, actual %x", table.in.Len, table.out.Len, a.Len)
+		}
+		if !reflect.DeepEqual(table.out.Buffer, a.Buffer) {
+			t.Errorf("in(%v): out %v, actual %x", table.in.Buffer, table.out.Buffer, a.Buffer)
+		}
 
 	}
 }

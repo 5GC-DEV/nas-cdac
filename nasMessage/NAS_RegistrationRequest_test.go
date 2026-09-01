@@ -1,7 +1,6 @@
+// Copyright (C) 2026 Intel Corporation
 // Copyright 2019 free5GC.org
-//
 // SPDX-License-Identifier: Apache-2.0
-//
 
 package nasMessage_test
 
@@ -10,10 +9,9 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/5GC-DEV/nas-cdac"
-	"github.com/5GC-DEV/nas-cdac/nasMessage"
-	"github.com/5GC-DEV/nas-cdac/nasType"
-	"github.com/stretchr/testify/assert"
+	"github.com/omec-project/nas/v2"
+	"github.com/omec-project/nas/v2/nasMessage"
+	"github.com/omec-project/nas/v2/nasType"
 )
 
 type nasMessageRegistrationRequestData struct {
@@ -156,7 +154,9 @@ var nasMessageRegistrationRequestTable = []nasMessageRegistrationRequestData{
 
 func TestNasTypeNewRegistrationRequest(t *testing.T) {
 	a := nasMessage.NewRegistrationRequest(0)
-	assert.NotNil(t, a)
+	if a == nil {
+		t.Fatal("Expected value not to be nil")
+	}
 }
 
 func TestNasTypeNewRegistrationRequestMessage(t *testing.T) {
@@ -164,8 +164,12 @@ func TestNasTypeNewRegistrationRequestMessage(t *testing.T) {
 		t.Logf("Test Cnt:%d", i)
 		a := nasMessage.NewRegistrationRequest(0)
 		b := nasMessage.NewRegistrationRequest(0)
-		assert.NotNil(t, a)
-		assert.NotNil(t, b)
+		if a == nil {
+			t.Fatal("Expected value not to be nil")
+		}
+		if b == nil {
+			t.Fatal("Expected value not to be nil")
+		}
 
 		a.ExtendedProtocolDiscriminator.SetExtendedProtocolDiscriminator(table.inExtendedProtocolDiscriminator)
 		a.SpareHalfOctetAndSecurityHeaderType.SetSecurityHeaderType(table.inSecurityHeader)
@@ -245,5 +249,47 @@ func TestNasTypeNewRegistrationRequestMessage(t *testing.T) {
 		if reflect.DeepEqual(a, b) != true {
 			t.Errorf("Not correct")
 		}
+	}
+}
+
+func TestRegistrationRequestNewIEsEncodeDecode(t *testing.T) {
+	a := nasMessage.NewRegistrationRequest(0)
+	b := nasMessage.NewRegistrationRequest(0)
+	if a == nil {
+		t.Fatal("Expected value not to be nil")
+	}
+	if b == nil {
+		t.Fatal("Expected value not to be nil")
+	}
+
+	a.ExtendedProtocolDiscriminator.SetExtendedProtocolDiscriminator(nasMessage.Epd5GSMobilityManagementMessage)
+	a.SpareHalfOctetAndSecurityHeaderType.SetSecurityHeaderType(0x00)
+	a.SpareHalfOctetAndSecurityHeaderType.SetSpareHalfOctet(0x00)
+	a.RegistrationRequestMessageIdentity.SetMessageType(nas.MsgTypeRegistrationRequest)
+	a.NgksiAndRegistrationType5GS.SetNasKeySetIdentifiler(0x01)
+	a.NgksiAndRegistrationType5GS.SetRegistrationType5GS(0x01)
+	a.MobileIdentity5GS = nasType.MobileIdentity5GS{Len: 2, Buffer: []uint8{0x01, 0x01}}
+
+	a.EPSBearerContextStatus = nasType.NewEPSBearerContextStatus(nasMessage.RegistrationRequestEPSBearerContextStatusType)
+	a.EPSBearerContextStatus.SetLen(2)
+	copy(a.EPSBearerContextStatus.Buffer, []byte{0x0E, 0x00})
+
+	a.ExtendedDRXParameters = nasType.NewExtendedDRXParameters(nasMessage.RegistrationRequestExtendedDRXParametersType)
+	a.ExtendedDRXParameters.SetLen(1)
+	a.ExtendedDRXParameters.Buffer[0] = 0x25
+
+	a.UERadioCapabilityID = nasType.NewUERadioCapabilityID(nasMessage.RegistrationRequestUERadioCapabilityIDType)
+	a.UERadioCapabilityID.SetLen(3)
+	copy(a.UERadioCapabilityID.Buffer, []byte{0x01, 0x02, 0x03})
+
+	buff := new(bytes.Buffer)
+	a.EncodeRegistrationRequest(buff)
+
+	data := make([]byte, buff.Len())
+	buff.Read(data)
+	b.DecodeRegistrationRequest(&data)
+
+	if reflect.DeepEqual(a, b) != true {
+		t.Errorf("RegistrationRequest new IEs encode/decode mismatch")
 	}
 }

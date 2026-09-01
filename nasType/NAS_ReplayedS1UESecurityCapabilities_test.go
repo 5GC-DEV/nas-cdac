@@ -6,16 +6,18 @@
 package nasType_test
 
 import (
+	"reflect"
 	"testing"
 
-	"github.com/5GC-DEV/nas-cdac/nasMessage"
-	"github.com/5GC-DEV/nas-cdac/nasType"
-	"github.com/stretchr/testify/assert"
+	"github.com/omec-project/nas/v2/nasMessage"
+	"github.com/omec-project/nas/v2/nasType"
 )
 
 func TestNasTypeNewReplayedS1UESecurityCapabilities(t *testing.T) {
 	a := nasType.NewReplayedS1UESecurityCapabilities(nasMessage.SecurityModeCommandReplayedS1UESecurityCapabilitiesType)
-	assert.NotNil(t, a)
+	if a == nil {
+		t.Fatal("Expected value not to be nil")
+	}
 }
 
 var nasTypeServiceRequestReplayedS1UESecurityCapabilitiesTable = []NasTypeIeiData{
@@ -26,7 +28,9 @@ func TestNasTypeReplayedS1UESecurityCapabilitiesGetSetIei(t *testing.T) {
 	a := nasType.NewReplayedS1UESecurityCapabilities(nasMessage.SecurityModeCommandReplayedS1UESecurityCapabilitiesType)
 	for _, table := range nasTypeServiceRequestReplayedS1UESecurityCapabilitiesTable {
 		a.SetIei(table.in)
-		assert.Equal(t, table.out, a.GetIei())
+		if !reflect.DeepEqual(table.out, a.GetIei()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetIei())
+		}
 	}
 }
 
@@ -38,7 +42,9 @@ func TestNasTypeReplayedS1UESecurityCapabilitiesGetSetLen(t *testing.T) {
 	a := nasType.NewReplayedS1UESecurityCapabilities(nasMessage.SecurityModeCommandReplayedS1UESecurityCapabilitiesType)
 	for _, table := range nasTypeServiceRequestReplayedS1UESecurityCapabilitiesLenTable {
 		a.SetLen(table.in)
-		assert.Equal(t, table.out, a.GetLen())
+		if !reflect.DeepEqual(table.out, a.GetLen()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetLen())
+		}
 	}
 }
 
@@ -58,7 +64,9 @@ func TestNasTypeReplayedS1UESecurityCapabilitiesGetSetEEA0(t *testing.T) {
 		a.SetLen(table.inLen)
 		a.SetEEA0(table.in)
 
-		assert.Equal(t, table.out, a.GetEEA0())
+		if !reflect.DeepEqual(table.out, a.GetEEA0()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetEEA0())
+		}
 	}
 }
 
@@ -78,7 +86,9 @@ func TestNasTypeReplayedS1UESecurityCapabilitiesGetSetEEA1_128(t *testing.T) {
 		a.SetLen(table.inLen)
 		a.SetEEA1_128(table.in)
 
-		assert.Equal(t, table.out, a.GetEEA1_128())
+		if !reflect.DeepEqual(table.out, a.GetEEA1_128()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetEEA1_128())
+		}
 	}
 }
 
@@ -98,7 +108,9 @@ func TestNasTypeReplayedS1UESecurityCapabilitiesGetSetEEA2_128(t *testing.T) {
 		a.SetLen(table.inLen)
 		a.SetEEA2_128(table.in)
 
-		assert.Equal(t, table.out, a.GetEEA2_128())
+		if !reflect.DeepEqual(table.out, a.GetEEA2_128()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetEEA2_128())
+		}
 	}
 }
 
@@ -118,7 +130,9 @@ func TestNasTypeReplayedS1UESecurityCapabilitiesGetSetEEA3_128(t *testing.T) {
 		a.SetLen(table.inLen)
 		a.SetEEA3_128(table.in)
 
-		assert.Equal(t, table.out, a.GetEEA3_128())
+		if !reflect.DeepEqual(table.out, a.GetEEA3_128()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetEEA3_128())
+		}
 	}
 }
 
@@ -138,7 +152,9 @@ func TestNasTypeReplayedS1UESecurityCapabilitiesGetSetEEA4(t *testing.T) {
 		a.SetLen(table.inLen)
 		a.SetEEA4(table.in)
 
-		assert.Equal(t, table.out, a.GetEEA4())
+		if !reflect.DeepEqual(table.out, a.GetEEA4()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetEEA4())
+		}
 	}
 }
 
@@ -158,7 +174,9 @@ func TestNasTypeReplayedS1UESecurityCapabilitiesGetSetEEA5(t *testing.T) {
 		a.SetLen(table.inLen)
 		a.SetEEA5(table.in)
 
-		assert.Equal(t, table.out, a.GetEEA5())
+		if !reflect.DeepEqual(table.out, a.GetEEA5()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetEEA5())
+		}
 	}
 }
 
@@ -178,7 +196,9 @@ func TestNasTypeReplayedS1UESecurityCapabilitiesGetSetEEA6(t *testing.T) {
 		a.SetLen(table.inLen)
 		a.SetEEA6(table.in)
 
-		assert.Equal(t, table.out, a.GetEEA6())
+		if !reflect.DeepEqual(table.out, a.GetEEA6()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetEEA6())
+		}
 	}
 }
 
@@ -198,7 +218,9 @@ func TestNasTypeReplayedS1UESecurityCapabilitiesGetSetEEA7(t *testing.T) {
 		a.SetLen(table.inLen)
 		a.SetEEA7(table.in)
 
-		assert.Equal(t, table.out, a.GetEEA7())
+		if !reflect.DeepEqual(table.out, a.GetEEA7()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetEEA7())
+		}
 	}
 }
 
@@ -218,7 +240,9 @@ func TestNasTypeReplayedS1UESecurityCapabilitiesGetSetEIA0(t *testing.T) {
 		a.SetLen(table.inLen)
 		a.SetEIA0(table.in)
 
-		assert.Equal(t, table.out, a.GetEIA0())
+		if !reflect.DeepEqual(table.out, a.GetEIA0()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetEIA0())
+		}
 	}
 }
 
@@ -238,7 +262,9 @@ func TestNasTypeReplayedS1UESecurityCapabilitiesGetSetEIA1_128(t *testing.T) {
 		a.SetLen(table.inLen)
 		a.SetEIA1_128(table.in)
 
-		assert.Equal(t, table.out, a.GetEIA1_128())
+		if !reflect.DeepEqual(table.out, a.GetEIA1_128()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetEIA1_128())
+		}
 	}
 }
 
@@ -258,7 +284,9 @@ func TestNasTypeReplayedS1UESecurityCapabilitiesGetSetEIA2_128(t *testing.T) {
 		a.SetLen(table.inLen)
 		a.SetEIA2_128(table.in)
 
-		assert.Equal(t, table.out, a.GetEIA2_128())
+		if !reflect.DeepEqual(table.out, a.GetEIA2_128()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetEIA2_128())
+		}
 	}
 }
 
@@ -278,7 +306,9 @@ func TestNasTypeReplayedS1UESecurityCapabilitiesGetSetEIA3_128(t *testing.T) {
 		a.SetLen(table.inLen)
 		a.SetEIA3_128(table.in)
 
-		assert.Equal(t, table.out, a.GetEIA3_128())
+		if !reflect.DeepEqual(table.out, a.GetEIA3_128()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetEIA3_128())
+		}
 	}
 }
 
@@ -298,7 +328,9 @@ func TestNasTypeReplayedS1UESecurityCapabilitiesGetSetEIA4(t *testing.T) {
 		a.SetLen(table.inLen)
 		a.SetEIA4(table.in)
 
-		assert.Equal(t, table.out, a.GetEIA4())
+		if !reflect.DeepEqual(table.out, a.GetEIA4()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetEIA4())
+		}
 	}
 }
 
@@ -312,7 +344,9 @@ func TestNasTypeReplayedS1UESecurityCapabilitiesGetSetEIA5(t *testing.T) {
 		a.SetLen(table.inLen)
 		a.SetEIA5(table.in)
 
-		assert.Equal(t, table.out, a.GetEIA5())
+		if !reflect.DeepEqual(table.out, a.GetEIA5()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetEIA5())
+		}
 	}
 }
 
@@ -332,7 +366,9 @@ func TestNasTypeReplayedS1UESecurityCapabilitiesGetSetEIA6(t *testing.T) {
 		a.SetLen(table.inLen)
 		a.SetEIA6(table.in)
 
-		assert.Equal(t, table.out, a.GetEIA6())
+		if !reflect.DeepEqual(table.out, a.GetEIA6()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetEIA6())
+		}
 	}
 }
 
@@ -352,7 +388,9 @@ func TestNasTypeReplayedS1UESecurityCapabilitiesGetSetEIA7(t *testing.T) {
 		a.SetLen(table.inLen)
 		a.SetEIA7(table.in)
 
-		assert.Equal(t, table.out, a.GetEIA7())
+		if !reflect.DeepEqual(table.out, a.GetEIA7()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetEIA7())
+		}
 	}
 }
 
@@ -372,7 +410,9 @@ func TestNasTypeReplayedS1UESecurityCapabilitiesGetSetUEA0(t *testing.T) {
 		a.SetLen(table.inLen)
 		a.SetUEA0(table.in)
 
-		assert.Equal(t, table.out, a.GetUEA0())
+		if !reflect.DeepEqual(table.out, a.GetUEA0()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetUEA0())
+		}
 	}
 }
 
@@ -392,7 +432,9 @@ func TestNasTypeReplayedS1UESecurityCapabilitiesGetSetUEA1(t *testing.T) {
 		a.SetLen(table.inLen)
 		a.SetUEA1(table.in)
 
-		assert.Equal(t, table.out, a.GetUEA1())
+		if !reflect.DeepEqual(table.out, a.GetUEA1()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetUEA1())
+		}
 	}
 }
 
@@ -412,7 +454,9 @@ func TestNasTypeReplayedS1UESecurityCapabilitiesGetSetUEA2(t *testing.T) {
 		a.SetLen(table.inLen)
 		a.SetUEA2(table.in)
 
-		assert.Equal(t, table.out, a.GetUEA2())
+		if !reflect.DeepEqual(table.out, a.GetUEA2()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetUEA2())
+		}
 	}
 }
 
@@ -432,7 +476,9 @@ func TestNasTypeReplayedS1UESecurityCapabilitiesGetSetUEA3(t *testing.T) {
 		a.SetLen(table.inLen)
 		a.SetUEA3(table.in)
 
-		assert.Equal(t, table.out, a.GetUEA3())
+		if !reflect.DeepEqual(table.out, a.GetUEA3()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetUEA3())
+		}
 	}
 }
 
@@ -452,7 +498,9 @@ func TestNasTypeReplayedS1UESecurityCapabilitiesGetSetUEA4(t *testing.T) {
 		a.SetLen(table.inLen)
 		a.SetUEA4(table.in)
 
-		assert.Equal(t, table.out, a.GetUEA4())
+		if !reflect.DeepEqual(table.out, a.GetUEA4()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetUEA4())
+		}
 	}
 }
 
@@ -466,7 +514,9 @@ func TestNasTypeReplayedS1UESecurityCapabilitiesGetSetUEA5(t *testing.T) {
 		a.SetLen(table.inLen)
 		a.SetUEA5(table.in)
 
-		assert.Equal(t, table.out, a.GetUEA5())
+		if !reflect.DeepEqual(table.out, a.GetUEA5()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetUEA5())
+		}
 	}
 }
 
@@ -486,7 +536,9 @@ func TestNasTypeReplayedS1UESecurityCapabilitiesGetSetUEA6(t *testing.T) {
 		a.SetLen(table.inLen)
 		a.SetUEA6(table.in)
 
-		assert.Equal(t, table.out, a.GetUEA6())
+		if !reflect.DeepEqual(table.out, a.GetUEA6()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetUEA6())
+		}
 	}
 }
 
@@ -506,7 +558,9 @@ func TestNasTypeReplayedS1UESecurityCapabilitiesGetSetUEA7(t *testing.T) {
 		a.SetLen(table.inLen)
 		a.SetUEA7(table.in)
 
-		assert.Equal(t, table.out, a.GetUEA7())
+		if !reflect.DeepEqual(table.out, a.GetUEA7()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetUEA7())
+		}
 	}
 }
 
@@ -526,7 +580,9 @@ func TestNasTypeReplayedS1UESecurityCapabilitiesGetSetUIA1(t *testing.T) {
 		a.SetLen(table.inLen)
 		a.SetUIA1(table.in)
 
-		assert.Equal(t, table.out, a.GetUIA1())
+		if !reflect.DeepEqual(table.out, a.GetUIA1()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetUIA1())
+		}
 	}
 }
 
@@ -546,7 +602,9 @@ func TestNasTypeReplayedS1UESecurityCapabilitiesGetSetUIA2(t *testing.T) {
 		a.SetLen(table.inLen)
 		a.SetUIA2(table.in)
 
-		assert.Equal(t, table.out, a.GetUIA2())
+		if !reflect.DeepEqual(table.out, a.GetUIA2()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetUIA2())
+		}
 	}
 }
 
@@ -566,7 +624,9 @@ func TestNasTypeReplayedS1UESecurityCapabilitiesGetSetUIA3(t *testing.T) {
 		a.SetLen(table.inLen)
 		a.SetUIA3(table.in)
 
-		assert.Equal(t, table.out, a.GetUIA3())
+		if !reflect.DeepEqual(table.out, a.GetUIA3()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetUIA3())
+		}
 	}
 }
 
@@ -586,7 +646,9 @@ func TestNasTypeReplayedS1UESecurityCapabilitiesGetSetUIA4(t *testing.T) {
 		a.SetLen(table.inLen)
 		a.SetUIA4(table.in)
 
-		assert.Equal(t, table.out, a.GetUIA4())
+		if !reflect.DeepEqual(table.out, a.GetUIA4()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetUIA4())
+		}
 	}
 }
 
@@ -600,7 +662,9 @@ func TestNasTypeReplayedS1UESecurityCapabilitiesGetSetUIA5(t *testing.T) {
 		a.SetLen(table.inLen)
 		a.SetUIA5(table.in)
 
-		assert.Equal(t, table.out, a.GetUIA5())
+		if !reflect.DeepEqual(table.out, a.GetUIA5()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetUIA5())
+		}
 	}
 }
 
@@ -620,7 +684,9 @@ func TestNasTypeReplayedS1UESecurityCapabilitiesGetSetUIA6(t *testing.T) {
 		a.SetLen(table.inLen)
 		a.SetUIA6(table.in)
 
-		assert.Equal(t, table.out, a.GetUIA6())
+		if !reflect.DeepEqual(table.out, a.GetUIA6()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetUIA6())
+		}
 	}
 }
 
@@ -640,7 +706,9 @@ func TestNasTypeReplayedS1UESecurityCapabilitiesGetSetUIA7(t *testing.T) {
 		a.SetLen(table.inLen)
 		a.SetUIA7(table.in)
 
-		assert.Equal(t, table.out, a.GetUIA7())
+		if !reflect.DeepEqual(table.out, a.GetUIA7()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetUIA7())
+		}
 	}
 }
 
@@ -660,7 +728,9 @@ func TestNasTypeReplayedS1UESecurityCapabilitiesGetSetGEA1(t *testing.T) {
 		a.SetLen(table.inLen)
 		a.SetGEA1(table.in)
 
-		assert.Equal(t, table.out, a.GetGEA1())
+		if !reflect.DeepEqual(table.out, a.GetGEA1()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetGEA1())
+		}
 	}
 }
 
@@ -680,7 +750,9 @@ func TestNasTypeReplayedS1UESecurityCapabilitiesGetSetGEA2(t *testing.T) {
 		a.SetLen(table.inLen)
 		a.SetGEA2(table.in)
 
-		assert.Equal(t, table.out, a.GetGEA2())
+		if !reflect.DeepEqual(table.out, a.GetGEA2()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetGEA2())
+		}
 	}
 }
 
@@ -700,7 +772,9 @@ func TestNasTypeReplayedS1UESecurityCapabilitiesGetSetGEA3(t *testing.T) {
 		a.SetLen(table.inLen)
 		a.SetGEA3(table.in)
 
-		assert.Equal(t, table.out, a.GetGEA3())
+		if !reflect.DeepEqual(table.out, a.GetGEA3()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetGEA3())
+		}
 	}
 }
 
@@ -720,7 +794,9 @@ func TestNasTypeReplayedS1UESecurityCapabilitiesGetSetGEA4(t *testing.T) {
 		a.SetLen(table.inLen)
 		a.SetGEA4(table.in)
 
-		assert.Equal(t, table.out, a.GetGEA4())
+		if !reflect.DeepEqual(table.out, a.GetGEA4()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetGEA4())
+		}
 	}
 }
 
@@ -734,7 +810,9 @@ func TestNasTypeReplayedS1UESecurityCapabilitiesGetSetGEA5(t *testing.T) {
 		a.SetLen(table.inLen)
 		a.SetGEA5(table.in)
 
-		assert.Equal(t, table.out, a.GetGEA5())
+		if !reflect.DeepEqual(table.out, a.GetGEA5()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetGEA5())
+		}
 	}
 }
 
@@ -754,7 +832,9 @@ func TestNasTypeReplayedS1UESecurityCapabilitiesGetSetGEA6(t *testing.T) {
 		a.SetLen(table.inLen)
 		a.SetGEA6(table.in)
 
-		assert.Equal(t, table.out, a.GetGEA6())
+		if !reflect.DeepEqual(table.out, a.GetGEA6()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetGEA6())
+		}
 	}
 }
 
@@ -774,7 +854,9 @@ func TestNasTypeReplayedS1UESecurityCapabilitiesGetSetGEA7(t *testing.T) {
 		a.SetLen(table.inLen)
 		a.SetGEA7(table.in)
 
-		assert.Equal(t, table.out, a.GetGEA7())
+		if !reflect.DeepEqual(table.out, a.GetGEA7()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetGEA7())
+		}
 	}
 }
 
@@ -838,8 +920,14 @@ func TestNasTypeReplayedS1UESecurityCapabilities(t *testing.T) {
 		a.SetGEA6(0x01)
 		a.SetGEA7(0x01)
 
-		assert.Equal(t, table.out.Iei, a.Iei)
-		assert.Equal(t, table.out.Len, a.Len)
-		assert.Equal(t, table.out.Buffer, a.Buffer)
+		if !reflect.DeepEqual(table.out.Iei, a.Iei) {
+			t.Errorf("Not equal: expected %v, got %v", table.out.Iei, a.Iei)
+		}
+		if !reflect.DeepEqual(table.out.Len, a.Len) {
+			t.Errorf("Not equal: expected %v, got %v", table.out.Len, a.Len)
+		}
+		if !reflect.DeepEqual(table.out.Buffer, a.Buffer) {
+			t.Errorf("Not equal: expected %v, got %v", table.out.Buffer, a.Buffer)
+		}
 	}
 }

@@ -6,16 +6,18 @@
 package nasType_test
 
 import (
+	"reflect"
 	"testing"
 
-	"github.com/5GC-DEV/nas-cdac/nasMessage"
-	"github.com/5GC-DEV/nas-cdac/nasType"
-	"github.com/stretchr/testify/assert"
+	"github.com/omec-project/nas/v2/nasMessage"
+	"github.com/omec-project/nas/v2/nasType"
 )
 
 func TestNasTypeNewNetworkFeatureSupport5GS(t *testing.T) {
 	a := nasType.NewNetworkFeatureSupport5GS(nasMessage.RegistrationAcceptNetworkFeatureSupport5GSType)
-	assert.NotNil(t, a)
+	if a == nil {
+		t.Fatal("Expected value not to be nil")
+	}
 }
 
 var nasTypeNetworkFeatureSupport5GSRegistrationAcceptNetworkFeatureSupport5GSTypeTable = []NasTypeIeiData{
@@ -26,7 +28,9 @@ func TestNasTypeNetworkFeatureSupport5GSGetSetIei(t *testing.T) {
 	a := nasType.NewNetworkFeatureSupport5GS(nasMessage.RegistrationAcceptNetworkFeatureSupport5GSType)
 	for _, table := range nasTypeNetworkFeatureSupport5GSRegistrationAcceptNetworkFeatureSupport5GSTypeTable {
 		a.SetIei(table.in)
-		assert.Equal(t, table.out, a.GetIei())
+		if !reflect.DeepEqual(table.out, a.GetIei()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetIei())
+		}
 	}
 }
 
@@ -38,7 +42,9 @@ func TestNasTypeNetworkFeatureSupport5GSGetSetLen(t *testing.T) {
 	a := nasType.NewNetworkFeatureSupport5GS(nasMessage.RegistrationAcceptNetworkFeatureSupport5GSType)
 	for _, table := range nasTypeNetworkFeatureSupport5GSLenTable {
 		a.SetLen(table.in)
-		assert.Equal(t, table.out, a.GetLen())
+		if !reflect.DeepEqual(table.out, a.GetLen()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetLen())
+		}
 	}
 }
 
@@ -55,7 +61,9 @@ func TestNasTypeNetworkFeatureSupport5GSGetSetMPSI(t *testing.T) {
 	a := nasType.NewNetworkFeatureSupport5GS(nasMessage.RegistrationAcceptNetworkFeatureSupport5GSType)
 	for _, table := range nasTypeNetworkFeatureSupport5GSMPSITable {
 		a.SetMPSI(table.in)
-		assert.Equal(t, table.out, a.GetMPSI())
+		if !reflect.DeepEqual(table.out, a.GetMPSI()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetMPSI())
+		}
 	}
 }
 
@@ -72,7 +80,9 @@ func TestNasTypeNetworkFeatureSupport5GSGetSetIWKN26(t *testing.T) {
 	a := nasType.NewNetworkFeatureSupport5GS(nasMessage.RegistrationAcceptNetworkFeatureSupport5GSType)
 	for _, table := range nasTypeNetworkFeatureSupport5GSIWKN26Table {
 		a.SetIWKN26(table.in)
-		assert.Equal(t, table.out, a.GetIWKN26())
+		if !reflect.DeepEqual(table.out, a.GetIWKN26()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetIWKN26())
+		}
 	}
 }
 
@@ -89,7 +99,9 @@ func TestNasTypeNetworkFeatureSupport5GSGetSetEMF(t *testing.T) {
 	a := nasType.NewNetworkFeatureSupport5GS(nasMessage.RegistrationAcceptNetworkFeatureSupport5GSType)
 	for _, table := range nasTypeNetworkFeatureSupport5GSEMFTable {
 		a.SetEMF(table.in)
-		assert.Equal(t, table.out, a.GetEMF())
+		if !reflect.DeepEqual(table.out, a.GetEMF()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetEMF())
+		}
 	}
 }
 
@@ -106,7 +118,9 @@ func TestNasTypeNetworkFeatureSupport5GSGetSetEMC(t *testing.T) {
 	a := nasType.NewNetworkFeatureSupport5GS(nasMessage.RegistrationAcceptNetworkFeatureSupport5GSType)
 	for _, table := range nasTypeNetworkFeatureSupport5GSEMCTable {
 		a.SetEMC(table.in)
-		assert.Equal(t, table.out, a.GetEMC())
+		if !reflect.DeepEqual(table.out, a.GetEMC()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetEMC())
+		}
 	}
 }
 
@@ -123,7 +137,9 @@ func TestNasTypeNetworkFeatureSupport5GSGetSetIMSVoPSN3GPP(t *testing.T) {
 	a := nasType.NewNetworkFeatureSupport5GS(nasMessage.RegistrationAcceptNetworkFeatureSupport5GSType)
 	for _, table := range nasTypeNetworkFeatureSupport5GSIMSVoPSN3GPPTable {
 		a.SetIMSVoPSN3GPP(table.in)
-		assert.Equal(t, table.out, a.GetIMSVoPSN3GPP())
+		if !reflect.DeepEqual(table.out, a.GetIMSVoPSN3GPP()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetIMSVoPSN3GPP())
+		}
 	}
 }
 
@@ -140,7 +156,9 @@ func TestNasTypeNetworkFeatureSupport5GSGetSetIMSVoPS3GPP(t *testing.T) {
 	a := nasType.NewNetworkFeatureSupport5GS(nasMessage.RegistrationAcceptNetworkFeatureSupport5GSType)
 	for _, table := range nasTypeNetworkFeatureSupport5GSIMSVoPS3GPPTable {
 		a.SetIMSVoPS3GPP(table.in)
-		assert.Equal(t, table.out, a.GetIMSVoPS3GPP())
+		if !reflect.DeepEqual(table.out, a.GetIMSVoPS3GPP()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetIMSVoPS3GPP())
+		}
 	}
 }
 
@@ -157,7 +175,9 @@ func TestNasTypeNetworkFeatureSupport5GSGetSetMCSI(t *testing.T) {
 	a := nasType.NewNetworkFeatureSupport5GS(nasMessage.RegistrationAcceptNetworkFeatureSupport5GSType)
 	for _, table := range nasTypeNetworkFeatureSupport5GSMCSITable {
 		a.SetMCSI(table.in)
-		assert.Equal(t, table.out, a.GetMCSI())
+		if !reflect.DeepEqual(table.out, a.GetMCSI()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetMCSI())
+		}
 	}
 }
 
@@ -174,7 +194,9 @@ func TestNasTypeNetworkFeatureSupport5GSGetSetEMCN(t *testing.T) {
 	a := nasType.NewNetworkFeatureSupport5GS(nasMessage.RegistrationAcceptNetworkFeatureSupport5GSType)
 	for _, table := range nasTypeNetworkFeatureSupport5GSEMCNTable {
 		a.SetEMCN(table.in)
-		assert.Equal(t, table.out, a.GetEMCN())
+		if !reflect.DeepEqual(table.out, a.GetEMCN()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetEMCN())
+		}
 	}
 }
 
@@ -191,7 +213,9 @@ func TestNasTypeNetworkFeatureSupport5GSGetSetSpare(t *testing.T) {
 	a := nasType.NewNetworkFeatureSupport5GS(nasMessage.RegistrationAcceptNetworkFeatureSupport5GSType)
 	for _, table := range nasTypeNetworkFeatureSupport5GSSpareTable {
 		a.SetSpare(table.in)
-		assert.Equal(t, table.out, a.GetSpare())
+		if !reflect.DeepEqual(table.out, a.GetSpare()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetSpare())
+		}
 	}
 }
 
@@ -244,17 +268,39 @@ func TestNasTypeNetworkFeatureSupport5GS(t *testing.T) {
 		a.SetEMCN(table.inEMCN)
 		a.SetSpare(table.inSpare)
 
-		assert.Equalf(t, table.outIei, a.Iei, "in(%v): out %v, actual %x", table.inIei, table.outIei, a.Iei)
-		assert.Equalf(t, table.outLen, a.Len, "in(%v): out %v, actual %x", table.inLen, table.outLen, a.Len)
-		assert.Equalf(t, table.outMPSI, a.GetMPSI(), "in(%v): out %v, actual %x", table.inMPSI, table.outMPSI, a.GetMPSI())
-		assert.Equalf(t, table.outIWKN26, a.GetIWKN26(), "in(%v): out %v, actual %x", table.inIWKN26, table.outIWKN26, a.GetIWKN26())
-		assert.Equalf(t, table.outEMF, a.GetEMF(), "in(%v): out %v, actual %x", table.inEMF, table.outEMF, a.GetEMF())
-		assert.Equalf(t, table.outEMC, a.GetEMC(), "in(%v): out %v, actual %x", table.inEMC, table.outEMC, a.GetEMC())
-		assert.Equalf(t, table.outIMSVoPSN3GPP, a.GetIMSVoPSN3GPP(), "in(%v): out %v, actual %x", table.inIMSVoPSN3GPP, table.outIMSVoPSN3GPP, a.GetIMSVoPSN3GPP())
-		assert.Equalf(t, table.outIMSVoPS3GPP, a.GetIMSVoPS3GPP(), "in(%v): out %v, actual %x", table.inIMSVoPS3GPP, table.outIMSVoPS3GPP, a.GetIMSVoPS3GPP())
-		assert.Equalf(t, table.outMCSI, a.GetMCSI(), "in(%v): out %v, actual %x", table.inMCSI, table.outMCSI, a.GetMCSI())
-		assert.Equalf(t, table.outEMCN, a.GetEMCN(), "in(%v): out %v, actual %x", table.inEMCN, table.outEMCN, a.GetEMCN())
-		assert.Equalf(t, table.outSpare, a.GetSpare(), "in(%v): out %v, actual %x", table.inSpare, table.outSpare, a.GetSpare())
+		if !reflect.DeepEqual(table.outIei, a.Iei) {
+			t.Errorf("in(%v): out %v, actual %x", table.inIei, table.outIei, a.Iei)
+		}
+		if !reflect.DeepEqual(table.outLen, a.Len) {
+			t.Errorf("in(%v): out %v, actual %x", table.inLen, table.outLen, a.Len)
+		}
+		if !reflect.DeepEqual(table.outMPSI, a.GetMPSI()) {
+			t.Errorf("in(%v): out %v, actual %x", table.inMPSI, table.outMPSI, a.GetMPSI())
+		}
+		if !reflect.DeepEqual(table.outIWKN26, a.GetIWKN26()) {
+			t.Errorf("in(%v): out %v, actual %x", table.inIWKN26, table.outIWKN26, a.GetIWKN26())
+		}
+		if !reflect.DeepEqual(table.outEMF, a.GetEMF()) {
+			t.Errorf("in(%v): out %v, actual %x", table.inEMF, table.outEMF, a.GetEMF())
+		}
+		if !reflect.DeepEqual(table.outEMC, a.GetEMC()) {
+			t.Errorf("in(%v): out %v, actual %x", table.inEMC, table.outEMC, a.GetEMC())
+		}
+		if !reflect.DeepEqual(table.outIMSVoPSN3GPP, a.GetIMSVoPSN3GPP()) {
+			t.Errorf("in(%v): out %v, actual %x", table.inIMSVoPSN3GPP, table.outIMSVoPSN3GPP, a.GetIMSVoPSN3GPP())
+		}
+		if !reflect.DeepEqual(table.outIMSVoPS3GPP, a.GetIMSVoPS3GPP()) {
+			t.Errorf("in(%v): out %v, actual %x", table.inIMSVoPS3GPP, table.outIMSVoPS3GPP, a.GetIMSVoPS3GPP())
+		}
+		if !reflect.DeepEqual(table.outMCSI, a.GetMCSI()) {
+			t.Errorf("in(%v): out %v, actual %x", table.inMCSI, table.outMCSI, a.GetMCSI())
+		}
+		if !reflect.DeepEqual(table.outEMCN, a.GetEMCN()) {
+			t.Errorf("in(%v): out %v, actual %x", table.inEMCN, table.outEMCN, a.GetEMCN())
+		}
+		if !reflect.DeepEqual(table.outSpare, a.GetSpare()) {
+			t.Errorf("in(%v): out %v, actual %x", table.inSpare, table.outSpare, a.GetSpare())
+		}
 
 	}
 }

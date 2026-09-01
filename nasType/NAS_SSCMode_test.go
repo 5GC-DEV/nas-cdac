@@ -6,16 +6,18 @@
 package nasType_test
 
 import (
+	"reflect"
 	"testing"
 
-	"github.com/5GC-DEV/nas-cdac/nasMessage"
-	"github.com/5GC-DEV/nas-cdac/nasType"
-	"github.com/stretchr/testify/assert"
+	"github.com/omec-project/nas/v2/nasMessage"
+	"github.com/omec-project/nas/v2/nasType"
 )
 
 func TestNasTypeNewSSCMode(t *testing.T) {
 	a := nasType.NewSSCMode(nasMessage.PDUSessionEstablishmentRequestSSCModeType)
-	assert.NotNil(t, a)
+	if a == nil {
+		t.Fatal("Expected value not to be nil")
+	}
 }
 
 var nasTypeSSCModeIeiTable = []NasTypeIeiData{
@@ -24,10 +26,14 @@ var nasTypeSSCModeIeiTable = []NasTypeIeiData{
 
 func TestNasTypeSSCModeGetSetIei(t *testing.T) {
 	a := nasType.NewSSCMode(nasMessage.PDUSessionEstablishmentRequestSSCModeType)
-	assert.NotNil(t, a)
+	if a == nil {
+		t.Fatal("Expected value not to be nil")
+	}
 	for _, table := range nasTypeSSCModeIeiTable {
 		a.SetIei(table.in)
-		assert.Equal(t, table.out, a.GetIei())
+		if !reflect.DeepEqual(table.out, a.GetIei()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetIei())
+		}
 	}
 }
 
@@ -44,7 +50,9 @@ func TestNasTypeSSCModeGetSetSpare(t *testing.T) {
 	a := nasType.NewSSCMode(nasMessage.PDUSessionEstablishmentRequestSSCModeType)
 	for _, table := range nasTypeSSCModeSpareTable {
 		a.SetSpare(table.in)
-		assert.Equal(t, table.out, a.GetSpare())
+		if !reflect.DeepEqual(table.out, a.GetSpare()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetSpare())
+		}
 	}
 }
 
@@ -61,7 +69,9 @@ func TestNasTypeSSCModeGetSetSSCMode(t *testing.T) {
 	a := nasType.NewSSCMode(nasMessage.PDUSessionEstablishmentRequestSSCModeType)
 	for _, table := range nasTypeSSCModeSSCModeTable {
 		a.SetSSCMode(table.in)
-		assert.Equal(t, table.out, a.GetSSCMode())
+		if !reflect.DeepEqual(table.out, a.GetSSCMode()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetSSCMode())
+		}
 	}
 }
 
@@ -90,7 +100,9 @@ func TestNasTypeSSCMode(t *testing.T) {
 		a.SetSpare(0x01)
 		a.SetSSCMode(0x01)
 
-		assert.Equal(t, table.out.Octet, a.Octet)
+		if !reflect.DeepEqual(table.out.Octet, a.Octet) {
+			t.Errorf("Not equal: expected %v, got %v", table.out.Octet, a.Octet)
+		}
 
 	}
 }

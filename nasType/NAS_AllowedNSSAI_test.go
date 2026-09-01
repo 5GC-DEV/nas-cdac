@@ -6,16 +6,18 @@
 package nasType_test
 
 import (
+	"reflect"
 	"testing"
 
-	"github.com/5GC-DEV/nas-cdac/nasMessage"
-	"github.com/5GC-DEV/nas-cdac/nasType"
-	"github.com/stretchr/testify/assert"
+	"github.com/omec-project/nas/v2/nasMessage"
+	"github.com/omec-project/nas/v2/nasType"
 )
 
 func TestNasTypeNewAllowedNSSAI(t *testing.T) {
 	a := nasType.NewAllowedNSSAI(nasMessage.ConfigurationUpdateCommandConfiguredNSSAIType)
-	assert.NotNil(t, a)
+	if a == nil {
+		t.Fatal("Expected value not to be nil")
+	}
 }
 
 var nasTypeConfigurationUpdateCommandConfiguredNSSAITable = []NasTypeIeiData{
@@ -26,7 +28,9 @@ func TestNasTypeAllowedNSSAIGetSetIei(t *testing.T) {
 	a := nasType.NewAllowedNSSAI(nasMessage.ConfigurationUpdateCommandConfiguredNSSAIType)
 	for _, table := range nasTypeConfigurationUpdateCommandConfiguredNSSAITable {
 		a.SetIei(table.in)
-		assert.Equal(t, table.out, a.GetIei())
+		if !reflect.DeepEqual(table.out, a.GetIei()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetIei())
+		}
 	}
 }
 
@@ -38,7 +42,9 @@ func TestNasTypeAllowedNSSAIGetSetLen(t *testing.T) {
 	a := nasType.NewAllowedNSSAI(nasMessage.ConfigurationUpdateCommandConfiguredNSSAIType)
 	for _, table := range nasTypeConfigurationUpdateCommandConfiguredNSSAILenTable {
 		a.SetLen(table.in)
-		assert.Equal(t, table.out, a.GetLen())
+		if !reflect.DeepEqual(table.out, a.GetLen()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetLen())
+		}
 	}
 }
 
@@ -57,7 +63,9 @@ func TestNasTypeAllowedNSSAIGetSetSNSSAIValue(t *testing.T) {
 	for _, table := range nasTypeSNSSAIValueTable {
 		a.SetLen(table.inLen)
 		a.SetSNSSAIValue(table.in)
-		assert.Equalf(t, table.out, a.GetSNSSAIValue(), "in(%v): out %v, actual %x", table.in, table.out, a.GetSNSSAIValue())
+		if !reflect.DeepEqual(table.out, a.GetSNSSAIValue()) {
+			t.Errorf("in(%v): out %v, actual %x", table.in, table.out, a.GetSNSSAIValue())
+		}
 	}
 }
 
@@ -87,8 +95,14 @@ func TestNasTypeAllowedNSSAI(t *testing.T) {
 		a.SetLen(table.in.Len)
 		a.SetSNSSAIValue(table.in.Buffer)
 
-		assert.Equalf(t, table.out.Iei, a.Iei, "in(%v): out %v, actual %x", table.in.Iei, table.out.Iei, a.Iei)
-		assert.Equalf(t, table.out.Len, a.Len, "in(%v): out %v, actual %x", table.in.Len, table.out.Len, a.Len)
-		assert.Equalf(t, table.out.Buffer, a.Buffer, "in(%v): out %v, actual %x", table.in.Buffer, table.out.Buffer, a.Buffer)
+		if !reflect.DeepEqual(table.out.Iei, a.Iei) {
+			t.Errorf("in(%v): out %v, actual %x", table.in.Iei, table.out.Iei, a.Iei)
+		}
+		if !reflect.DeepEqual(table.out.Len, a.Len) {
+			t.Errorf("in(%v): out %v, actual %x", table.in.Len, table.out.Len, a.Len)
+		}
+		if !reflect.DeepEqual(table.out.Buffer, a.Buffer) {
+			t.Errorf("in(%v): out %v, actual %x", table.in.Buffer, table.out.Buffer, a.Buffer)
+		}
 	}
 }

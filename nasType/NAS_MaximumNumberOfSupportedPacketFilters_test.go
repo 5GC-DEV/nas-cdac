@@ -6,16 +6,18 @@
 package nasType_test
 
 import (
+	"reflect"
 	"testing"
 
-	"github.com/5GC-DEV/nas-cdac/nasMessage"
-	"github.com/5GC-DEV/nas-cdac/nasType"
-	"github.com/stretchr/testify/assert"
+	"github.com/omec-project/nas/v2/nasMessage"
+	"github.com/omec-project/nas/v2/nasType"
 )
 
 func TestNasTypeNewMaximumNumberOfSupportedPacketFilters(t *testing.T) {
 	a := nasType.NewMaximumNumberOfSupportedPacketFilters(nasMessage.PDUSessionModificationRequestMaximumNumberOfSupportedPacketFiltersType)
-	assert.NotNil(t, a)
+	if a == nil {
+		t.Fatal("Expected value not to be nil")
+	}
 }
 
 var nasTypePDUSessionModificationRequestMaximumNumberOfSupportedPacketFiltersTable = []NasTypeIeiData{
@@ -26,7 +28,9 @@ func TestNasTypeMaximumNumberOfSupportedPacketFiltersGetSetIei(t *testing.T) {
 	a := nasType.NewMaximumNumberOfSupportedPacketFilters(nasMessage.PDUSessionModificationRequestMaximumNumberOfSupportedPacketFiltersType)
 	for _, table := range nasTypePDUSessionModificationRequestMaximumNumberOfSupportedPacketFiltersTable {
 		a.SetIei(table.in)
-		assert.Equal(t, table.out, a.GetIei())
+		if !reflect.DeepEqual(table.out, a.GetIei()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetIei())
+		}
 	}
 }
 
@@ -43,6 +47,8 @@ func TestNasTypeMaximumNumberOfSupportedPacketFiltersGetSetMaximumNumberOfSuppor
 	a := nasType.NewMaximumNumberOfSupportedPacketFilters(nasMessage.PDUSessionModificationRequestMaximumNumberOfSupportedPacketFiltersType)
 	for _, table := range nasTypeMaximumNumberOfSupportedPacketFiltersTable {
 		a.SetMaximumNumberOfSupportedPacketFilters(table.in)
-		assert.Equal(t, table.out, a.GetMaximumNumberOfSupportedPacketFilters())
+		if !reflect.DeepEqual(table.out, a.GetMaximumNumberOfSupportedPacketFilters()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetMaximumNumberOfSupportedPacketFilters())
+		}
 	}
 }

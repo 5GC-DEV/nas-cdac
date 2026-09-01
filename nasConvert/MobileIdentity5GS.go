@@ -12,10 +12,10 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/5GC-DEV/nas-cdac/logger"
-	"github.com/5GC-DEV/nas-cdac/nasMessage"
-	"github.com/5GC-DEV/nas-cdac/nasType"
-	"github.com/5GC-DEV/openapi-cdac/models"
+	"github.com/omec-project/nas/v2/logger"
+	"github.com/omec-project/nas/v2/nasMessage"
+	"github.com/omec-project/nas/v2/nasType"
+	"github.com/omec-project/openapi/v2/models"
 )
 
 func GetTypeOfIdentity(buf byte) uint8 {
@@ -25,14 +25,22 @@ func GetTypeOfIdentity(buf byte) uint8 {
 // TS 24.501 9.11.3.4
 // suci(imsi) =
 // "suci-0-${mcc}-${mnc}-${routingIndentifier}-${protectionScheme}-${homeNetworkPublicKeyIdentifier}-${schemeOutput}"
-// suci(nai) = "nai-${naiString}"
-func SuciToString(buf []byte) (suci string, plmnId string) {
+// suci(nai) = NAI string returned by NaiToString, for example "nai-1-..."
+func SuciToString(buf []byte) (suci string, plmnId string, err error) {
 	var mcc, mnc, routingInd, protectionScheme, homeNetworkPublicKeyIdentifier, schemeOutput string
+
+	if len(buf) == 0 {
+		return "", "", fmt.Errorf("empty SUCI buffer")
+	}
 
 	supiFormat := (buf[0] & 0xf0) >> 4
 	if supiFormat == nasMessage.SupiFormatNai {
-		suci = NaiToString(buf)
-		return suci, ""
+		suci, err = NaiToString(buf)
+		return suci, "", err
+	}
+
+	if len(buf) < 9 {
+		return "", "", fmt.Errorf("invalid SUCI buffer length: %d", len(buf))
 	}
 
 	// Encode buf to SUCI in supi format "IMSI"
@@ -77,7 +85,7 @@ func SuciToString(buf []byte) (suci string, plmnId string) {
 			msinBytes = append(msinBytes, bits.RotateLeft8(buf[i], 4))
 		}
 		schemeOutput = hex.EncodeToString(msinBytes)
-		if schemeOutput[len(schemeOutput)-1] == 'f' {
+		if len(schemeOutput) > 0 && schemeOutput[len(schemeOutput)-1] == 'f' {
 			schemeOutput = schemeOutput[:len(schemeOutput)-1]
 		}
 	} else {
@@ -88,15 +96,19 @@ func SuciToString(buf []byte) (suci string, plmnId string) {
 		"suci", "0", mcc, mnc, routingInd, protectionScheme, homeNetworkPublicKeyIdentifier,
 		schemeOutput,
 	}, "-")
-	return suci, plmnId
+	return suci, plmnId, nil
 }
 
-func NaiToString(buf []byte) (nai string) {
+func NaiToString(buf []byte) (nai string, err error) {
+	if len(buf) < 2 {
+		return "", fmt.Errorf("invalid NAI buffer")
+	}
+
 	prefix := "nai"
 	naiBytes := buf[1:]
 	naiStr := hex.EncodeToString(naiBytes)
 	nai = strings.Join([]string{prefix, "1", naiStr}, "-")
-	return
+	return nai, nil
 }
 
 // nasType: TS 24.501 9.11.3.4
@@ -105,9 +117,10 @@ func GutiToString(buf []byte) (guami models.Guami, guti string) {
 	amfID := hex.EncodeToString(buf[4:7])
 	tmsi5G := hex.EncodeToString(buf[7:])
 
-	guami.PlmnId = new(models.PlmnId)
-	guami.PlmnId.Mcc = plmnID[:3]
-	guami.PlmnId.Mnc = plmnID[3:]
+	guami.PlmnId = models.PlmnIdNid{
+		Mcc: plmnID[:3],
+		Mnc: plmnID[3:],
+	}
 	guami.AmfId = amfID
 	guti = plmnID + amfID + tmsi5G
 	return
@@ -182,53 +195,75 @@ func GutiToNas(guti string) nasType.GUTI5G {
 }
 
 // PEI: ^(imei-[0-9]{15}|imeisv-[0-9]{16}|.+)$
-func PeiToString(buf []byte) string {
-	prefix := "imei"
-
-	typeOfIdentity := buf[0] & 0x07
-	if typeOfIdentity != 0x03 {
-		prefix = "imeisv"
-	}
-
-	oddIndication := (buf[0] & 0x08) >> 3
-
-	digit1 := (buf[0] & 0xf0)
-
-	tmpBytes := []byte{digit1}
-
-	for _, octet := range buf[1:] {
-		digitP := octet & 0x0f
-		digitP1 := octet & 0xf0
-
-		tmpBytes[len(tmpBytes)-1] += digitP
-		tmpBytes = append(tmpBytes, digitP1)
-	}
-
-	digitStr := hex.EncodeToString(tmpBytes)
-	digitStr = digitStr[:len(digitStr)-1] // remove the last digit
-
-	if oddIndication == 0 { // even digits
-		digitStr = digitStr[:len(digitStr)-1] // remove the last digit
-	}
-
-	// Validation for IMEI and IMEISV
-	digitStrLen := len(digitStr)
-	if (prefix == "imei" && digitStrLen != 15) || (prefix == "imeisv" && digitStrLen != 16) {
-		logger.ConvertLog.Warnf("invalid %s length: %d", prefix, digitStrLen)
+func PeiToString(pei []byte) string {
+	if len(pei) == 0 {
+		logger.ConvertLog.Errorln("empty PEI")
 		return ""
 	}
 
-	// Ensure all elements in digitStr are decimal digits
-	for _, char := range digitStr {
-		if char < '0' || char > '9' {
-			logger.ConvertLog.Warnf("invalid value in %s: %c", prefix, char)
+	const imei_prefix = "imei"
+	const imeisv_prefix = "imeisv"
+	var digits strings.Builder
+
+	prefix := ""
+
+	lower := pei[0] & 0x0F
+	upper := (pei[0] & 0xF0) >> 4
+
+	typeIdentity := lower & 0x07
+	switch typeIdentity {
+	case 3:
+		prefix = imei_prefix
+	case 5:
+		prefix = imeisv_prefix
+	case 6: // mac-address
+		logger.ConvertLog.Errorf("unsupported type of identity: %d", typeIdentity)
+		return prefix
+	default:
+		logger.ConvertLog.Errorf("invalid type of identity: %d", typeIdentity)
+		return prefix
+	}
+
+	if upper <= 9 {
+		digits.WriteByte('0' + upper)
+	} else {
+		logger.ConvertLog.Errorf("invalid value/character 0x%x", upper)
+		return ""
+	}
+
+	for i, b := range pei[1:] {
+		lower = b & 0x0F
+		upper = (b & 0xF0) >> 4
+
+		if lower <= 9 {
+			digits.WriteByte('0' + lower)
+		} else {
+			logger.ConvertLog.Errorf("invalid value/character 0x%x", lower)
+			return ""
+		}
+
+		if upper <= 9 {
+			digits.WriteByte('0' + upper)
+		} else if i == len(pei)-2 && upper == 0x0f {
+			// last digit is filler
+		} else {
+			logger.ConvertLog.Errorf("invalid value/character 0x%x", upper)
 			return ""
 		}
 	}
 
+	digitStr := digits.String()
+
+	// Validation for IMEI and IMEISV
+	digitStrLen := len(digitStr)
+	if (prefix == imei_prefix && digitStrLen != 15) || (prefix == imeisv_prefix && digitStrLen != 16) {
+		logger.ConvertLog.Errorf("invalid %s length: %d", prefix, digitStrLen)
+		return ""
+	}
+
 	// Validate TAC and SNR using the Luhn formula
-	if !isValidLuhn(digitStr) {
-		logger.ConvertLog.Warnf("invalid TAC/SNR in %s: %s", prefix, digitStr[:14])
+	if (prefix == imei_prefix) && !isValidLuhn(digitStr) {
+		logger.ConvertLog.Errorf("invalid TAC/SNR in %s: %s", prefix, digitStr)
 		return ""
 	}
 
@@ -239,17 +274,18 @@ func PeiToString(buf []byte) string {
 func isValidLuhn(input string) bool {
 	sum := 0
 	alt := false
-	for i := len(input) - 1; i >= 0; i-- {
-		n := int(input[i] - '0')
+	for _, char := range input[:14] {
+		n := int(char - '0')
 		if alt {
 			n *= 2
 			if n > 9 {
-				n -= 9
+				n = n/10 + n%10
 			}
 		}
 		sum += n
 		alt = !alt
 	}
-	logger.ConvertLog.Debugf("Luhn sum is: %d", sum)
-	return sum%10 == 0
+	cd := (10 - sum%10) % 10
+	logger.ConvertLog.Debugf("Luhn sum: %d, and cd: %d", sum, cd)
+	return cd == int(input[len(input)-1]-'0')
 }

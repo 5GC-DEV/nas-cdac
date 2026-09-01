@@ -6,10 +6,10 @@
 package nasType_test
 
 import (
+	"reflect"
 	"testing"
 
-	"github.com/5GC-DEV/nas-cdac/nasType"
-	"github.com/stretchr/testify/assert"
+	"github.com/omec-project/nas/v2/nasType"
 )
 
 type nasTypeNgksiAndServiceTypeData struct {
@@ -27,20 +27,28 @@ var nasTypeNgksiAndServiceTypeTable = []nasTypeNgksiAndServiceTypeData{
 
 func TestNasTypeNewServiceTypeAndNgksi(t *testing.T) {
 	a := nasType.NewServiceTypeAndNgksi()
-	assert.NotNil(t, a)
+	if a == nil {
+		t.Fatal("Expected value not to be nil")
+	}
 }
 
 func TestNasTypeGetSetNgksiAndServiceType(t *testing.T) {
 	a := nasType.NewServiceTypeAndNgksi()
 	for _, table := range nasTypeNgksiAndServiceTypeTable {
 		a.SetTSC(table.inTsc)
-		assert.Equal(t, table.outTsc, a.GetTSC())
+		if !reflect.DeepEqual(table.outTsc, a.GetTSC()) {
+			t.Errorf("Not equal: expected %v, got %v", table.outTsc, a.GetTSC())
+		}
 		// a.SetTSC(0)
 		a.SetNasKeySetIdentifiler(table.inNASKeySetIdentifier)
-		assert.Equal(t, table.outNASKeySetIdentifier, a.GetNasKeySetIdentifiler())
+		if !reflect.DeepEqual(table.outNASKeySetIdentifier, a.GetNasKeySetIdentifiler()) {
+			t.Errorf("Not equal: expected %v, got %v", table.outNASKeySetIdentifier, a.GetNasKeySetIdentifiler())
+		}
 
 		a.SetServiceTypeValue(table.inServiceTypeValue)
-		assert.Equal(t, table.outServiceTypeValue, a.GetServiceTypeValue())
+		if !reflect.DeepEqual(table.outServiceTypeValue, a.GetServiceTypeValue()) {
+			t.Errorf("Not equal: expected %v, got %v", table.outServiceTypeValue, a.GetServiceTypeValue())
+		}
 
 	}
 }

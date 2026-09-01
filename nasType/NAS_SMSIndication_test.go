@@ -6,16 +6,18 @@
 package nasType_test
 
 import (
+	"reflect"
 	"testing"
 
-	"github.com/5GC-DEV/nas-cdac/nasMessage"
-	"github.com/5GC-DEV/nas-cdac/nasType"
-	"github.com/stretchr/testify/assert"
+	"github.com/omec-project/nas/v2/nasMessage"
+	"github.com/omec-project/nas/v2/nasType"
 )
 
 func TestNasTypeNewSMSIndication(t *testing.T) {
 	a := nasType.NewSMSIndication(nasMessage.ConfigurationUpdateCommandSMSIndicationType)
-	assert.NotNil(t, a)
+	if a == nil {
+		t.Fatal("Expected value not to be nil")
+	}
 }
 
 var nasTypeSMSIndicationIeiTable = []NasTypeIeiData{
@@ -24,10 +26,14 @@ var nasTypeSMSIndicationIeiTable = []NasTypeIeiData{
 
 func TestNasTypeSMSIndicationGetSetIei(t *testing.T) {
 	a := nasType.NewSMSIndication(nasMessage.ConfigurationUpdateCommandSMSIndicationType)
-	assert.NotNil(t, a)
+	if a == nil {
+		t.Fatal("Expected value not to be nil")
+	}
 	for _, table := range nasTypeSMSIndicationIeiTable {
 		a.SetIei(table.in)
-		assert.Equal(t, table.out, a.GetIei())
+		if !reflect.DeepEqual(table.out, a.GetIei()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetIei())
+		}
 	}
 }
 
@@ -44,7 +50,9 @@ func TestNasTypeSMSIndicationGetSetSAI(t *testing.T) {
 	a := nasType.NewSMSIndication(nasMessage.ConfigurationUpdateCommandSMSIndicationType)
 	for _, table := range nasTypeSMSIndicationSAITable {
 		a.SetSAI(table.in)
-		assert.Equal(t, table.out, a.GetSAI())
+		if !reflect.DeepEqual(table.out, a.GetSAI()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetSAI())
+		}
 	}
 }
 
@@ -72,7 +80,9 @@ func TestNasTypeSMSIndication(t *testing.T) {
 		a.SetIei(0x01)
 		a.SetSAI(0x01)
 
-		assert.Equal(t, table.out.Octet, a.Octet)
+		if !reflect.DeepEqual(table.out.Octet, a.Octet) {
+			t.Errorf("Not equal: expected %v, got %v", table.out.Octet, a.Octet)
+		}
 
 	}
 }

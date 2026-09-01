@@ -6,17 +6,19 @@
 package nasType_test
 
 import (
+	"reflect"
 	"testing"
 
-	"github.com/5GC-DEV/nas-cdac/nasType"
-	"github.com/stretchr/testify/assert"
+	"github.com/omec-project/nas/v2/nasType"
 )
 
 var ConfigurationUpdateCommandNetworkSlicingIndicationTypeIeiInput uint8 = 0x09
 
 func TestNasTypeNewNetworkSlicingIndication(t *testing.T) {
 	a := nasType.NewNetworkSlicingIndication(ConfigurationUpdateCommandNetworkSlicingIndicationTypeIeiInput)
-	assert.NotNil(t, a)
+	if a == nil {
+		t.Fatal("Expected value not to be nil")
+	}
 }
 
 var nasTypeConfigurationUpdateCommandNetworkSlicingIndicationTable = []NasTypeIeiData{
@@ -27,7 +29,9 @@ func TestNasTypeNetworkSlicingIndicationGetSetIei(t *testing.T) {
 	a := nasType.NewNetworkSlicingIndication(ConfigurationUpdateCommandNetworkSlicingIndicationTypeIeiInput)
 	for _, table := range nasTypeConfigurationUpdateCommandNetworkSlicingIndicationTable {
 		a.SetIei(table.in)
-		assert.Equal(t, table.out, a.GetIei())
+		if !reflect.DeepEqual(table.out, a.GetIei()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetIei())
+		}
 	}
 }
 
@@ -49,8 +53,14 @@ func TestNasTypeNetworkSlicingIndication(t *testing.T) {
 		a.SetDCNI(table.inDCNI)
 		a.SetNSSCI(table.inNSSCI)
 
-		assert.Equal(t, table.outIei, a.GetIei())
-		assert.Equal(t, table.outDCNI, a.GetDCNI())
-		assert.Equal(t, table.outNSSCI, a.GetNSSCI())
+		if !reflect.DeepEqual(table.outIei, a.GetIei()) {
+			t.Errorf("Not equal: expected %v, got %v", table.outIei, a.GetIei())
+		}
+		if !reflect.DeepEqual(table.outDCNI, a.GetDCNI()) {
+			t.Errorf("Not equal: expected %v, got %v", table.outDCNI, a.GetDCNI())
+		}
+		if !reflect.DeepEqual(table.outNSSCI, a.GetNSSCI()) {
+			t.Errorf("Not equal: expected %v, got %v", table.outNSSCI, a.GetNSSCI())
+		}
 	}
 }

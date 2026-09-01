@@ -6,16 +6,18 @@
 package nasType_test
 
 import (
+	"reflect"
 	"testing"
 
-	"github.com/5GC-DEV/nas-cdac/nasMessage"
-	"github.com/5GC-DEV/nas-cdac/nasType"
-	"github.com/stretchr/testify/assert"
+	"github.com/omec-project/nas/v2/nasMessage"
+	"github.com/omec-project/nas/v2/nasType"
 )
 
 func TestNasTypeNewCapability5GSM(t *testing.T) {
 	a := nasType.NewCapability5GSM(nasMessage.PDUSessionModificationRequestCapability5GSMType)
-	assert.NotNil(t, a)
+	if a == nil {
+		t.Fatal("Expected value not to be nil")
+	}
 }
 
 var nasTypePDUSessionModificationRequestCapability5GSMTypeTable = []NasTypeIeiData{
@@ -26,7 +28,9 @@ func TestNasTypeCapability5GSMGetSetIei(t *testing.T) {
 	a := nasType.NewCapability5GSM(nasMessage.PDUSessionModificationRequestCapability5GSMType)
 	for _, table := range nasTypePDUSessionModificationRequestCapability5GSMTypeTable {
 		a.SetIei(table.in)
-		assert.Equal(t, table.out, a.GetIei())
+		if !reflect.DeepEqual(table.out, a.GetIei()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetIei())
+		}
 	}
 }
 
@@ -38,7 +42,9 @@ func TestNasTypeCapability5GSMGetSetLen(t *testing.T) {
 	a := nasType.NewCapability5GSM(nasMessage.PDUSessionModificationRequestCapability5GSMType)
 	for _, table := range nasTypeCapability5GSMLenTable {
 		a.SetLen(table.in)
-		assert.Equal(t, table.out, a.GetLen())
+		if !reflect.DeepEqual(table.out, a.GetLen()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetLen())
+		}
 	}
 }
 
@@ -57,7 +63,9 @@ func TestNasTypeCapability5GSMGetSetMH6PDU(t *testing.T) {
 	for _, table := range nasTypeCapability5GSMMH6PDUTable {
 		a.SetLen(table.inLen)
 		a.SetMH6PDU(table.in)
-		assert.Equal(t, table.out, a.GetMH6PDU())
+		if !reflect.DeepEqual(table.out, a.GetMH6PDU()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetMH6PDU())
+		}
 	}
 }
 
@@ -76,7 +84,9 @@ func TestNasTypeCapability5GSMGetSetRqoS(t *testing.T) {
 	for _, table := range nasTypeCapability5GSMRqoSTable {
 		a.SetLen(table.inLen)
 		a.SetRqoS(table.in)
-		assert.Equal(t, table.out, a.GetRqoS())
+		if !reflect.DeepEqual(table.out, a.GetRqoS()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetRqoS())
+		}
 	}
 }
 
@@ -95,7 +105,9 @@ func TestNasTypeCapability5GSMGetSetSpare(t *testing.T) {
 	for _, table := range nasTypeCapability5GSMSpareTable {
 		a.SetLen(table.inLen)
 		a.SetSpare(table.in)
-		assert.Equal(t, table.out, a.GetSpare())
+		if !reflect.DeepEqual(table.out, a.GetSpare()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetSpare())
+		}
 	}
 }
 
@@ -131,9 +143,15 @@ func TestNasTypeCapability5GSM(t *testing.T) {
 		a.SetRqoS(table.inRqoS)
 		a.SetSpare(table.inSpare)
 
-		assert.Equalf(t, table.out.Iei, a.Iei, "in(%v): out %v, actual %x", table.in.Iei, table.out.Iei, a.Iei)
-		assert.Equalf(t, table.out.Len, a.Len, "in(%v): out %v, actual %x", table.in.Len, table.out.Len, a.Len)
-		assert.Equalf(t, table.out.Octet, a.Octet, "in(%v): out %v, actual %x", table.in.Octet, table.out.Octet, a.Octet)
+		if !reflect.DeepEqual(table.out.Iei, a.Iei) {
+			t.Errorf("in(%v): out %v, actual %x", table.in.Iei, table.out.Iei, a.Iei)
+		}
+		if !reflect.DeepEqual(table.out.Len, a.Len) {
+			t.Errorf("in(%v): out %v, actual %x", table.in.Len, table.out.Len, a.Len)
+		}
+		if !reflect.DeepEqual(table.out.Octet, a.Octet) {
+			t.Errorf("in(%v): out %v, actual %x", table.in.Octet, table.out.Octet, a.Octet)
+		}
 
 	}
 }

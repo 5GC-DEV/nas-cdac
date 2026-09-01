@@ -6,11 +6,11 @@
 package nasType_test
 
 import (
+	"reflect"
 	"testing"
 
-	"github.com/5GC-DEV/nas-cdac/nasMessage"
-	"github.com/5GC-DEV/nas-cdac/nasType"
-	"github.com/stretchr/testify/assert"
+	"github.com/omec-project/nas/v2/nasMessage"
+	"github.com/omec-project/nas/v2/nasType"
 )
 
 type nasTypeResponseMessageIdentityData struct {
@@ -24,13 +24,17 @@ var nasTypeResponseMessageIdentityTable = []nasTypeResponseMessageIdentityData{
 
 func TestNasTypeNewAuthenticationResponseMessageIdentity(t *testing.T) {
 	a := nasType.NewAuthenticationResponseMessageIdentity()
-	assert.NotNil(t, a)
+	if a == nil {
+		t.Fatal("Expected value not to be nil")
+	}
 }
 
 func TestNasTypeGetSetAuthenticationResponseMessageIdentity(t *testing.T) {
 	a := nasType.NewAuthenticationResponseMessageIdentity()
 	for _, table := range nasTypeResponseMessageIdentityTable {
 		a.SetMessageType(table.in)
-		assert.Equal(t, table.out, a.GetMessageType())
+		if !reflect.DeepEqual(table.out, a.GetMessageType()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetMessageType())
+		}
 	}
 }

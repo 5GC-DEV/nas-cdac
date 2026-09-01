@@ -9,7 +9,7 @@ import (
 	"bytes"
 	"encoding/binary"
 
-	"github.com/5GC-DEV/nas-cdac/nasType"
+	"github.com/omec-project/nas/v2/nasType"
 )
 
 type ServiceAccept struct {
@@ -20,6 +20,10 @@ type ServiceAccept struct {
 	*nasType.PDUSessionReactivationResult
 	*nasType.PDUSessionReactivationResultErrorCause
 	*nasType.EAPMessage
+	*nasType.T3448Value
+	*nasType.FiveGSAdditionalRequestResult
+	ForbiddenTAIRoaming           *nasType.TAIList
+	ForbiddenTAIRegionalProvision *nasType.TAIList
 }
 
 func NewServiceAccept(iei uint8) (serviceAccept *ServiceAccept) {
@@ -32,6 +36,10 @@ const (
 	ServiceAcceptPDUSessionReactivationResultType           uint8 = 0x26
 	ServiceAcceptPDUSessionReactivationResultErrorCauseType uint8 = 0x72
 	ServiceAcceptEAPMessageType                             uint8 = 0x78
+	ServiceAcceptT3448ValueType                             uint8 = 0x6B
+	ServiceAcceptFiveGSAdditionalRequestResultType          uint8 = 0x34
+	ServiceAcceptForbiddenTAIRoamingType                    uint8 = 0x1D
+	ServiceAcceptForbiddenTAIRegionalProvisionType          uint8 = 0x1E
 )
 
 func (a *ServiceAccept) EncodeServiceAccept(buffer *bytes.Buffer) {
@@ -57,6 +65,26 @@ func (a *ServiceAccept) EncodeServiceAccept(buffer *bytes.Buffer) {
 		binary.Write(buffer, binary.BigEndian, a.EAPMessage.GetIei())
 		binary.Write(buffer, binary.BigEndian, a.EAPMessage.GetLen())
 		binary.Write(buffer, binary.BigEndian, &a.EAPMessage.Buffer)
+	}
+	if a.T3448Value != nil {
+		binary.Write(buffer, binary.BigEndian, a.T3448Value.GetIei())
+		binary.Write(buffer, binary.BigEndian, a.T3448Value.GetLen())
+		binary.Write(buffer, binary.BigEndian, &a.T3448Value.Octet)
+	}
+	if a.FiveGSAdditionalRequestResult != nil {
+		binary.Write(buffer, binary.BigEndian, a.FiveGSAdditionalRequestResult.GetIei())
+		binary.Write(buffer, binary.BigEndian, uint8(a.FiveGSAdditionalRequestResult.GetLen()))
+		binary.Write(buffer, binary.BigEndian, a.FiveGSAdditionalRequestResult.Buffer[:uint8(a.FiveGSAdditionalRequestResult.GetLen())])
+	}
+	if a.ForbiddenTAIRoaming != nil {
+		binary.Write(buffer, binary.BigEndian, a.ForbiddenTAIRoaming.GetIei())
+		binary.Write(buffer, binary.BigEndian, a.ForbiddenTAIRoaming.GetLen())
+		binary.Write(buffer, binary.BigEndian, &a.ForbiddenTAIRoaming.Buffer)
+	}
+	if a.ForbiddenTAIRegionalProvision != nil {
+		binary.Write(buffer, binary.BigEndian, a.ForbiddenTAIRegionalProvision.GetIei())
+		binary.Write(buffer, binary.BigEndian, a.ForbiddenTAIRegionalProvision.GetLen())
+		binary.Write(buffer, binary.BigEndian, &a.ForbiddenTAIRegionalProvision.Buffer)
 	}
 }
 
@@ -95,6 +123,27 @@ func (a *ServiceAccept) DecodeServiceAccept(byteArray *[]byte) {
 			binary.Read(buffer, binary.BigEndian, &a.EAPMessage.Len)
 			a.EAPMessage.SetLen(a.EAPMessage.GetLen())
 			binary.Read(buffer, binary.BigEndian, a.EAPMessage.Buffer[:a.EAPMessage.GetLen()])
+		case ServiceAcceptT3448ValueType:
+			a.T3448Value = nasType.NewT3448Value(ieiN)
+			binary.Read(buffer, binary.BigEndian, &a.T3448Value.Len)
+			a.T3448Value.SetLen(a.T3448Value.GetLen())
+			binary.Read(buffer, binary.BigEndian, &a.T3448Value.Octet)
+		case ServiceAcceptFiveGSAdditionalRequestResultType:
+			a.FiveGSAdditionalRequestResult = nasType.NewFiveGSAdditionalRequestResult(ieiN)
+			var l uint8
+			binary.Read(buffer, binary.BigEndian, &l)
+			a.FiveGSAdditionalRequestResult.SetLen(uint16(l))
+			binary.Read(buffer, binary.BigEndian, a.FiveGSAdditionalRequestResult.Buffer[:l])
+		case ServiceAcceptForbiddenTAIRoamingType:
+			a.ForbiddenTAIRoaming = nasType.NewTAIList(ieiN)
+			binary.Read(buffer, binary.BigEndian, &a.ForbiddenTAIRoaming.Len)
+			a.ForbiddenTAIRoaming.SetLen(a.ForbiddenTAIRoaming.GetLen())
+			binary.Read(buffer, binary.BigEndian, a.ForbiddenTAIRoaming.Buffer[:a.ForbiddenTAIRoaming.GetLen()])
+		case ServiceAcceptForbiddenTAIRegionalProvisionType:
+			a.ForbiddenTAIRegionalProvision = nasType.NewTAIList(ieiN)
+			binary.Read(buffer, binary.BigEndian, &a.ForbiddenTAIRegionalProvision.Len)
+			a.ForbiddenTAIRegionalProvision.SetLen(a.ForbiddenTAIRegionalProvision.GetLen())
+			binary.Read(buffer, binary.BigEndian, a.ForbiddenTAIRegionalProvision.Buffer[:a.ForbiddenTAIRegionalProvision.GetLen()])
 		default:
 		}
 	}

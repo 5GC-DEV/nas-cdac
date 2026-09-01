@@ -6,16 +6,18 @@
 package nasType_test
 
 import (
+	"reflect"
 	"testing"
 
-	"github.com/5GC-DEV/nas-cdac/nasMessage"
-	"github.com/5GC-DEV/nas-cdac/nasType"
-	"github.com/stretchr/testify/assert"
+	"github.com/omec-project/nas/v2/nasMessage"
+	"github.com/omec-project/nas/v2/nasType"
 )
 
 func TestNasTypeNewLADNInformation(t *testing.T) {
 	a := nasType.NewLADNInformation(nasMessage.ConfigurationUpdateCommandLADNInformationType)
-	assert.NotNil(t, a)
+	if a == nil {
+		t.Fatal("Expected value not to be nil")
+	}
 }
 
 var nasTypeRegistrationRequestLADNInformationTable = []NasTypeIeiData{
@@ -26,7 +28,9 @@ func TestNasTypeLADNInformationGetSetIei(t *testing.T) {
 	a := nasType.NewLADNInformation(nasMessage.ConfigurationUpdateCommandLADNInformationType)
 	for _, table := range nasTypeRegistrationRequestLADNInformationTable {
 		a.SetIei(table.in)
-		assert.Equal(t, table.out, a.GetIei())
+		if !reflect.DeepEqual(table.out, a.GetIei()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetIei())
+		}
 	}
 }
 
@@ -38,7 +42,9 @@ func TestNasTypeLADNInformationGetSetLen(t *testing.T) {
 	a := nasType.NewLADNInformation(nasMessage.ConfigurationUpdateCommandLADNInformationType)
 	for _, table := range nasTypeLADNInformationLenTable {
 		a.SetLen(table.in)
-		assert.Equal(t, table.out, a.GetLen())
+		if !reflect.DeepEqual(table.out, a.GetLen()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetLen())
+		}
 	}
 }
 
@@ -57,7 +63,9 @@ func TestNasTypeLADNInformationGetSetLADND(t *testing.T) {
 	for _, table := range nasTypeLADNInformationLADNDTable {
 		a.SetLen(table.inLen)
 		a.SetLADND(table.in)
-		assert.Equal(t, table.out, a.GetLADND())
+		if !reflect.DeepEqual(table.out, a.GetLADND()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetLADND())
+		}
 	}
 }
 
@@ -88,8 +96,14 @@ func TestNasTypeLADNInformation(t *testing.T) {
 		a.SetLen(table.inLen)
 		a.SetLADND(table.inLADND)
 
-		assert.Equalf(t, table.outIei, a.Iei, "in(%v): out %v, actual %x", table.inIei, table.outIei, a.Iei)
-		assert.Equalf(t, table.outLen, a.Len, "in(%v): out %v, actual %x", table.inLen, table.outLen, a.Len)
-		assert.Equalf(t, table.outLADND, a.GetLADND(), "in(%v): out %v, actual %x", table.inLADND, table.outLADND, a.GetLADND())
+		if !reflect.DeepEqual(table.outIei, a.Iei) {
+			t.Errorf("in(%v): out %v, actual %x", table.inIei, table.outIei, a.Iei)
+		}
+		if !reflect.DeepEqual(table.outLen, a.Len) {
+			t.Errorf("in(%v): out %v, actual %x", table.inLen, table.outLen, a.Len)
+		}
+		if !reflect.DeepEqual(table.outLADND, a.GetLADND()) {
+			t.Errorf("in(%v): out %v, actual %x", table.inLADND, table.outLADND, a.GetLADND())
+		}
 	}
 }

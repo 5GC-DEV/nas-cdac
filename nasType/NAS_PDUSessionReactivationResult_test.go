@@ -6,16 +6,18 @@
 package nasType_test
 
 import (
+	"reflect"
 	"testing"
 
-	"github.com/5GC-DEV/nas-cdac/nasMessage"
-	"github.com/5GC-DEV/nas-cdac/nasType"
-	"github.com/stretchr/testify/assert"
+	"github.com/omec-project/nas/v2/nasMessage"
+	"github.com/omec-project/nas/v2/nasType"
 )
 
 func TestNasTypeNewPDUSessionReactivationResult(t *testing.T) {
 	a := nasType.NewPDUSessionReactivationResult(nasMessage.ServiceAcceptPDUSessionReactivationResultType)
-	assert.NotNil(t, a)
+	if a == nil {
+		t.Fatal("Expected value not to be nil")
+	}
 }
 
 var nasTypePDUSessionReactivationResultServiceAcceptPDUSessionReactivationResultTypeTable = []NasTypeIeiData{
@@ -26,7 +28,9 @@ func TestNasTypePDUSessionReactivationResultGetSetIei(t *testing.T) {
 	a := nasType.NewPDUSessionReactivationResult(nasMessage.ServiceAcceptPDUSessionReactivationResultType)
 	for _, table := range nasTypePDUSessionReactivationResultServiceAcceptPDUSessionReactivationResultTypeTable {
 		a.SetIei(table.in)
-		assert.Equal(t, table.out, a.GetIei())
+		if !reflect.DeepEqual(table.out, a.GetIei()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetIei())
+		}
 	}
 }
 
@@ -38,7 +42,9 @@ func TestNasTypePDUSessionReactivationResultGetSetLen(t *testing.T) {
 	a := nasType.NewPDUSessionReactivationResult(nasMessage.ServiceAcceptPDUSessionReactivationResultType)
 	for _, table := range nasTypeServiceRequestPDUSessionReactivationResultLenTable {
 		a.SetLen(table.in)
-		assert.Equal(t, table.out, a.GetLen())
+		if !reflect.DeepEqual(table.out, a.GetLen()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetLen())
+		}
 	}
 }
 
@@ -58,7 +64,9 @@ func TestNasTypePDUSessionReactivationResultGetSetPSI7(t *testing.T) {
 		a.SetLen(table.inLen)
 		a.SetPSI7(table.in)
 
-		assert.Equal(t, table.out, a.GetPSI7())
+		if !reflect.DeepEqual(table.out, a.GetPSI7()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetPSI7())
+		}
 	}
 }
 
@@ -78,7 +86,9 @@ func TestNasTypePDUSessionReactivationResultGetSetPSI6(t *testing.T) {
 		a.SetLen(table.inLen)
 		a.SetPSI6(table.in)
 
-		assert.Equal(t, table.out, a.GetPSI6())
+		if !reflect.DeepEqual(table.out, a.GetPSI6()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetPSI6())
+		}
 	}
 }
 
@@ -98,7 +108,9 @@ func TestNasTypePDUSessionReactivationResultGetSetPSI5(t *testing.T) {
 		a.SetLen(table.inLen)
 		a.SetPSI5(table.in)
 
-		assert.Equal(t, table.out, a.GetPSI5())
+		if !reflect.DeepEqual(table.out, a.GetPSI5()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetPSI5())
+		}
 	}
 }
 
@@ -118,7 +130,9 @@ func TestNasTypePDUSessionReactivationResultGetSetPSI4(t *testing.T) {
 		a.SetLen(table.inLen)
 		a.SetPSI4(table.in)
 
-		assert.Equal(t, table.out, a.GetPSI4())
+		if !reflect.DeepEqual(table.out, a.GetPSI4()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetPSI4())
+		}
 	}
 }
 
@@ -138,7 +152,9 @@ func TestNasTypePDUSessionReactivationResultGetSetPSI3(t *testing.T) {
 		a.SetLen(table.inLen)
 		a.SetPSI3(table.in)
 
-		assert.Equal(t, table.out, a.GetPSI3())
+		if !reflect.DeepEqual(table.out, a.GetPSI3()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetPSI3())
+		}
 	}
 }
 
@@ -158,7 +174,9 @@ func TestNasTypePDUSessionReactivationResultGetSetPSI2(t *testing.T) {
 		a.SetLen(table.inLen)
 		a.SetPSI2(table.in)
 
-		assert.Equal(t, table.out, a.GetPSI2())
+		if !reflect.DeepEqual(table.out, a.GetPSI2()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetPSI2())
+		}
 	}
 }
 
@@ -178,7 +196,9 @@ func TestNasTypePDUSessionReactivationResultGetSetPSI1(t *testing.T) {
 		a.SetLen(table.inLen)
 		a.SetPSI1(table.in)
 
-		assert.Equal(t, table.out, a.GetPSI1())
+		if !reflect.DeepEqual(table.out, a.GetPSI1()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetPSI1())
+		}
 	}
 }
 
@@ -198,7 +218,9 @@ func TestNasTypePDUSessionReactivationResultGetSetPSI0(t *testing.T) {
 		a.SetLen(table.inLen)
 		a.SetPSI0(table.in)
 
-		assert.Equal(t, table.out, a.GetPSI0())
+		if !reflect.DeepEqual(table.out, a.GetPSI0()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetPSI0())
+		}
 	}
 }
 
@@ -218,7 +240,9 @@ func TestNasTypePDUSessionReactivationResultGetSetPSI15(t *testing.T) {
 		a.SetLen(table.inLen)
 		a.SetPSI15(table.in)
 
-		assert.Equal(t, table.out, a.GetPSI15())
+		if !reflect.DeepEqual(table.out, a.GetPSI15()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetPSI15())
+		}
 	}
 }
 
@@ -238,7 +262,9 @@ func TestNasTypePDUSessionReactivationResultGetSetPSI14(t *testing.T) {
 		a.SetLen(table.inLen)
 		a.SetPSI14(table.in)
 
-		assert.Equal(t, table.out, a.GetPSI14())
+		if !reflect.DeepEqual(table.out, a.GetPSI14()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetPSI14())
+		}
 	}
 }
 
@@ -258,7 +284,9 @@ func TestNasTypePDUSessionReactivationResultGetSetPSI13(t *testing.T) {
 		a.SetLen(table.inLen)
 		a.SetPSI13(table.in)
 
-		assert.Equal(t, table.out, a.GetPSI13())
+		if !reflect.DeepEqual(table.out, a.GetPSI13()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetPSI13())
+		}
 	}
 }
 
@@ -278,7 +306,9 @@ func TestNasTypePDUSessionReactivationResultGetSetPSI12(t *testing.T) {
 		a.SetLen(table.inLen)
 		a.SetPSI12(table.in)
 
-		assert.Equal(t, table.out, a.GetPSI12())
+		if !reflect.DeepEqual(table.out, a.GetPSI12()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetPSI12())
+		}
 	}
 }
 
@@ -298,7 +328,9 @@ func TestNasTypePDUSessionReactivationResultGetSetPSI11(t *testing.T) {
 		a.SetLen(table.inLen)
 		a.SetPSI11(table.in)
 
-		assert.Equal(t, table.out, a.GetPSI11())
+		if !reflect.DeepEqual(table.out, a.GetPSI11()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetPSI11())
+		}
 	}
 }
 
@@ -312,7 +344,9 @@ func TestNasTypePDUSessionReactivationResultGetSetPSI10(t *testing.T) {
 		a.SetLen(table.inLen)
 		a.SetPSI10(table.in)
 
-		assert.Equal(t, table.out, a.GetPSI10())
+		if !reflect.DeepEqual(table.out, a.GetPSI10()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetPSI10())
+		}
 	}
 }
 
@@ -332,7 +366,9 @@ func TestNasTypePDUSessionReactivationResultGetSetPSI9(t *testing.T) {
 		a.SetLen(table.inLen)
 		a.SetPSI9(table.in)
 
-		assert.Equal(t, table.out, a.GetPSI9())
+		if !reflect.DeepEqual(table.out, a.GetPSI9()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetPSI9())
+		}
 	}
 }
 
@@ -352,7 +388,9 @@ func TestNasTypePDUSessionReactivationResultGetSetPSI8(t *testing.T) {
 		a.SetLen(table.inLen)
 		a.SetPSI8(table.in)
 
-		assert.Equal(t, table.out, a.GetPSI8())
+		if !reflect.DeepEqual(table.out, a.GetPSI8()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetPSI8())
+		}
 	}
 }
 
@@ -372,7 +410,9 @@ func TestNasTypePDUSessionReactivationResultGetSetSpare(t *testing.T) {
 		a.SetLen(table.inLen)
 		a.SetSpare(table.in)
 
-		assert.Equal(t, table.out, a.GetSpare())
+		if !reflect.DeepEqual(table.out, a.GetSpare()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetSpare())
+		}
 	}
 }
 
@@ -449,23 +489,59 @@ func TestNasTypePDUSessionReactivationResult(t *testing.T) {
 		a.SetPSI15(table.inPSI15)
 		a.SetSpare(table.inSpare)
 
-		assert.Equal(t, table.outIei, a.Iei)
-		assert.Equal(t, table.outLen, a.Len)
-		assert.Equal(t, table.outPSI1, a.GetPSI1())
-		assert.Equal(t, table.outPSI2, a.GetPSI2())
-		assert.Equal(t, table.outPSI3, a.GetPSI3())
-		assert.Equal(t, table.outPSI4, a.GetPSI4())
-		assert.Equal(t, table.outPSI5, a.GetPSI5())
-		assert.Equal(t, table.outPSI6, a.GetPSI6())
-		assert.Equal(t, table.outPSI7, a.GetPSI7())
-		assert.Equal(t, table.outPSI8, a.GetPSI8())
-		assert.Equal(t, table.outPSI9, a.GetPSI9())
-		assert.Equal(t, table.outPSI10, a.GetPSI10())
-		assert.Equal(t, table.outPSI11, a.GetPSI11())
-		assert.Equal(t, table.outPSI12, a.GetPSI12())
-		assert.Equal(t, table.outPSI13, a.GetPSI13())
-		assert.Equal(t, table.outPSI14, a.GetPSI14())
-		assert.Equal(t, table.outPSI15, a.GetPSI15())
-		assert.Equal(t, table.outSpare, a.GetSpare())
+		if !reflect.DeepEqual(table.outIei, a.Iei) {
+			t.Errorf("Not equal: expected %v, got %v", table.outIei, a.Iei)
+		}
+		if !reflect.DeepEqual(table.outLen, a.Len) {
+			t.Errorf("Not equal: expected %v, got %v", table.outLen, a.Len)
+		}
+		if !reflect.DeepEqual(table.outPSI1, a.GetPSI1()) {
+			t.Errorf("Not equal: expected %v, got %v", table.outPSI1, a.GetPSI1())
+		}
+		if !reflect.DeepEqual(table.outPSI2, a.GetPSI2()) {
+			t.Errorf("Not equal: expected %v, got %v", table.outPSI2, a.GetPSI2())
+		}
+		if !reflect.DeepEqual(table.outPSI3, a.GetPSI3()) {
+			t.Errorf("Not equal: expected %v, got %v", table.outPSI3, a.GetPSI3())
+		}
+		if !reflect.DeepEqual(table.outPSI4, a.GetPSI4()) {
+			t.Errorf("Not equal: expected %v, got %v", table.outPSI4, a.GetPSI4())
+		}
+		if !reflect.DeepEqual(table.outPSI5, a.GetPSI5()) {
+			t.Errorf("Not equal: expected %v, got %v", table.outPSI5, a.GetPSI5())
+		}
+		if !reflect.DeepEqual(table.outPSI6, a.GetPSI6()) {
+			t.Errorf("Not equal: expected %v, got %v", table.outPSI6, a.GetPSI6())
+		}
+		if !reflect.DeepEqual(table.outPSI7, a.GetPSI7()) {
+			t.Errorf("Not equal: expected %v, got %v", table.outPSI7, a.GetPSI7())
+		}
+		if !reflect.DeepEqual(table.outPSI8, a.GetPSI8()) {
+			t.Errorf("Not equal: expected %v, got %v", table.outPSI8, a.GetPSI8())
+		}
+		if !reflect.DeepEqual(table.outPSI9, a.GetPSI9()) {
+			t.Errorf("Not equal: expected %v, got %v", table.outPSI9, a.GetPSI9())
+		}
+		if !reflect.DeepEqual(table.outPSI10, a.GetPSI10()) {
+			t.Errorf("Not equal: expected %v, got %v", table.outPSI10, a.GetPSI10())
+		}
+		if !reflect.DeepEqual(table.outPSI11, a.GetPSI11()) {
+			t.Errorf("Not equal: expected %v, got %v", table.outPSI11, a.GetPSI11())
+		}
+		if !reflect.DeepEqual(table.outPSI12, a.GetPSI12()) {
+			t.Errorf("Not equal: expected %v, got %v", table.outPSI12, a.GetPSI12())
+		}
+		if !reflect.DeepEqual(table.outPSI13, a.GetPSI13()) {
+			t.Errorf("Not equal: expected %v, got %v", table.outPSI13, a.GetPSI13())
+		}
+		if !reflect.DeepEqual(table.outPSI14, a.GetPSI14()) {
+			t.Errorf("Not equal: expected %v, got %v", table.outPSI14, a.GetPSI14())
+		}
+		if !reflect.DeepEqual(table.outPSI15, a.GetPSI15()) {
+			t.Errorf("Not equal: expected %v, got %v", table.outPSI15, a.GetPSI15())
+		}
+		if !reflect.DeepEqual(table.outSpare, a.GetSpare()) {
+			t.Errorf("Not equal: expected %v, got %v", table.outSpare, a.GetSpare())
+		}
 	}
 }

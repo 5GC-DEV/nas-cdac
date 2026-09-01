@@ -6,17 +6,19 @@
 package nasType_test
 
 import (
+	"reflect"
 	"testing"
 
-	"github.com/5GC-DEV/nas-cdac/nasType"
-	"github.com/stretchr/testify/assert"
+	"github.com/omec-project/nas/v2/nasType"
 )
 
 var ConfigurationUpdateCommandConfigurationUpdateIndicationTypeIeiInput uint8 = 0x0D
 
 func TestNasTypeNewConfigurationUpdateIndication(t *testing.T) {
 	a := nasType.NewConfigurationUpdateIndication(ConfigurationUpdateCommandConfigurationUpdateIndicationTypeIeiInput)
-	assert.NotNil(t, a)
+	if a == nil {
+		t.Fatal("Expected value not to be nil")
+	}
 }
 
 var nasTypePDUSessionEstablishmentRequestConfigurationUpdateIndicationTable = []NasTypeIeiData{
@@ -27,7 +29,9 @@ func TestNasTypeConfigurationUpdateIndicationGetSetIei(t *testing.T) {
 	a := nasType.NewConfigurationUpdateIndication(ConfigurationUpdateCommandConfigurationUpdateIndicationTypeIeiInput)
 	for _, table := range nasTypePDUSessionEstablishmentRequestConfigurationUpdateIndicationTable {
 		a.SetIei(table.in)
-		assert.Equal(t, table.out, a.GetIei())
+		if !reflect.DeepEqual(table.out, a.GetIei()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetIei())
+		}
 	}
 }
 
@@ -44,7 +48,9 @@ func TestNasTypeConfigurationUpdateIndicationGetSetRED(t *testing.T) {
 	a := nasType.NewConfigurationUpdateIndication(ConfigurationUpdateCommandConfigurationUpdateIndicationTypeIeiInput)
 	for _, table := range nasTypeConfigurationUpdateIndicationREDTable {
 		a.SetRED(table.in)
-		assert.Equal(t, table.out, a.GetRED())
+		if !reflect.DeepEqual(table.out, a.GetRED()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetRED())
+		}
 	}
 }
 
@@ -61,7 +67,9 @@ func TestNasTypeConfigurationUpdateIndicationGetSetACK(t *testing.T) {
 	a := nasType.NewConfigurationUpdateIndication(ConfigurationUpdateCommandConfigurationUpdateIndicationTypeIeiInput)
 	for _, table := range nasTypeConfigurationUpdateIndicationACKTable {
 		a.SetACK(table.in)
-		assert.Equal(t, table.out, a.GetACK())
+		if !reflect.DeepEqual(table.out, a.GetACK()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetACK())
+		}
 	}
 }
 
@@ -92,7 +100,9 @@ func TestNasTypeConfigurationUpdateIndication(t *testing.T) {
 		a.SetRED(table.inRED)
 		a.SetACK(table.inACK)
 
-		assert.Equal(t, table.out.Octet, a.Octet)
+		if !reflect.DeepEqual(table.out.Octet, a.Octet) {
+			t.Errorf("Not equal: expected %v, got %v", table.out.Octet, a.Octet)
+		}
 
 	}
 }

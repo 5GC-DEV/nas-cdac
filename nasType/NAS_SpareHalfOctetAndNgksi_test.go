@@ -6,10 +6,10 @@
 package nasType_test
 
 import (
+	"reflect"
 	"testing"
 
-	"github.com/5GC-DEV/nas-cdac/nasType"
-	"github.com/stretchr/testify/assert"
+	"github.com/omec-project/nas/v2/nasType"
 )
 
 type nasTypeNewNgksiAndSpareHalfOctetData struct {
@@ -27,19 +27,27 @@ var nasTypeNewNgksiAndSpareHalfOctetTable = []nasTypeNewNgksiAndSpareHalfOctetDa
 
 func TestNasTypeNewSpareHalfOctetAndNgksi(t *testing.T) {
 	a := nasType.NewSpareHalfOctetAndNgksi()
-	assert.NotNil(t, a)
+	if a == nil {
+		t.Fatal("Expected value not to be nil")
+	}
 }
 
 func TestNasTypeGetSetSpareHalfOctetAndNgksi(t *testing.T) {
 	a := nasType.NewSpareHalfOctetAndNgksi()
 	for _, table := range nasTypeNewNgksiAndSpareHalfOctetTable {
 		a.SetTSC(table.inTsc)
-		assert.Equal(t, table.outTsc, a.GetTSC())
+		if !reflect.DeepEqual(table.outTsc, a.GetTSC()) {
+			t.Errorf("Not equal: expected %v, got %v", table.outTsc, a.GetTSC())
+		}
 		a.SetNasKeySetIdentifiler(table.inNASKeySetIdentifier)
-		assert.Equal(t, table.outNASKeySetIdentifier, a.GetNasKeySetIdentifiler())
+		if !reflect.DeepEqual(table.outNASKeySetIdentifier, a.GetNasKeySetIdentifiler()) {
+			t.Errorf("Not equal: expected %v, got %v", table.outNASKeySetIdentifier, a.GetNasKeySetIdentifiler())
+		}
 
 		a.SetSpareHalfOctet(table.inSpareHalfOctet)
-		assert.Equal(t, table.outSpareHalfOctet, a.GetSpareHalfOctet())
+		if !reflect.DeepEqual(table.outSpareHalfOctet, a.GetSpareHalfOctet()) {
+			t.Errorf("Not equal: expected %v, got %v", table.outSpareHalfOctet, a.GetSpareHalfOctet())
+		}
 
 	}
 }

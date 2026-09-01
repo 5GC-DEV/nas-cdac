@@ -6,16 +6,18 @@
 package nasType_test
 
 import (
+	"reflect"
 	"testing"
 
-	"github.com/5GC-DEV/nas-cdac/nasMessage"
-	"github.com/5GC-DEV/nas-cdac/nasType"
-	"github.com/stretchr/testify/assert"
+	"github.com/omec-project/nas/v2/nasMessage"
+	"github.com/omec-project/nas/v2/nasType"
 )
 
 func TestNasTypeNewRegistrationResult5GS(t *testing.T) {
 	a := nasType.NewRegistrationResult5GS(nasMessage.RegistrationAcceptNetworkFeatureSupport5GSType)
-	assert.NotNil(t, a)
+	if a == nil {
+		t.Fatal("Expected value not to be nil")
+	}
 }
 
 var nasTypeRegistrationAcceptNetworkFeatureSupport5GSTable = []NasTypeIeiData{
@@ -26,7 +28,9 @@ func TestNasTypeRegistrationResult5GSGetSetIei(t *testing.T) {
 	a := nasType.NewRegistrationResult5GS(nasMessage.RegistrationAcceptNetworkFeatureSupport5GSType)
 	for _, table := range nasTypeRegistrationAcceptNetworkFeatureSupport5GSTable {
 		a.SetIei(table.in)
-		assert.Equal(t, table.out, a.GetIei())
+		if !reflect.DeepEqual(table.out, a.GetIei()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetIei())
+		}
 	}
 }
 
@@ -38,7 +42,9 @@ func TestNasTypeRegistrationResult5GSGetSetLen(t *testing.T) {
 	a := nasType.NewRegistrationResult5GS(nasMessage.RegistrationAcceptNetworkFeatureSupport5GSType)
 	for _, table := range nasTypeRegistrationAcceptNetworkFeatureSupport5GSLenTable {
 		a.SetLen(table.in)
-		assert.Equal(t, table.out, a.GetLen())
+		if !reflect.DeepEqual(table.out, a.GetLen()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetLen())
+		}
 	}
 }
 
@@ -56,7 +62,9 @@ func TestNasTypeRegistrationResult5GSGetSetSMSAllowed(t *testing.T) {
 	a := nasType.NewRegistrationResult5GS(nasMessage.RegistrationAcceptNetworkFeatureSupport5GSType)
 	for _, table := range nasTypeRegistrationResult5GSSMSAllowed {
 		a.SetSMSAllowed(table.in)
-		assert.Equal(t, table.out, a.GetSMSAllowed())
+		if !reflect.DeepEqual(table.out, a.GetSMSAllowed()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetSMSAllowed())
+		}
 	}
 }
 
@@ -74,7 +82,9 @@ func TestNasTypeRegistrationResult5GSGetSetRegistrationResultValue5GS(t *testing
 	a := nasType.NewRegistrationResult5GS(nasMessage.RegistrationAcceptNetworkFeatureSupport5GSType)
 	for _, table := range nasTypeRegistrationResult5GSRegistrationResultValue5GS {
 		a.SetRegistrationResultValue5GS(table.in)
-		assert.Equal(t, table.out, a.GetRegistrationResultValue5GS())
+		if !reflect.DeepEqual(table.out, a.GetRegistrationResultValue5GS()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetRegistrationResultValue5GS())
+		}
 	}
 }
 
@@ -104,8 +114,14 @@ func TestNasTypeRegistrationResult5GS(t *testing.T) {
 		a.SetLen(table.in.Len)
 		a.SetSMSAllowed(table.inSMSAllowed)
 		a.SetRegistrationResultValue5GS(table.inRegistrationResultValue5GS)
-		assert.Equal(t, table.out.Iei, a.Iei)
-		assert.Equal(t, table.out.Len, a.Len)
-		assert.Equal(t, table.out.Octet, a.Octet)
+		if !reflect.DeepEqual(table.out.Iei, a.Iei) {
+			t.Errorf("Not equal: expected %v, got %v", table.out.Iei, a.Iei)
+		}
+		if !reflect.DeepEqual(table.out.Len, a.Len) {
+			t.Errorf("Not equal: expected %v, got %v", table.out.Len, a.Len)
+		}
+		if !reflect.DeepEqual(table.out.Octet, a.Octet) {
+			t.Errorf("Not equal: expected %v, got %v", table.out.Octet, a.Octet)
+		}
 	}
 }

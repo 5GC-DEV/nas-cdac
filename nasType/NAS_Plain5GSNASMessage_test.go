@@ -8,11 +8,12 @@ package nasType_test
 import (
 	"testing"
 
-	"github.com/5GC-DEV/nas-cdac/nasType"
-	"github.com/stretchr/testify/assert"
+	"github.com/omec-project/nas/v2/nasType"
 )
 
 func TestNasTypeNewPlain5GSNASMessage(t *testing.T) {
 	a := nasType.NewPlain5GSNASMessage()
-	assert.NotNil(t, a)
+	if a == nil {
+		t.Fatal("Expected value not to be nil")
+	}
 }

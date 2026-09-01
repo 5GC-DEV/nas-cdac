@@ -6,15 +6,17 @@
 package nasType_test
 
 import (
+	"reflect"
 	"testing"
 
-	"github.com/5GC-DEV/nas-cdac/nasType"
-	"github.com/stretchr/testify/assert"
+	"github.com/omec-project/nas/v2/nasType"
 )
 
 func TestNasTypeNewSelectedSSCModeAndSelectedPDUSessionType(t *testing.T) {
 	a := nasType.NewSelectedSSCModeAndSelectedPDUSessionType()
-	assert.NotNil(t, a)
+	if a == nil {
+		t.Fatal("Expected value not to be nil")
+	}
 }
 
 type nasTypeSelectedSSCModeAndSelectedPDUSessionTypeSSCModeData struct {
@@ -30,7 +32,9 @@ func TestNasTypeSelectedSSCModeAndSelectedPDUSessionTypeGetSetSSCMode(t *testing
 	a := nasType.NewSelectedSSCModeAndSelectedPDUSessionType()
 	for _, table := range nasTypeSelectedSSCModeAndSelectedPDUSessionTypeSSCModeTable {
 		a.SetSSCMode(table.in)
-		assert.Equal(t, table.out, a.GetSSCMode())
+		if !reflect.DeepEqual(table.out, a.GetSSCMode()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetSSCMode())
+		}
 	}
 }
 
@@ -47,7 +51,9 @@ func TestNasTypeSelectedPDUSessionTypeAndSelectedPDUSessionTypeGetSetPDUSessionT
 	a := nasType.NewSelectedSSCModeAndSelectedPDUSessionType()
 	for _, table := range nasTypeSelectedPDUSessionTypeAndSelectedPDUSessionTypePDUSessionTypeTable {
 		a.SetPDUSessionType(table.in)
-		assert.Equal(t, table.out, a.GetPDUSessionType())
+		if !reflect.DeepEqual(table.out, a.GetPDUSessionType()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetPDUSessionType())
+		}
 	}
 }
 
@@ -75,6 +81,8 @@ func TestNasTypeSelectedSSCModeAndSelectedPDUSessionType(t *testing.T) {
 		a.SetSSCMode(0x01)
 		a.SetPDUSessionType(0x01)
 
-		assert.Equal(t, table.out.Octet, a.Octet)
+		if !reflect.DeepEqual(table.out.Octet, a.Octet) {
+			t.Errorf("Not equal: expected %v, got %v", table.out.Octet, a.Octet)
+		}
 	}
 }

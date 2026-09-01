@@ -6,16 +6,18 @@
 package nasType_test
 
 import (
+	"reflect"
 	"testing"
 
-	"github.com/5GC-DEV/nas-cdac/nasMessage"
-	"github.com/5GC-DEV/nas-cdac/nasType"
-	"github.com/stretchr/testify/assert"
+	"github.com/omec-project/nas/v2/nasMessage"
+	"github.com/omec-project/nas/v2/nasType"
 )
 
 func TestNasTypeNewMobileIdentity5GS(t *testing.T) {
 	a := nasType.NewMobileIdentity5GS(nasMessage.RegistrationRequestAdditionalGUTIType)
-	assert.NotNil(t, a)
+	if a == nil {
+		t.Fatal("Expected value not to be nil")
+	}
 }
 
 var nasTypeMobileIdentity5GSRegistrationRequestAdditionalGUTITable = []NasTypeIeiData{
@@ -26,7 +28,9 @@ func TestNasTypeMobileIdentity5GSGetSetIei(t *testing.T) {
 	a := nasType.NewMobileIdentity5GS(nasMessage.RegistrationRequestAdditionalGUTIType)
 	for _, table := range nasTypeMobileIdentity5GSRegistrationRequestAdditionalGUTITable {
 		a.SetIei(table.in)
-		assert.Equal(t, table.out, a.GetIei())
+		if !reflect.DeepEqual(table.out, a.GetIei()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetIei())
+		}
 	}
 }
 
@@ -38,7 +42,9 @@ func TestNasTypeMobileIdentity5GSGetSetLen(t *testing.T) {
 	a := nasType.NewMobileIdentity5GS(nasMessage.RegistrationRequestAdditionalGUTIType)
 	for _, table := range nasTypeMobileIdentity5GSLenTable {
 		a.SetLen(table.in)
-		assert.Equal(t, table.out, a.GetLen())
+		if !reflect.DeepEqual(table.out, a.GetLen()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetLen())
+		}
 	}
 }
 
@@ -57,7 +63,9 @@ func TestNasTypeMobileIdentity5GSGetSetMobileIdentity5GSContents(t *testing.T) {
 	for _, table := range nasTypeMobileIdentity5GSMobileIdentity5GSContentsTable {
 		a.SetLen(table.inLen)
 		a.SetMobileIdentity5GSContents(table.in)
-		assert.Equal(t, table.out, a.GetMobileIdentity5GSContents())
+		if !reflect.DeepEqual(table.out, a.GetMobileIdentity5GSContents()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetMobileIdentity5GSContents())
+		}
 	}
 }
 
@@ -88,8 +96,14 @@ func TestNasTypeMobileIdentity5GS(t *testing.T) {
 		a.SetLen(table.inLen)
 		a.SetMobileIdentity5GSContents(table.inMobileIdentity5GSContents)
 
-		assert.Equalf(t, table.outIei, a.Iei, "in(%v): out %v, actual %x", table.inIei, table.outIei, a.Iei)
-		assert.Equalf(t, table.outLen, a.Len, "in(%v): out %v, actual %x", table.inLen, table.outLen, a.Len)
-		assert.Equalf(t, table.outMobileIdentity5GSContents, a.GetMobileIdentity5GSContents(), "in(%v): out %v, actual %x", table.inMobileIdentity5GSContents, table.outMobileIdentity5GSContents, a.GetMobileIdentity5GSContents())
+		if !reflect.DeepEqual(table.outIei, a.Iei) {
+			t.Errorf("in(%v): out %v, actual %x", table.inIei, table.outIei, a.Iei)
+		}
+		if !reflect.DeepEqual(table.outLen, a.Len) {
+			t.Errorf("in(%v): out %v, actual %x", table.inLen, table.outLen, a.Len)
+		}
+		if !reflect.DeepEqual(table.outMobileIdentity5GSContents, a.GetMobileIdentity5GSContents()) {
+			t.Errorf("in(%v): out %v, actual %x", table.inMobileIdentity5GSContents, table.outMobileIdentity5GSContents, a.GetMobileIdentity5GSContents())
+		}
 	}
 }

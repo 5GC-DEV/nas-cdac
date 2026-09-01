@@ -6,16 +6,18 @@
 package nasType_test
 
 import (
+	"reflect"
 	"testing"
 
-	"github.com/5GC-DEV/nas-cdac/nasMessage"
-	"github.com/5GC-DEV/nas-cdac/nasType"
-	"github.com/stretchr/testify/assert"
+	"github.com/omec-project/nas/v2/nasMessage"
+	"github.com/omec-project/nas/v2/nasType"
 )
 
 func TestNasTypeNewAuthenticationResponseParameter(t *testing.T) {
 	a := nasType.NewAuthenticationResponseParameter(nasMessage.AuthenticationResponseAuthenticationResponseParameterType)
-	assert.NotNil(t, a)
+	if a == nil {
+		t.Fatal("Expected value not to be nil")
+	}
 }
 
 var nasTypeAuthenticationResponseAuthenticationResponseParameterTable = []NasTypeIeiData{
@@ -26,7 +28,9 @@ func TestNasTypeAuthenticationResponseParameterGetSetIei(t *testing.T) {
 	a := nasType.NewAuthenticationResponseParameter(nasMessage.AuthenticationResponseAuthenticationResponseParameterType)
 	for _, table := range nasTypeAuthenticationResponseAuthenticationResponseParameterTable {
 		a.SetIei(table.in)
-		assert.Equal(t, table.out, a.GetIei())
+		if !reflect.DeepEqual(table.out, a.GetIei()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetIei())
+		}
 	}
 }
 
@@ -38,7 +42,9 @@ func TestNasTypeAuthenticationResponseParameterGetSetLen(t *testing.T) {
 	a := nasType.NewAuthenticationResponseParameter(nasMessage.AuthenticationResponseAuthenticationResponseParameterType)
 	for _, table := range nasTypeAuthenticationResponseAuthenticationResponseParameterLenTable {
 		a.SetLen(table.in)
-		assert.Equal(t, table.out, a.GetLen())
+		if !reflect.DeepEqual(table.out, a.GetLen()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetLen())
+		}
 	}
 }
 
@@ -57,7 +63,9 @@ func TestNasTypeAuthenticationResponseParameterGetSetRES(t *testing.T) {
 	for _, table := range nasTypeAuthenticationResponseParameterOctetTable {
 		a.SetLen(table.inLen)
 		a.SetRES(table.in)
-		assert.Equal(t, table.out, a.GetRES())
+		if !reflect.DeepEqual(table.out, a.GetRES()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetRES())
+		}
 	}
 }
 
@@ -87,9 +95,15 @@ func TestNasTypeAuthenticationResponseParameter(t *testing.T) {
 		a.SetLen(table.in.Len)
 		a.SetRES(table.in.Octet)
 
-		assert.Equalf(t, table.out.Iei, a.Iei, "in(%v): out %v, actual %x", table.in.Iei, table.out.Iei, a.Iei)
-		assert.Equalf(t, table.out.Len, a.Len, "in(%v): out %v, actual %x", table.in.Len, table.out.Len, a.Len)
-		assert.Equalf(t, table.out.Octet, a.Octet, "in(%v): out %v, actual %x", table.in.Octet, table.out.Octet, a.Octet)
+		if !reflect.DeepEqual(table.out.Iei, a.Iei) {
+			t.Errorf("in(%v): out %v, actual %x", table.in.Iei, table.out.Iei, a.Iei)
+		}
+		if !reflect.DeepEqual(table.out.Len, a.Len) {
+			t.Errorf("in(%v): out %v, actual %x", table.in.Len, table.out.Len, a.Len)
+		}
+		if !reflect.DeepEqual(table.out.Octet, a.Octet) {
+			t.Errorf("in(%v): out %v, actual %x", table.in.Octet, table.out.Octet, a.Octet)
+		}
 
 	}
 }

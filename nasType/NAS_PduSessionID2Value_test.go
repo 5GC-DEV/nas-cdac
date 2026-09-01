@@ -6,16 +6,18 @@
 package nasType_test
 
 import (
+	"reflect"
 	"testing"
 
-	"github.com/5GC-DEV/nas-cdac/nasMessage"
-	"github.com/5GC-DEV/nas-cdac/nasType"
-	"github.com/stretchr/testify/assert"
+	"github.com/omec-project/nas/v2/nasMessage"
+	"github.com/omec-project/nas/v2/nasType"
 )
 
 func TestNasTypeNewPduSessionID2Value(t *testing.T) {
 	a := nasType.NewPduSessionID2Value(nasMessage.ULNASTransportPduSessionID2ValueType)
-	assert.NotNil(t, a)
+	if a == nil {
+		t.Fatal("Expected value not to be nil")
+	}
 }
 
 var nasTypePDUSessionIDULNASTransportPduSessionID2ValueTypeTypeTable = []NasTypeIeiData{
@@ -26,7 +28,9 @@ func TestNasTypePduSessionID2ValueGetSetIei(t *testing.T) {
 	a := nasType.NewPduSessionID2Value(nasMessage.ULNASTransportPduSessionID2ValueType)
 	for _, table := range nasTypePDUSessionIDULNASTransportPduSessionID2ValueTypeTypeTable {
 		a.SetIei(table.in)
-		assert.Equal(t, table.out, a.GetIei())
+		if !reflect.DeepEqual(table.out, a.GetIei()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetIei())
+		}
 	}
 }
 
@@ -43,7 +47,9 @@ func TestNasTypeGetSetPduSessionIdentity2Value(t *testing.T) {
 	a := nasType.NewPduSessionID2Value(nasMessage.ULNASTransportPduSessionID2ValueType)
 	for _, table := range nasTypePduSessionIdentity2ValueTable {
 		a.SetPduSessionID2Value((table.in))
-		assert.Equal(t, table.out, a.GetPduSessionID2Value())
+		if !reflect.DeepEqual(table.out, a.GetPduSessionID2Value()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetPduSessionID2Value())
+		}
 	}
 }
 
@@ -68,7 +74,11 @@ func TestNasTypePDUSessionID2Value(t *testing.T) {
 		a.SetIei(table.inIei)
 		a.SetPduSessionID2Value(table.inPduSessionIdentity2Value)
 
-		assert.Equalf(t, table.outIei, a.Iei, "in(%v): out %v, actual %x", table.inIei, table.outIei, a.Iei)
-		assert.Equalf(t, table.outPduSessionIdentity2Value, a.GetPduSessionID2Value(), "in(%v): out %v, actual %x", table.inPduSessionIdentity2Value, table.outPduSessionIdentity2Value, a.GetPduSessionID2Value())
+		if !reflect.DeepEqual(table.outIei, a.Iei) {
+			t.Errorf("in(%v): out %v, actual %x", table.inIei, table.outIei, a.Iei)
+		}
+		if !reflect.DeepEqual(table.outPduSessionIdentity2Value, a.GetPduSessionID2Value()) {
+			t.Errorf("in(%v): out %v, actual %x", table.inPduSessionIdentity2Value, table.outPduSessionIdentity2Value, a.GetPduSessionID2Value())
+		}
 	}
 }

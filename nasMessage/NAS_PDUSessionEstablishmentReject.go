@@ -9,7 +9,7 @@ import (
 	"bytes"
 	"encoding/binary"
 
-	"github.com/5GC-DEV/nas-cdac/nasType"
+	"github.com/omec-project/nas/v2/nasType"
 )
 
 type PDUSessionEstablishmentReject struct {
@@ -22,6 +22,9 @@ type PDUSessionEstablishmentReject struct {
 	*nasType.AllowedSSCMode
 	*nasType.EAPMessage
 	*nasType.ExtendedProtocolConfigurationOptions
+	*nasType.Fivegsmcongestionreattemptindicator
+	*nasType.ReAttemptIndicator
+	*nasType.ServiceLevelAAContainer
 }
 
 func NewPDUSessionEstablishmentReject(iei uint8) (pDUSessionEstablishmentReject *PDUSessionEstablishmentReject) {
@@ -34,6 +37,9 @@ const (
 	PDUSessionEstablishmentRejectAllowedSSCModeType                       uint8 = 0x0F
 	PDUSessionEstablishmentRejectEAPMessageType                           uint8 = 0x78
 	PDUSessionEstablishmentRejectExtendedProtocolConfigurationOptionsType uint8 = 0x7B
+	PDUSessionEstablishmentRejectFivegsmcongestionreattemptindicatorType  uint8 = 0x61
+	PDUSessionEstablishmentRejectReAttemptIndicatorType                   uint8 = 0x1D
+	PDUSessionEstablishmentRejectServiceLevelAAContainerType              uint8 = 0x72
 )
 
 func (a *PDUSessionEstablishmentReject) EncodePDUSessionEstablishmentReject(buffer *bytes.Buffer) {
@@ -59,6 +65,21 @@ func (a *PDUSessionEstablishmentReject) EncodePDUSessionEstablishmentReject(buff
 		binary.Write(buffer, binary.BigEndian, a.ExtendedProtocolConfigurationOptions.GetIei())
 		binary.Write(buffer, binary.BigEndian, a.ExtendedProtocolConfigurationOptions.GetLen())
 		binary.Write(buffer, binary.BigEndian, &a.ExtendedProtocolConfigurationOptions.Buffer)
+	}
+	if a.Fivegsmcongestionreattemptindicator != nil {
+		binary.Write(buffer, binary.BigEndian, a.Fivegsmcongestionreattemptindicator.GetIei())
+		binary.Write(buffer, binary.BigEndian, a.Fivegsmcongestionreattemptindicator.GetLen())
+		binary.Write(buffer, binary.BigEndian, &a.Fivegsmcongestionreattemptindicator.Octet)
+	}
+	if a.ReAttemptIndicator != nil {
+		binary.Write(buffer, binary.BigEndian, a.ReAttemptIndicator.GetIei())
+		binary.Write(buffer, binary.BigEndian, a.ReAttemptIndicator.GetLen())
+		binary.Write(buffer, binary.BigEndian, &a.ReAttemptIndicator.Octet)
+	}
+	if a.ServiceLevelAAContainer != nil {
+		binary.Write(buffer, binary.BigEndian, a.ServiceLevelAAContainer.GetIei())
+		binary.Write(buffer, binary.BigEndian, a.ServiceLevelAAContainer.GetLen())
+		binary.Write(buffer, binary.BigEndian, &a.ServiceLevelAAContainer.Buffer)
 	}
 }
 
@@ -97,6 +118,21 @@ func (a *PDUSessionEstablishmentReject) DecodePDUSessionEstablishmentReject(byte
 			binary.Read(buffer, binary.BigEndian, &a.ExtendedProtocolConfigurationOptions.Len)
 			a.ExtendedProtocolConfigurationOptions.SetLen(a.ExtendedProtocolConfigurationOptions.GetLen())
 			binary.Read(buffer, binary.BigEndian, a.ExtendedProtocolConfigurationOptions.Buffer[:a.ExtendedProtocolConfigurationOptions.GetLen()])
+		case PDUSessionEstablishmentRejectFivegsmcongestionreattemptindicatorType:
+			a.Fivegsmcongestionreattemptindicator = nasType.NewFivegsmcongestionreattemptindicator(ieiN)
+			binary.Read(buffer, binary.BigEndian, &a.Fivegsmcongestionreattemptindicator.Len)
+			a.Fivegsmcongestionreattemptindicator.SetLen(a.Fivegsmcongestionreattemptindicator.GetLen())
+			binary.Read(buffer, binary.BigEndian, &a.Fivegsmcongestionreattemptindicator.Octet)
+		case PDUSessionEstablishmentRejectReAttemptIndicatorType:
+			a.ReAttemptIndicator = nasType.NewReAttemptIndicator(ieiN)
+			binary.Read(buffer, binary.BigEndian, &a.ReAttemptIndicator.Len)
+			a.ReAttemptIndicator.SetLen(a.ReAttemptIndicator.GetLen())
+			binary.Read(buffer, binary.BigEndian, &a.ReAttemptIndicator.Octet)
+		case PDUSessionEstablishmentRejectServiceLevelAAContainerType:
+			a.ServiceLevelAAContainer = nasType.NewServiceLevelAAContainer(ieiN)
+			binary.Read(buffer, binary.BigEndian, &a.ServiceLevelAAContainer.Len)
+			a.ServiceLevelAAContainer.SetLen(a.ServiceLevelAAContainer.GetLen())
+			binary.Read(buffer, binary.BigEndian, a.ServiceLevelAAContainer.Buffer[:a.ServiceLevelAAContainer.GetLen()])
 		default:
 		}
 	}

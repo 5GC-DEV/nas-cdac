@@ -6,18 +6,20 @@
 package nasType_test
 
 import (
+	"reflect"
 	"testing"
 
-	"github.com/5GC-DEV/nas-cdac/nasMessage"
-	"github.com/5GC-DEV/nas-cdac/nasType"
-	"github.com/stretchr/testify/assert"
+	"github.com/omec-project/nas/v2/nasMessage"
+	"github.com/omec-project/nas/v2/nasType"
 )
 
 var PDUSessionEstablishmentRequestPDUSessionTypeTypeIeiInput uint8 = 0x09
 
 func TestNasTypeNewPDUSessionType(t *testing.T) {
 	a := nasType.NewPDUSessionType(PDUSessionEstablishmentRequestPDUSessionTypeTypeIeiInput)
-	assert.NotNil(t, a)
+	if a == nil {
+		t.Fatal("Expected value not to be nil")
+	}
 }
 
 var nasTypePDUSessionEstablishmentRequestPDUSessionTypeTable = []NasTypeIeiData{
@@ -28,7 +30,9 @@ func TestNasTypePDUSessionTypeGetSetIei(t *testing.T) {
 	a := nasType.NewPDUSessionType(PDUSessionEstablishmentRequestPDUSessionTypeTypeIeiInput)
 	for _, table := range nasTypePDUSessionEstablishmentRequestPDUSessionTypeTable {
 		a.SetIei(table.in)
-		assert.Equal(t, table.out, a.GetIei())
+		if !reflect.DeepEqual(table.out, a.GetIei()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetIei())
+		}
 	}
 }
 
@@ -40,7 +44,9 @@ func TestNasTypePDUSessionTypeGetSetSpare(t *testing.T) {
 	a := nasType.NewPDUSessionType(PDUSessionEstablishmentRequestPDUSessionTypeTypeIeiInput)
 	for _, table := range nasTypePDUSessionEstablishmentRequestPDUSessionTypeSpareTable {
 		a.SetSpare(table.in)
-		assert.Equal(t, table.out, a.GetSpare())
+		if !reflect.DeepEqual(table.out, a.GetSpare()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetSpare())
+		}
 	}
 }
 
@@ -57,7 +63,9 @@ func TestNasTypePDUSessionTypeGetSetPDUSessionTypeValue(t *testing.T) {
 	a := nasType.NewPDUSessionType(PDUSessionEstablishmentRequestPDUSessionTypeTypeIeiInput)
 	for _, table := range nasTypePDUSessionTypeValue {
 		a.SetPDUSessionTypeValue(table.in)
-		assert.Equal(t, table.out, a.GetPDUSessionTypeValue())
+		if !reflect.DeepEqual(table.out, a.GetPDUSessionTypeValue()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetPDUSessionTypeValue())
+		}
 	}
 }
 
@@ -86,7 +94,9 @@ func TestNasTypePDUSessionType(t *testing.T) {
 		a.SetIei(PDUSessionEstablishmentRequestPDUSessionTypeTypeIeiInput)
 		a.SetPDUSessionTypeValue(table.inPDUSessionTypeValue)
 
-		assert.Equal(t, table.out.Octet, a.Octet)
+		if !reflect.DeepEqual(table.out.Octet, a.Octet) {
+			t.Errorf("Not equal: expected %v, got %v", table.out.Octet, a.Octet)
+		}
 
 	}
 }

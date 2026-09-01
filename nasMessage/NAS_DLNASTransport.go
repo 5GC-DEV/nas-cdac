@@ -10,7 +10,7 @@ import (
 	"encoding/binary"
 	"net"
 
-	"github.com/5GC-DEV/nas-cdac/nasType"
+	"github.com/omec-project/nas/v2/nasType"
 )
 
 type DLNASTransport struct {
@@ -23,6 +23,7 @@ type DLNASTransport struct {
 	*nasType.AdditionalInformation
 	*nasType.Cause5GMM
 	*nasType.BackoffTimerValue
+	*nasType.LowerBoundTimerValue
 	Ipaddr string
 }
 
@@ -36,6 +37,7 @@ const (
 	DLNASTransportAdditionalInformationType uint8 = 0x24
 	DLNASTransportCause5GMMType             uint8 = 0x58
 	DLNASTransportBackoffTimerValueType     uint8 = 0x37
+	DLNASTransportLowerBoundTimerValueType  uint8 = 0x3A
 )
 
 func (a *DLNASTransport) EncodeDLNASTransport(buffer *bytes.Buffer) {
@@ -62,6 +64,11 @@ func (a *DLNASTransport) EncodeDLNASTransport(buffer *bytes.Buffer) {
 		binary.Write(buffer, binary.BigEndian, a.BackoffTimerValue.GetIei())
 		binary.Write(buffer, binary.BigEndian, a.BackoffTimerValue.GetLen())
 		binary.Write(buffer, binary.BigEndian, &a.BackoffTimerValue.Octet)
+	}
+	if a.LowerBoundTimerValue != nil {
+		binary.Write(buffer, binary.BigEndian, a.LowerBoundTimerValue.GetIei())
+		binary.Write(buffer, binary.BigEndian, a.LowerBoundTimerValue.GetLen())
+		binary.Write(buffer, binary.BigEndian, &a.LowerBoundTimerValue.Octet)
 	}
 }
 
@@ -140,6 +147,11 @@ func (a *DLNASTransport) DecodeDLNASTransport(byteArray *[]byte) {
 			binary.Read(buffer, binary.BigEndian, &a.BackoffTimerValue.Len)
 			a.BackoffTimerValue.SetLen(a.BackoffTimerValue.GetLen())
 			binary.Read(buffer, binary.BigEndian, &a.BackoffTimerValue.Octet)
+		case DLNASTransportLowerBoundTimerValueType:
+			a.LowerBoundTimerValue = nasType.NewLowerBoundTimerValue(ieiN)
+			binary.Read(buffer, binary.BigEndian, &a.LowerBoundTimerValue.Len)
+			a.LowerBoundTimerValue.SetLen(a.LowerBoundTimerValue.GetLen())
+			binary.Read(buffer, binary.BigEndian, &a.LowerBoundTimerValue.Octet)
 		default:
 		}
 	}

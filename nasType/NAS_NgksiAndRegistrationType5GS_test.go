@@ -6,15 +6,17 @@
 package nasType_test
 
 import (
+	"reflect"
 	"testing"
 
-	"github.com/5GC-DEV/nas-cdac/nasType"
-	"github.com/stretchr/testify/assert"
+	"github.com/omec-project/nas/v2/nasType"
 )
 
 func TestNasTypeNewNgksiAndRegistrationType5GS(t *testing.T) {
 	a := nasType.NewNgksiAndRegistrationType5GS()
-	assert.NotNil(t, a)
+	if a == nil {
+		t.Fatal("Expected value not to be nil")
+	}
 }
 
 var RegistrationType5GSAndNgksiFORTable = []NasTypeLenuint8Data{
@@ -25,7 +27,9 @@ func TestNasTypeRegistrationType5GSAndNgksiGetSetFOR(t *testing.T) {
 	a := nasType.NewNgksiAndRegistrationType5GS()
 	for _, table := range RegistrationType5GSAndNgksiFORTable {
 		a.SetFOR(table.in)
-		assert.Equal(t, table.out, a.GetFOR())
+		if !reflect.DeepEqual(table.out, a.GetFOR()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetFOR())
+		}
 	}
 }
 
@@ -37,7 +41,9 @@ func TestNasTypeRegistrationType5GSAndNgksiGetSetRegistrationType5GS(t *testing.
 	a := nasType.NewNgksiAndRegistrationType5GS()
 	for _, table := range RegistrationType5GSAndNgksiRegistrationType5GSTable {
 		a.SetRegistrationType5GS(table.in)
-		assert.Equal(t, table.out, a.GetRegistrationType5GS())
+		if !reflect.DeepEqual(table.out, a.GetRegistrationType5GS()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetRegistrationType5GS())
+		}
 	}
 }
 
@@ -49,7 +55,9 @@ func TestNasTypeRegistrationType5GSAndNgksiGetSetTSC(t *testing.T) {
 	a := nasType.NewNgksiAndRegistrationType5GS()
 	for _, table := range RegistrationType5GSAndNgksiTSCTable {
 		a.SetTSC(table.in)
-		assert.Equal(t, table.out, a.GetTSC())
+		if !reflect.DeepEqual(table.out, a.GetTSC()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetTSC())
+		}
 	}
 }
 
@@ -61,7 +69,9 @@ func TestNasTypeRegistrationType5GSAndNgksiGetSetNasKeySetIdentifiler(t *testing
 	a := nasType.NewNgksiAndRegistrationType5GS()
 	for _, table := range RegistrationType5GSAndNgksiNasKeySetIdentifilerTable {
 		a.SetNasKeySetIdentifiler(table.in)
-		assert.Equal(t, table.out, a.GetNasKeySetIdentifiler())
+		if !reflect.DeepEqual(table.out, a.GetNasKeySetIdentifiler()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetNasKeySetIdentifiler())
+		}
 	}
 }
 
@@ -95,6 +105,8 @@ func TestNasTypeRegistrationType5GSAndNgksi(t *testing.T) {
 		a.SetTSC(table.inTSC)
 		a.SetNasKeySetIdentifiler(table.inNasKeySetIdentifiler)
 
-		assert.Equal(t, table.out.Octet, a.Octet)
+		if !reflect.DeepEqual(table.out.Octet, a.Octet) {
+			t.Errorf("Not equal: expected %v, got %v", table.out.Octet, a.Octet)
+		}
 	}
 }

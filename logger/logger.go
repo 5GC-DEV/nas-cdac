@@ -51,10 +51,6 @@ func init() {
 	SecurityLog = log.Sugar().With("component", "NAS", "category", "Security")
 }
 
-func GetLogger() *zap.Logger {
-	return log
-}
-
 // SetLogLevel: set the log level (panic|fatal|error|warn|info|debug)
 func SetLogLevel(level zapcore.Level) {
 	NasLog.Infoln("set log level:", level)

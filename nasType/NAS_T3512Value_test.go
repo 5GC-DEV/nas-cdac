@@ -6,23 +6,27 @@
 package nasType_test
 
 import (
+	"reflect"
 	"testing"
 
-	"github.com/5GC-DEV/nas-cdac/nasMessage"
-	"github.com/5GC-DEV/nas-cdac/nasType"
-	"github.com/stretchr/testify/assert"
+	"github.com/omec-project/nas/v2/nasMessage"
+	"github.com/omec-project/nas/v2/nasType"
 )
 
 func TestNasTypeNewT3512Value(t *testing.T) {
 	a := nasType.NewT3512Value(nasMessage.RegistrationAcceptT3512ValueType)
-	assert.NotNil(t, a)
+	if a == nil {
+		t.Fatal("Expected value not to be nil")
+	}
 }
 
 func TestNasTypeT3512ValueGetSetIei(t *testing.T) {
 	a := nasType.NewT3512Value(nasMessage.RegistrationAcceptT3512ValueType)
 	for _, table := range nasTypeRegistrationAcceptNetworkFeatureSupport5GSTable {
 		a.SetIei(table.in)
-		assert.Equal(t, table.out, a.GetIei())
+		if !reflect.DeepEqual(table.out, a.GetIei()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetIei())
+		}
 	}
 }
 
@@ -30,7 +34,9 @@ func TestNasTypeT3512ValueGetSetLen(t *testing.T) {
 	a := nasType.NewT3512Value(nasMessage.RegistrationAcceptT3512ValueType)
 	for _, table := range nasTypeRegistrationAcceptNetworkFeatureSupport5GSLenTable {
 		a.SetLen(table.in)
-		assert.Equal(t, table.out, a.GetLen())
+		if !reflect.DeepEqual(table.out, a.GetLen()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetLen())
+		}
 	}
 }
 
@@ -47,7 +53,9 @@ func TestNasTypeT3512ValueGetSetUintValue(t *testing.T) {
 	a := nasType.NewT3512Value(nasMessage.RegistrationAcceptT3512ValueType)
 	for _, table := range nasTypeT3512ValueUintValueTable {
 		a.SetUnit(table.in)
-		assert.Equal(t, table.out, a.GetUnit())
+		if !reflect.DeepEqual(table.out, a.GetUnit()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetUnit())
+		}
 	}
 }
 
@@ -64,7 +72,9 @@ func TestNasTypeT3512ValueGetSetTimerValue(t *testing.T) {
 	a := nasType.NewT3512Value(nasMessage.RegistrationAcceptT3512ValueType)
 	for _, table := range nasTypeT3512ValueTimerValueTable {
 		a.SetTimerValue(table.in)
-		assert.Equal(t, table.out, a.GetTimerValue())
+		if !reflect.DeepEqual(table.out, a.GetTimerValue()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetTimerValue())
+		}
 	}
 }
 
@@ -92,8 +102,14 @@ func TestNasTypeT3512Value(t *testing.T) {
 		a.SetLen(table.in.Len)
 		a.SetUnit(0x01)
 		a.SetTimerValue(0x01)
-		assert.Equal(t, table.out.Iei, a.Iei)
-		assert.Equal(t, table.out.Len, a.Len)
-		assert.Equal(t, table.out.Octet, a.Octet)
+		if !reflect.DeepEqual(table.out.Iei, a.Iei) {
+			t.Errorf("Not equal: expected %v, got %v", table.out.Iei, a.Iei)
+		}
+		if !reflect.DeepEqual(table.out.Len, a.Len) {
+			t.Errorf("Not equal: expected %v, got %v", table.out.Len, a.Len)
+		}
+		if !reflect.DeepEqual(table.out.Octet, a.Octet) {
+			t.Errorf("Not equal: expected %v, got %v", table.out.Octet, a.Octet)
+		}
 	}
 }

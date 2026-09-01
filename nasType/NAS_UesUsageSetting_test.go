@@ -6,23 +6,27 @@
 package nasType_test
 
 import (
+	"reflect"
 	"testing"
 
-	"github.com/5GC-DEV/nas-cdac/nasMessage"
-	"github.com/5GC-DEV/nas-cdac/nasType"
-	"github.com/stretchr/testify/assert"
+	"github.com/omec-project/nas/v2/nasMessage"
+	"github.com/omec-project/nas/v2/nasType"
 )
 
 func TestNasTypeNewUesUsageSetting(t *testing.T) {
 	a := nasType.NewUesUsageSetting(nasMessage.RegistrationRequestUesUsageSettingType)
-	assert.NotNil(t, a)
+	if a == nil {
+		t.Fatal("Expected value not to be nil")
+	}
 }
 
 func TestNasTypeUesUsageSettingGetSetIei(t *testing.T) {
 	a := nasType.NewUesUsageSetting(nasMessage.RegistrationRequestUesUsageSettingType)
 	for _, table := range nasTypeRegistrationAcceptNetworkFeatureSupport5GSTable {
 		a.SetIei(table.in)
-		assert.Equal(t, table.out, a.GetIei())
+		if !reflect.DeepEqual(table.out, a.GetIei()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetIei())
+		}
 	}
 }
 
@@ -30,7 +34,9 @@ func TestNasTypeUesUsageSettingGetSetLen(t *testing.T) {
 	a := nasType.NewUesUsageSetting(nasMessage.RegistrationRequestUesUsageSettingType)
 	for _, table := range nasTypeRegistrationAcceptNetworkFeatureSupport5GSLenTable {
 		a.SetLen(table.in)
-		assert.Equal(t, table.out, a.GetLen())
+		if !reflect.DeepEqual(table.out, a.GetLen()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetLen())
+		}
 	}
 }
 
@@ -47,7 +53,9 @@ func TestNasTypeUesUsageSettingGetSetUesUsageSetting(t *testing.T) {
 	a := nasType.NewUesUsageSetting(nasMessage.RegistrationRequestUesUsageSettingType)
 	for _, table := range nasTypeUesUsageSettingUesUsageSettingTable {
 		a.SetUesUsageSetting(table.in)
-		assert.Equal(t, table.out, a.GetUesUsageSetting())
+		if !reflect.DeepEqual(table.out, a.GetUesUsageSetting()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetUesUsageSetting())
+		}
 	}
 }
 
@@ -74,8 +82,14 @@ func TestNasTypeUesUsageSetting(t *testing.T) {
 		a.SetIei(table.in.Iei)
 		a.SetLen(table.in.Len)
 		a.SetUesUsageSetting(0x05)
-		assert.Equal(t, table.out.Iei, a.Iei)
-		assert.Equal(t, table.out.Len, a.Len)
-		assert.Equal(t, table.out.Octet, a.Octet)
+		if !reflect.DeepEqual(table.out.Iei, a.Iei) {
+			t.Errorf("Not equal: expected %v, got %v", table.out.Iei, a.Iei)
+		}
+		if !reflect.DeepEqual(table.out.Len, a.Len) {
+			t.Errorf("Not equal: expected %v, got %v", table.out.Len, a.Len)
+		}
+		if !reflect.DeepEqual(table.out.Octet, a.Octet) {
+			t.Errorf("Not equal: expected %v, got %v", table.out.Octet, a.Octet)
+		}
 	}
 }

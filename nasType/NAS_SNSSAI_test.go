@@ -6,16 +6,18 @@
 package nasType_test
 
 import (
+	"reflect"
 	"testing"
 
-	"github.com/5GC-DEV/nas-cdac/nasMessage"
-	"github.com/5GC-DEV/nas-cdac/nasType"
-	"github.com/stretchr/testify/assert"
+	"github.com/omec-project/nas/v2/nasMessage"
+	"github.com/omec-project/nas/v2/nasType"
 )
 
 func TestNasTypeNewSNSSAI(t *testing.T) {
 	a := nasType.NewSNSSAI(nasMessage.PDUSessionEstablishmentAcceptSNSSAIType)
-	assert.NotNil(t, a)
+	if a == nil {
+		t.Fatal("Expected value not to be nil")
+	}
 }
 
 var nasTypeServiceRequestSNSSAITable = []NasTypeIeiData{
@@ -26,7 +28,9 @@ func TestNasTypeSNSSAIGetSetIei(t *testing.T) {
 	a := nasType.NewSNSSAI(nasMessage.PDUSessionEstablishmentAcceptSNSSAIType)
 	for _, table := range nasTypeServiceRequestSNSSAITable {
 		a.SetIei(table.in)
-		assert.Equal(t, table.out, a.GetIei())
+		if !reflect.DeepEqual(table.out, a.GetIei()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetIei())
+		}
 	}
 }
 
@@ -38,7 +42,9 @@ func TestNasTypeSNSSAIGetSetLen(t *testing.T) {
 	a := nasType.NewSNSSAI(nasMessage.PDUSessionEstablishmentAcceptSNSSAIType)
 	for _, table := range nasTypeServiceRequestSNSSAILenTable {
 		a.SetLen(table.in)
-		assert.Equal(t, table.out, a.GetLen())
+		if !reflect.DeepEqual(table.out, a.GetLen()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetLen())
+		}
 	}
 }
 
@@ -58,7 +64,9 @@ func TestNasTypeSNSSAIGetSetSST(t *testing.T) {
 		a.SetLen(table.inLen)
 		a.SetSST(table.in)
 
-		assert.Equal(t, table.out, a.GetSST())
+		if !reflect.DeepEqual(table.out, a.GetSST()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetSST())
+		}
 	}
 }
 
@@ -78,7 +86,9 @@ func TestNasTypeSNSSAIGetSetSD(t *testing.T) {
 		a.SetLen(table.inLen)
 		a.SetSD(table.in)
 
-		assert.Equal(t, table.out, a.GetSD())
+		if !reflect.DeepEqual(table.out, a.GetSD()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetSD())
+		}
 	}
 }
 
@@ -98,7 +108,9 @@ func TestNasTypeSNSSAIGetSetMappedHPLMNSST(t *testing.T) {
 		a.SetLen(table.inLen)
 		a.SetMappedHPLMNSST(table.in)
 
-		assert.Equal(t, table.out, a.GetMappedHPLMNSST())
+		if !reflect.DeepEqual(table.out, a.GetMappedHPLMNSST()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetMappedHPLMNSST())
+		}
 	}
 }
 
@@ -118,7 +130,9 @@ func TestNasTypeSNSSAIGetSetMappedHPLMNSD(t *testing.T) {
 		a.SetLen(table.inLen)
 		a.SetMappedHPLMNSD(table.in)
 
-		assert.Equal(t, table.out, a.GetMappedHPLMNSD())
+		if !reflect.DeepEqual(table.out, a.GetMappedHPLMNSD()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetMappedHPLMNSD())
+		}
 	}
 }
 
@@ -148,8 +162,14 @@ func TestNasTypeSNSSAI(t *testing.T) {
 		a.SetMappedHPLMNSST(0x01)
 		a.SetMappedHPLMNSD([3]uint8{0x01, 0x01, 0x01})
 
-		assert.Equal(t, table.out.Iei, a.Iei)
-		assert.Equal(t, table.out.Len, a.Len)
-		assert.Equal(t, table.out.Octet, a.Octet)
+		if !reflect.DeepEqual(table.out.Iei, a.Iei) {
+			t.Errorf("Not equal: expected %v, got %v", table.out.Iei, a.Iei)
+		}
+		if !reflect.DeepEqual(table.out.Len, a.Len) {
+			t.Errorf("Not equal: expected %v, got %v", table.out.Len, a.Len)
+		}
+		if !reflect.DeepEqual(table.out.Octet, a.Octet) {
+			t.Errorf("Not equal: expected %v, got %v", table.out.Octet, a.Octet)
+		}
 	}
 }

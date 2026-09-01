@@ -6,16 +6,18 @@
 package nasType_test
 
 import (
+	"reflect"
 	"testing"
 
-	"github.com/5GC-DEV/nas-cdac/nasMessage"
-	"github.com/5GC-DEV/nas-cdac/nasType"
-	"github.com/stretchr/testify/assert"
+	"github.com/omec-project/nas/v2/nasMessage"
+	"github.com/omec-project/nas/v2/nasType"
 )
 
 func TestNasTypeNewSMPDUDNRequestContainer(t *testing.T) {
 	a := nasType.NewSMPDUDNRequestContainer(nasMessage.PDUSessionEstablishmentRequestSMPDUDNRequestContainerType)
-	assert.NotNil(t, a)
+	if a == nil {
+		t.Fatal("Expected value not to be nil")
+	}
 }
 
 var nasTypeSMPDUDNRequestContainerTable = []NasTypeIeiData{
@@ -26,7 +28,9 @@ func TestNasTypeSMPDUDNRequestContainerGetSetIei(t *testing.T) {
 	a := nasType.NewSMPDUDNRequestContainer(nasMessage.PDUSessionEstablishmentRequestSMPDUDNRequestContainerType)
 	for _, table := range nasTypeSMPDUDNRequestContainerTable {
 		a.SetIei(table.in)
-		assert.Equal(t, table.out, a.GetIei())
+		if !reflect.DeepEqual(table.out, a.GetIei()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetIei())
+		}
 	}
 }
 
@@ -38,7 +42,9 @@ func TestNasTypeSMPDUDNRequestContainerGetSetLen(t *testing.T) {
 	a := nasType.NewSMPDUDNRequestContainer(nasMessage.PDUSessionEstablishmentRequestSMPDUDNRequestContainerType)
 	for _, table := range nasTypeSMPDUDNRequestContainerLenTable {
 		a.SetLen(table.in)
-		assert.Equal(t, table.out, a.GetLen())
+		if !reflect.DeepEqual(table.out, a.GetLen()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetLen())
+		}
 	}
 }
 
@@ -57,7 +63,9 @@ func TestNasTypeSMPDUDNRequestContainerGetSetDNSpecificIdentity(t *testing.T) {
 	for _, table := range nasTypeSMPDUDNRequestContainerDNSpecificIdentityTable {
 		a.SetLen(table.inLen) // fix it, set input length
 		a.SetDNSpecificIdentity(table.in)
-		assert.Equalf(t, table.out, a.GetDNSpecificIdentity(), "in(%v): out %v, actual %x", table.in, table.out, a.GetDNSpecificIdentity())
+		if !reflect.DeepEqual(table.out, a.GetDNSpecificIdentity()) {
+			t.Errorf("in(%v): out %v, actual %x", table.in, table.out, a.GetDNSpecificIdentity())
+		}
 	}
 }
 
@@ -87,9 +95,15 @@ func TestNasTypeSMPDUDNRequestContainer(t *testing.T) {
 		a.SetLen(table.in.Len)
 		a.SetDNSpecificIdentity([]uint8{0x01, 0x01})
 
-		assert.Equalf(t, table.out.Iei, a.Iei, "in(%v): out %v, actual %x", table.in.Iei, table.out.Iei, a.Iei)
-		assert.Equalf(t, table.out.Len, a.Len, "in(%v): out %v, actual %x", table.in.Len, table.out.Len, a.Len)
-		assert.Equalf(t, table.out.Buffer, a.Buffer, "in(%v): out %v, actual %x", table.in.Buffer, table.out.Buffer, a.Buffer)
+		if !reflect.DeepEqual(table.out.Iei, a.Iei) {
+			t.Errorf("in(%v): out %v, actual %x", table.in.Iei, table.out.Iei, a.Iei)
+		}
+		if !reflect.DeepEqual(table.out.Len, a.Len) {
+			t.Errorf("in(%v): out %v, actual %x", table.in.Len, table.out.Len, a.Len)
+		}
+		if !reflect.DeepEqual(table.out.Buffer, a.Buffer) {
+			t.Errorf("in(%v): out %v, actual %x", table.in.Buffer, table.out.Buffer, a.Buffer)
+		}
 
 	}
 }

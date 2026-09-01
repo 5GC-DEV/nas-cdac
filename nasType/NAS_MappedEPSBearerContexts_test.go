@@ -6,16 +6,18 @@
 package nasType_test
 
 import (
+	"reflect"
 	"testing"
 
-	"github.com/5GC-DEV/nas-cdac/nasMessage"
-	"github.com/5GC-DEV/nas-cdac/nasType"
-	"github.com/stretchr/testify/assert"
+	"github.com/omec-project/nas/v2/nasMessage"
+	"github.com/omec-project/nas/v2/nasType"
 )
 
 func TestNasTypeNewMappedEPSBearerContexts(t *testing.T) {
 	a := nasType.NewMappedEPSBearerContexts(nasMessage.PDUSessionModificationRequestMappedEPSBearerContextsType)
-	assert.NotNil(t, a)
+	if a == nil {
+		t.Fatal("Expected value not to be nil")
+	}
 }
 
 var nasTypeRegistrationRequestMappedEPSBearerContextsTable = []NasTypeIeiData{
@@ -26,7 +28,9 @@ func TestNasTypeMappedEPSBearerContextsGetSetIei(t *testing.T) {
 	a := nasType.NewMappedEPSBearerContexts(nasMessage.PDUSessionModificationRequestMappedEPSBearerContextsType)
 	for _, table := range nasTypeRegistrationRequestMappedEPSBearerContextsTable {
 		a.SetIei(table.in)
-		assert.Equal(t, table.out, a.GetIei())
+		if !reflect.DeepEqual(table.out, a.GetIei()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetIei())
+		}
 	}
 }
 
@@ -38,7 +42,9 @@ func TestNasTypeMappedEPSBearerContextsGetSetLen(t *testing.T) {
 	a := nasType.NewMappedEPSBearerContexts(nasMessage.PDUSessionModificationRequestMappedEPSBearerContextsType)
 	for _, table := range nasTypeMappedEPSBearerContextsLenTable {
 		a.SetLen(table.in)
-		assert.Equal(t, table.out, a.GetLen())
+		if !reflect.DeepEqual(table.out, a.GetLen()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetLen())
+		}
 	}
 }
 
@@ -57,7 +63,9 @@ func TestNasTypeMappedEPSBearerContextsGetSetMappedEPSBearerContext(t *testing.T
 	for _, table := range nasTypeMappedEPSBearerContextsMappedEPSBearerContextTable {
 		a.SetLen(table.inLen)
 		a.SetMappedEPSBearerContext(table.in)
-		assert.Equal(t, table.out, a.GetMappedEPSBearerContext())
+		if !reflect.DeepEqual(table.out, a.GetMappedEPSBearerContext()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetMappedEPSBearerContext())
+		}
 	}
 }
 
@@ -88,8 +96,14 @@ func TestNasTypeMappedEPSBearerContexts(t *testing.T) {
 		a.SetLen(table.inLen)
 		a.SetMappedEPSBearerContext(table.inMappedEPSBearerContext)
 
-		assert.Equalf(t, table.outIei, a.Iei, "in(%v): out %v, actual %x", table.inIei, table.outIei, a.Iei)
-		assert.Equalf(t, table.outLen, a.Len, "in(%v): out %v, actual %x", table.inLen, table.outLen, a.Len)
-		assert.Equalf(t, table.outMappedEPSBearerContext, a.GetMappedEPSBearerContext(), "in(%v): out %v, actual %x", table.inMappedEPSBearerContext, table.outMappedEPSBearerContext, a.GetMappedEPSBearerContext())
+		if !reflect.DeepEqual(table.outIei, a.Iei) {
+			t.Errorf("in(%v): out %v, actual %x", table.inIei, table.outIei, a.Iei)
+		}
+		if !reflect.DeepEqual(table.outLen, a.Len) {
+			t.Errorf("in(%v): out %v, actual %x", table.inLen, table.outLen, a.Len)
+		}
+		if !reflect.DeepEqual(table.outMappedEPSBearerContext, a.GetMappedEPSBearerContext()) {
+			t.Errorf("in(%v): out %v, actual %x", table.inMappedEPSBearerContext, table.outMappedEPSBearerContext, a.GetMappedEPSBearerContext())
+		}
 	}
 }

@@ -6,15 +6,17 @@
 package nasType_test
 
 import (
+	"reflect"
 	"testing"
 
-	"github.com/5GC-DEV/nas-cdac/nasType"
-	"github.com/stretchr/testify/assert"
+	"github.com/omec-project/nas/v2/nasType"
 )
 
 func TestNasTypeNewAdditional5GSecurityInformation(t *testing.T) {
 	a := nasType.NewAdditional5GSecurityInformation(0x36) // security mode command message
-	assert.NotNil(t, a)
+	if a == nil {
+		t.Fatal("Expected value not to be nil")
+	}
 }
 
 var nasTypeSecurityModeCommandAdditional5GSecurityInformationTable = []NasTypeIeiData{
@@ -25,7 +27,9 @@ func TestNasTypeAdditional5GSecurityInformationGetSetIei(t *testing.T) {
 	a := nasType.NewAdditional5GSecurityInformation(0x36)
 	for _, table := range nasTypeSecurityModeCommandAdditional5GSecurityInformationTable {
 		a.SetIei(table.in)
-		assert.Equal(t, table.out, a.GetIei())
+		if !reflect.DeepEqual(table.out, a.GetIei()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetIei())
+		}
 	}
 }
 
@@ -37,7 +41,9 @@ func TestNasTypeAdditional5GSecurityInformationGetSetLen(t *testing.T) {
 	a := nasType.NewAdditional5GSecurityInformation(0x36)
 	for _, table := range nasTypeSecurityModeCommandAdditional5GSecurityInformationLenTable {
 		a.SetLen(table.in)
-		assert.Equal(t, table.out, a.GetLen())
+		if !reflect.DeepEqual(table.out, a.GetLen()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetLen())
+		}
 	}
 }
 
@@ -55,7 +61,9 @@ func TestNasTypeAdditional5GSecurityInformationGetSetRINMR(t *testing.T) {
 	a := nasType.NewAdditional5GSecurityInformation(0x36)
 	for _, table := range nasTypeAdditional5GSecurityInformationRINMR {
 		a.SetRINMR(table.in)
-		assert.Equal(t, table.out, a.GetRINMR())
+		if !reflect.DeepEqual(table.out, a.GetRINMR()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetRINMR())
+		}
 	}
 }
 
@@ -73,6 +81,8 @@ func TestNasTypeAdditional5GSecurityInformationGetSetHDP(t *testing.T) {
 	a := nasType.NewAdditional5GSecurityInformation(0x36)
 	for _, table := range nasTypeAdditional5GSecurityInformationHDP {
 		a.SetHDP(table.in)
-		assert.Equal(t, table.out, a.GetHDP())
+		if !reflect.DeepEqual(table.out, a.GetHDP()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetHDP())
+		}
 	}
 }

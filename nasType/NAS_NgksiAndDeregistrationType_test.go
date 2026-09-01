@@ -6,15 +6,17 @@
 package nasType_test
 
 import (
+	"reflect"
 	"testing"
 
-	"github.com/5GC-DEV/nas-cdac/nasType"
-	"github.com/stretchr/testify/assert"
+	"github.com/omec-project/nas/v2/nasType"
 )
 
 func TestNasTypeNewNgksiAndDeregistrationType(t *testing.T) {
 	a := nasType.NewNgksiAndDeregistrationType()
-	assert.NotNil(t, a)
+	if a == nil {
+		t.Fatal("Expected value not to be nil")
+	}
 }
 
 type nasTypeNgksiAndDeregistrationTypeTSC struct {
@@ -30,7 +32,9 @@ func TestNasTypeNgksiAndDeregistrationTypeGetSetTSC(t *testing.T) {
 	a := nasType.NewNgksiAndDeregistrationType()
 	for _, table := range nasTypeNgksiAndDeregistrationTypeTSCTable {
 		a.SetTSC(table.in)
-		assert.Equal(t, table.out, a.GetTSC())
+		if !reflect.DeepEqual(table.out, a.GetTSC()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetTSC())
+		}
 	}
 }
 
@@ -47,7 +51,9 @@ func TestNasTypeNgksiAndDeregistrationTypeGetSetNasKeySetIdentifiler(t *testing.
 	a := nasType.NewNgksiAndDeregistrationType()
 	for _, table := range nasTypeNgksiAndDeregistrationTypeNasKeySetIdentifilerTable {
 		a.SetNasKeySetIdentifiler(table.in)
-		assert.Equal(t, table.out, a.GetNasKeySetIdentifiler())
+		if !reflect.DeepEqual(table.out, a.GetNasKeySetIdentifiler()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetNasKeySetIdentifiler())
+		}
 	}
 }
 
@@ -64,7 +70,9 @@ func TestNasTypeNgksiAndDeregistrationTypeGetSetSwitchOff(t *testing.T) {
 	a := nasType.NewNgksiAndDeregistrationType()
 	for _, table := range nasTypeNgksiAndDeregistrationTypeSwitchOffTable {
 		a.SetSwitchOff(table.in)
-		assert.Equal(t, table.out, a.GetSwitchOff())
+		if !reflect.DeepEqual(table.out, a.GetSwitchOff()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetSwitchOff())
+		}
 	}
 }
 
@@ -81,7 +89,9 @@ func TestNasTypeNgksiAndDeregistrationTypeGetSetReRegistrationRequired(t *testin
 	a := nasType.NewNgksiAndDeregistrationType()
 	for _, table := range nasTypeNgksiAndDeregistrationTypeReRegistrationRequiredTable {
 		a.SetReRegistrationRequired(table.in)
-		assert.Equal(t, table.out, a.GetReRegistrationRequired())
+		if !reflect.DeepEqual(table.out, a.GetReRegistrationRequired()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetReRegistrationRequired())
+		}
 	}
 }
 
@@ -98,7 +108,9 @@ func TestNasTypeNgksiAndDeregistrationTypeGetSetAccessType(t *testing.T) {
 	a := nasType.NewNgksiAndDeregistrationType()
 	for _, table := range nasTypeNgksiAndDeregistrationTypeAccessTypeTable {
 		a.SetAccessType(table.in)
-		assert.Equal(t, table.out, a.GetAccessType())
+		if !reflect.DeepEqual(table.out, a.GetAccessType()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetAccessType())
+		}
 	}
 }
 
@@ -132,10 +144,20 @@ func TestNasTypeNgksiAndDeregistrationType(t *testing.T) {
 		a.SetReRegistrationRequired(table.inReRegistrationRequired)
 		a.SetAccessType(table.inAccessType)
 
-		assert.Equal(t, table.outTSC, a.GetTSC())
-		assert.Equal(t, table.outNasKeySetIdentifiler, a.GetNasKeySetIdentifiler())
-		assert.Equal(t, table.outSwitchOff, a.GetSwitchOff())
-		assert.Equal(t, table.outReRegistrationRequired, a.GetReRegistrationRequired())
-		assert.Equal(t, table.outAccessType, a.GetAccessType())
+		if !reflect.DeepEqual(table.outTSC, a.GetTSC()) {
+			t.Errorf("Not equal: expected %v, got %v", table.outTSC, a.GetTSC())
+		}
+		if !reflect.DeepEqual(table.outNasKeySetIdentifiler, a.GetNasKeySetIdentifiler()) {
+			t.Errorf("Not equal: expected %v, got %v", table.outNasKeySetIdentifiler, a.GetNasKeySetIdentifiler())
+		}
+		if !reflect.DeepEqual(table.outSwitchOff, a.GetSwitchOff()) {
+			t.Errorf("Not equal: expected %v, got %v", table.outSwitchOff, a.GetSwitchOff())
+		}
+		if !reflect.DeepEqual(table.outReRegistrationRequired, a.GetReRegistrationRequired()) {
+			t.Errorf("Not equal: expected %v, got %v", table.outReRegistrationRequired, a.GetReRegistrationRequired())
+		}
+		if !reflect.DeepEqual(table.outAccessType, a.GetAccessType()) {
+			t.Errorf("Not equal: expected %v, got %v", table.outAccessType, a.GetAccessType())
+		}
 	}
 }

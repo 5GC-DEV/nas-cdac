@@ -6,16 +6,18 @@
 package nasType_test
 
 import (
+	"reflect"
 	"testing"
 
-	"github.com/5GC-DEV/nas-cdac/nasMessage"
-	"github.com/5GC-DEV/nas-cdac/nasType"
-	"github.com/stretchr/testify/assert"
+	"github.com/omec-project/nas/v2/nasMessage"
+	"github.com/omec-project/nas/v2/nasType"
 )
 
 func TestNasTypeNewRequestedQosFlowDescriptions(t *testing.T) {
 	a := nasType.NewRequestedQosFlowDescriptions(nasMessage.PDUSessionModificationRequestRequestedQosFlowDescriptionsType)
-	assert.NotNil(t, a)
+	if a == nil {
+		t.Fatal("Expected value not to be nil")
+	}
 }
 
 var nasTypeAuthenticationResultRequestedQosFlowDescriptionsTable = []NasTypeIeiData{
@@ -26,7 +28,9 @@ func TestNasTypeRequestedQosFlowDescriptionsGetSetIei(t *testing.T) {
 	a := nasType.NewRequestedQosFlowDescriptions(nasMessage.PDUSessionModificationRequestRequestedQosFlowDescriptionsType)
 	for _, table := range nasTypeAuthenticationResultRequestedQosFlowDescriptionsTable {
 		a.SetIei(table.in)
-		assert.Equal(t, table.out, a.GetIei())
+		if !reflect.DeepEqual(table.out, a.GetIei()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetIei())
+		}
 	}
 }
 
@@ -38,7 +42,9 @@ func TestNasTypeRequestedQosFlowDescriptionsGetSetLen(t *testing.T) {
 	a := nasType.NewRequestedQosFlowDescriptions(nasMessage.PDUSessionModificationRequestRequestedQosFlowDescriptionsType)
 	for _, table := range nasTypeAuthenticationResultRequestedQosFlowDescriptionsLenTable {
 		a.SetLen(table.in)
-		assert.Equal(t, table.out, a.GetLen())
+		if !reflect.DeepEqual(table.out, a.GetLen()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetLen())
+		}
 	}
 }
 
@@ -57,7 +63,9 @@ func TestNasTypeRequestedQosFlowDescriptionsGetSetContent(t *testing.T) {
 	for _, table := range nasTypeRequestedQosFlowDescriptionsTable {
 		a.SetLen(table.inLen)
 		a.SetQoSFlowDescriptions(table.in)
-		assert.Equalf(t, table.out, a.GetQoSFlowDescriptions(), "in(%v): out %v, actual %x", table.in, table.out, a.GetQoSFlowDescriptions())
+		if !reflect.DeepEqual(table.out, a.GetQoSFlowDescriptions()) {
+			t.Errorf("in(%v): out %v, actual %x", table.in, table.out, a.GetQoSFlowDescriptions())
+		}
 	}
 }
 
@@ -87,9 +95,15 @@ func TestNasTypeRequestedQosFlowDescriptions(t *testing.T) {
 		a.SetLen(table.in.Len)
 		a.SetQoSFlowDescriptions(table.in.Buffer)
 
-		assert.Equalf(t, table.out.Iei, a.Iei, "in(%v): out %v, actual %x", table.in.Iei, table.out.Iei, a.Iei)
-		assert.Equalf(t, table.out.Len, a.Len, "in(%v): out %v, actual %x", table.in.Len, table.out.Len, a.Len)
-		assert.Equalf(t, table.out.Buffer, a.Buffer, "in(%v): out %v, actual %x", table.in.Buffer, table.out.Buffer, a.Buffer)
+		if !reflect.DeepEqual(table.out.Iei, a.Iei) {
+			t.Errorf("in(%v): out %v, actual %x", table.in.Iei, table.out.Iei, a.Iei)
+		}
+		if !reflect.DeepEqual(table.out.Len, a.Len) {
+			t.Errorf("in(%v): out %v, actual %x", table.in.Len, table.out.Len, a.Len)
+		}
+		if !reflect.DeepEqual(table.out.Buffer, a.Buffer) {
+			t.Errorf("in(%v): out %v, actual %x", table.in.Buffer, table.out.Buffer, a.Buffer)
+		}
 
 	}
 }

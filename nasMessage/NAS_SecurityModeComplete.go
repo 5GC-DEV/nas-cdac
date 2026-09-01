@@ -10,7 +10,7 @@ import (
 	"encoding/binary"
 	"fmt"
 
-	"github.com/5GC-DEV/nas-cdac/nasType"
+	"github.com/omec-project/nas/v2/nasType"
 )
 
 type SecurityModeComplete struct {
@@ -19,6 +19,7 @@ type SecurityModeComplete struct {
 	nasType.SecurityModeCompleteMessageIdentity
 	*nasType.IMEISV
 	*nasType.NASMessageContainer
+	NonIMEISVPEI *nasType.MobileIdentity5GS
 }
 
 func NewSecurityModeComplete(iei uint8) (securityModeComplete *SecurityModeComplete) {
@@ -29,6 +30,7 @@ func NewSecurityModeComplete(iei uint8) (securityModeComplete *SecurityModeCompl
 const (
 	SecurityModeCompleteIMEISVType              uint8 = 0x77
 	SecurityModeCompleteNASMessageContainerType uint8 = 0x71
+	SecurityModeCompleteNonIMEISVPEIType        uint8 = 0x78
 )
 
 func (a *SecurityModeComplete) EncodeSecurityModeComplete(buffer *bytes.Buffer) {
@@ -44,6 +46,11 @@ func (a *SecurityModeComplete) EncodeSecurityModeComplete(buffer *bytes.Buffer) 
 		binary.Write(buffer, binary.BigEndian, a.NASMessageContainer.GetIei())
 		binary.Write(buffer, binary.BigEndian, a.NASMessageContainer.GetLen())
 		binary.Write(buffer, binary.BigEndian, &a.NASMessageContainer.Buffer)
+	}
+	if a.NonIMEISVPEI != nil {
+		binary.Write(buffer, binary.BigEndian, a.NonIMEISVPEI.GetIei())
+		binary.Write(buffer, binary.BigEndian, a.NonIMEISVPEI.GetLen())
+		binary.Write(buffer, binary.BigEndian, &a.NonIMEISVPEI.Buffer)
 	}
 }
 
@@ -76,6 +83,11 @@ func (a *SecurityModeComplete) DecodeSecurityModeComplete(byteArray *[]byte) err
 			binary.Read(buffer, binary.BigEndian, &a.NASMessageContainer.Len)
 			a.NASMessageContainer.SetLen(a.NASMessageContainer.GetLen())
 			binary.Read(buffer, binary.BigEndian, a.NASMessageContainer.Buffer[:a.NASMessageContainer.GetLen()])
+		case SecurityModeCompleteNonIMEISVPEIType:
+			a.NonIMEISVPEI = nasType.NewMobileIdentity5GS(ieiN)
+			binary.Read(buffer, binary.BigEndian, &a.NonIMEISVPEI.Len)
+			a.NonIMEISVPEI.SetLen(a.NonIMEISVPEI.GetLen())
+			binary.Read(buffer, binary.BigEndian, a.NonIMEISVPEI.Buffer[:a.NonIMEISVPEI.GetLen()])
 		default:
 		}
 	}

@@ -6,15 +6,17 @@
 package nasType_test
 
 import (
+	"reflect"
 	"testing"
 
-	"github.com/5GC-DEV/nas-cdac/nasType"
-	"github.com/stretchr/testify/assert"
+	"github.com/omec-project/nas/v2/nasType"
 )
 
 func TestNasTypeNewNewSpareHalfOctetAndDeregistrationType(t *testing.T) {
 	a := nasType.NewSpareHalfOctetAndDeregistrationType()
-	assert.NotNil(t, a)
+	if a == nil {
+		t.Fatal("Expected value not to be nil")
+	}
 }
 
 type nasTypeDeregistrationTypeAndSpareHalfOctetSwitchOff struct {
@@ -30,7 +32,9 @@ func TestNasTypeDeregistrationTypeAndSpareHalfOctetGetSetSwitchOff(t *testing.T)
 	a := nasType.NewSpareHalfOctetAndDeregistrationType()
 	for _, table := range nasTypeDeregistrationTypeAndSpareHalfOctetSwitchOffTable {
 		a.SetSwitchOff(table.in)
-		assert.Equal(t, table.out, a.GetSwitchOff())
+		if !reflect.DeepEqual(table.out, a.GetSwitchOff()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetSwitchOff())
+		}
 	}
 }
 
@@ -47,7 +51,9 @@ func TestNasTypeDeregistrationTypeAndSpareHalfOctetGetSetReRegistrationRequired(
 	a := nasType.NewSpareHalfOctetAndDeregistrationType()
 	for _, table := range nasTypeDeregistrationTypeAndSpareHalfOctetReRegistrationRequiredTable {
 		a.SetReRegistrationRequired(table.in)
-		assert.Equal(t, table.out, a.GetReRegistrationRequired())
+		if !reflect.DeepEqual(table.out, a.GetReRegistrationRequired()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetReRegistrationRequired())
+		}
 	}
 }
 
@@ -64,7 +70,9 @@ func TestNasTypeDeregistrationTypeAndSpareHalfOctetGetSetAccessType(t *testing.T
 	a := nasType.NewSpareHalfOctetAndDeregistrationType()
 	for _, table := range nasTypeDeregistrationTypeAndSpareHalfOctetAccessTypeTable {
 		a.SetAccessType(table.in)
-		assert.Equal(t, table.out, a.GetAccessType())
+		if !reflect.DeepEqual(table.out, a.GetAccessType()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetAccessType())
+		}
 	}
 }
 
@@ -96,7 +104,9 @@ func TestNasTypeDeregistrationTypeAndSpareHalfOctet(t *testing.T) {
 		a.SetReRegistrationRequired(table.inReRegistrationRequired)
 		a.SetAccessType(table.inAccessType)
 
-		assert.Equal(t, table.out.Octet, a.Octet)
+		if !reflect.DeepEqual(table.out.Octet, a.Octet) {
+			t.Errorf("Not equal: expected %v, got %v", table.out.Octet, a.Octet)
+		}
 
 	}
 }

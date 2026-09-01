@@ -6,16 +6,18 @@
 package nasType_test
 
 import (
+	"reflect"
 	"testing"
 
-	"github.com/5GC-DEV/nas-cdac/nasMessage"
-	"github.com/5GC-DEV/nas-cdac/nasType"
-	"github.com/stretchr/testify/assert"
+	"github.com/omec-project/nas/v2/nasMessage"
+	"github.com/omec-project/nas/v2/nasType"
 )
 
 func TestNasTypeNewBackoffTimerValue(t *testing.T) {
 	a := nasType.NewBackoffTimerValue(nasMessage.RegistrationAcceptT3512ValueType)
-	assert.NotNil(t, a)
+	if a == nil {
+		t.Fatal("Expected value not to be nil")
+	}
 }
 
 var nasTypeAuthenticationRequestBackoffTimerValueIeiTable = []NasTypeIeiData{
@@ -26,7 +28,9 @@ func TestNasTypeBackoffTimerValueGetSetIei(t *testing.T) {
 	a := nasType.NewBackoffTimerValue(nasMessage.RegistrationAcceptT3512ValueType)
 	for _, table := range nasTypeAuthenticationRequestBackoffTimerValueIeiTable {
 		a.SetIei(table.in)
-		assert.Equal(t, table.out, a.GetIei())
+		if !reflect.DeepEqual(table.out, a.GetIei()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetIei())
+		}
 	}
 }
 
@@ -38,7 +42,9 @@ func TestNasTypeBackoffTimerValueGetSetLen(t *testing.T) {
 	a := nasType.NewBackoffTimerValue(nasMessage.RegistrationAcceptT3512ValueType)
 	for _, table := range nasTypeBackoffTimerValueLenTable {
 		a.SetLen(table.in)
-		assert.Equal(t, table.out, a.GetLen())
+		if !reflect.DeepEqual(table.out, a.GetLen()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetLen())
+		}
 	}
 }
 
@@ -55,7 +61,9 @@ func TestNasTypeBackoffTimerValueGetSetUintTimerValue(t *testing.T) {
 	a := nasType.NewBackoffTimerValue(nasMessage.RegistrationAcceptT3512ValueType)
 	for _, table := range nasTypeBackoffTimerValueUintTimerValueTable {
 		a.SetUnitTimerValue(table.in)
-		assert.Equal(t, table.out, a.GetUnitTimerValue())
+		if !reflect.DeepEqual(table.out, a.GetUnitTimerValue()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetUnitTimerValue())
+		}
 	}
 }
 
@@ -72,7 +80,9 @@ func TestNasTypeBackoffTimerValueGetSetTimerValue(t *testing.T) {
 	a := nasType.NewBackoffTimerValue(nasMessage.RegistrationAcceptT3512ValueType)
 	for _, table := range nasTypeBackoffTimerValueTimerValueTable {
 		a.SetTimerValue(table.in)
-		assert.Equal(t, table.out, a.GetTimerValue())
+		if !reflect.DeepEqual(table.out, a.GetTimerValue()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetTimerValue())
+		}
 	}
 }
 
@@ -102,8 +112,14 @@ func TestNasTypeBackoffTimer(t *testing.T) {
 		a.SetLen(table.in.Len)
 		a.SetUnitTimerValue(table.inUnitTimerValue)
 		a.SetTimerValue(table.inTimerValue)
-		assert.Equal(t, table.out.Iei, a.Iei)
-		assert.Equal(t, table.out.Len, a.Len)
-		assert.Equal(t, table.out.Octet, a.Octet)
+		if !reflect.DeepEqual(table.out.Iei, a.Iei) {
+			t.Errorf("Not equal: expected %v, got %v", table.out.Iei, a.Iei)
+		}
+		if !reflect.DeepEqual(table.out.Len, a.Len) {
+			t.Errorf("Not equal: expected %v, got %v", table.out.Len, a.Len)
+		}
+		if !reflect.DeepEqual(table.out.Octet, a.Octet) {
+			t.Errorf("Not equal: expected %v, got %v", table.out.Octet, a.Octet)
+		}
 	}
 }

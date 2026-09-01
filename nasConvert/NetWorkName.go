@@ -6,7 +6,7 @@
 package nasConvert
 
 import (
-	"github.com/5GC-DEV/nas-cdac/nasType"
+	"github.com/omec-project/nas/v2/nasType"
 )
 
 // TS 24.501 9.11.3.35, TS 24.008 10.5.3.5a

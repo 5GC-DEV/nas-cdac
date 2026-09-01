@@ -1,7 +1,6 @@
+// Copyright (C) 2026 Intel Corporation
 // Copyright 2019 free5GC.org
-//
 // SPDX-License-Identifier: Apache-2.0
-//
 
 package nasMessage
 
@@ -9,7 +8,7 @@ import (
 	"bytes"
 	"encoding/binary"
 
-	"github.com/5GC-DEV/nas-cdac/nasType"
+	"github.com/omec-project/nas/v2/nasType"
 )
 
 type ULNASTransport struct {
@@ -24,6 +23,11 @@ type ULNASTransport struct {
 	*nasType.SNSSAI
 	*nasType.DNN
 	*nasType.AdditionalInformation
+	*nasType.MAPDUSessionInformation
+	*nasType.ReleaseAssistanceIndication
+	*nasType.Non3GPPAccessPathSwitchingIndication
+	AlternativeSNSSAI *nasType.SNSSAI
+	*nasType.PayloadContainerInformation
 }
 
 func NewULNASTransport(iei uint8) (uLNASTransport *ULNASTransport) {
@@ -32,12 +36,17 @@ func NewULNASTransport(iei uint8) (uLNASTransport *ULNASTransport) {
 }
 
 const (
-	ULNASTransportPduSessionID2ValueType    uint8 = 0x12
-	ULNASTransportOldPDUSessionIDType       uint8 = 0x59
-	ULNASTransportRequestTypeType           uint8 = 0x08
-	ULNASTransportSNSSAIType                uint8 = 0x22
-	ULNASTransportDNNType                   uint8 = 0x25
-	ULNASTransportAdditionalInformationType uint8 = 0x24
+	ULNASTransportPduSessionID2ValueType                   uint8 = 0x12
+	ULNASTransportOldPDUSessionIDType                      uint8 = 0x59
+	ULNASTransportRequestTypeType                          uint8 = 0x08
+	ULNASTransportSNSSAIType                               uint8 = 0x22
+	ULNASTransportDNNType                                  uint8 = 0x25
+	ULNASTransportAdditionalInformationType                uint8 = 0x24
+	ULNASTransportMAPDUSessionInformationType              uint8 = 0x0A
+	ULNASTransportReleaseAssistanceIndicationType          uint8 = 0x0F
+	ULNASTransportNon3GPPAccessPathSwitchingIndicationType uint8 = 0x4E
+	ULNASTransportAlternativeSNSSAIType                    uint8 = 0x5A
+	ULNASTransportPayloadContainerInformationType          uint8 = 0x09
 )
 
 func (a *ULNASTransport) EncodeULNASTransport(buffer *bytes.Buffer) {
@@ -72,6 +81,25 @@ func (a *ULNASTransport) EncodeULNASTransport(buffer *bytes.Buffer) {
 		binary.Write(buffer, binary.BigEndian, a.AdditionalInformation.GetIei())
 		binary.Write(buffer, binary.BigEndian, a.AdditionalInformation.GetLen())
 		binary.Write(buffer, binary.BigEndian, &a.AdditionalInformation.Buffer)
+	}
+	if a.MAPDUSessionInformation != nil {
+		binary.Write(buffer, binary.BigEndian, &a.MAPDUSessionInformation.Octet)
+	}
+	if a.ReleaseAssistanceIndication != nil {
+		binary.Write(buffer, binary.BigEndian, &a.ReleaseAssistanceIndication.Octet)
+	}
+	if a.Non3GPPAccessPathSwitchingIndication != nil {
+		binary.Write(buffer, binary.BigEndian, a.Non3GPPAccessPathSwitchingIndication.GetIei())
+		binary.Write(buffer, binary.BigEndian, a.Non3GPPAccessPathSwitchingIndication.GetLen())
+		binary.Write(buffer, binary.BigEndian, &a.Non3GPPAccessPathSwitchingIndication.Octet)
+	}
+	if a.AlternativeSNSSAI != nil {
+		binary.Write(buffer, binary.BigEndian, a.AlternativeSNSSAI.GetIei())
+		binary.Write(buffer, binary.BigEndian, a.AlternativeSNSSAI.GetLen())
+		binary.Write(buffer, binary.BigEndian, a.AlternativeSNSSAI.Octet[:a.AlternativeSNSSAI.GetLen()])
+	}
+	if a.PayloadContainerInformation != nil {
+		binary.Write(buffer, binary.BigEndian, &a.PayloadContainerInformation.Octet)
 	}
 }
 
@@ -118,6 +146,25 @@ func (a *ULNASTransport) DecodeULNASTransport(byteArray *[]byte) {
 			binary.Read(buffer, binary.BigEndian, &a.AdditionalInformation.Len)
 			a.AdditionalInformation.SetLen(a.AdditionalInformation.GetLen())
 			binary.Read(buffer, binary.BigEndian, a.AdditionalInformation.Buffer[:a.AdditionalInformation.GetLen()])
+		case ULNASTransportMAPDUSessionInformationType:
+			a.MAPDUSessionInformation = nasType.NewMAPDUSessionInformation(ieiN)
+			a.MAPDUSessionInformation.Octet = ieiN
+		case ULNASTransportReleaseAssistanceIndicationType:
+			a.ReleaseAssistanceIndication = nasType.NewReleaseAssistanceIndication(ieiN)
+			a.ReleaseAssistanceIndication.Octet = ieiN
+		case ULNASTransportNon3GPPAccessPathSwitchingIndicationType:
+			a.Non3GPPAccessPathSwitchingIndication = nasType.NewNon3GPPAccessPathSwitchingIndication(ieiN)
+			binary.Read(buffer, binary.BigEndian, &a.Non3GPPAccessPathSwitchingIndication.Len)
+			a.Non3GPPAccessPathSwitchingIndication.SetLen(a.Non3GPPAccessPathSwitchingIndication.GetLen())
+			binary.Read(buffer, binary.BigEndian, &a.Non3GPPAccessPathSwitchingIndication.Octet)
+		case ULNASTransportAlternativeSNSSAIType:
+			a.AlternativeSNSSAI = nasType.NewSNSSAI(ieiN)
+			binary.Read(buffer, binary.BigEndian, &a.AlternativeSNSSAI.Len)
+			a.AlternativeSNSSAI.SetLen(a.AlternativeSNSSAI.GetLen())
+			binary.Read(buffer, binary.BigEndian, a.AlternativeSNSSAI.Octet[:a.AlternativeSNSSAI.GetLen()])
+		case ULNASTransportPayloadContainerInformationType:
+			a.PayloadContainerInformation = nasType.NewPayloadContainerInformation(ieiN)
+			a.PayloadContainerInformation.Octet = ieiN
 		default:
 		}
 	}

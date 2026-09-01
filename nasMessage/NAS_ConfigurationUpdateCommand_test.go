@@ -1,7 +1,6 @@
+// Copyright (C) 2026 Intel Corporation
 // Copyright 2019 free5GC.org
-//
 // SPDX-License-Identifier: Apache-2.0
-//
 
 package nasMessage_test
 
@@ -10,11 +9,10 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/5GC-DEV/nas-cdac"
-	"github.com/5GC-DEV/nas-cdac/logger"
-	"github.com/5GC-DEV/nas-cdac/nasMessage"
-	"github.com/5GC-DEV/nas-cdac/nasType"
-	"github.com/stretchr/testify/assert"
+	"github.com/omec-project/nas/v2"
+	"github.com/omec-project/nas/v2/logger"
+	"github.com/omec-project/nas/v2/nasMessage"
+	"github.com/omec-project/nas/v2/nasType"
 )
 
 type nasMessageConfigurationUpdateCommandData struct {
@@ -127,7 +125,9 @@ var nasMessageConfigurationUpdateCommandTable = []nasMessageConfigurationUpdateC
 
 func TestNasTypeNewConfigurationUpdateCommand(t *testing.T) {
 	a := nasMessage.NewConfigurationUpdateCommand(0)
-	assert.NotNil(t, a)
+	if a == nil {
+		t.Fatal("Expected value not to be nil")
+	}
 }
 
 func TestNasTypeNewConfigurationUpdateCommandMessage(t *testing.T) {
@@ -135,8 +135,12 @@ func TestNasTypeNewConfigurationUpdateCommandMessage(t *testing.T) {
 		logger.NasMsgLog.Infoln("Test Cnt:", i)
 		a := nasMessage.NewConfigurationUpdateCommand(0)
 		b := nasMessage.NewConfigurationUpdateCommand(0)
-		assert.NotNil(t, a)
-		assert.NotNil(t, b)
+		if a == nil {
+			t.Fatal("Expected value not to be nil")
+		}
+		if b == nil {
+			t.Fatal("Expected value not to be nil")
+		}
 
 		a.ExtendedProtocolDiscriminator.SetExtendedProtocolDiscriminator(table.inExtendedProtocolDiscriminator)
 		a.SpareHalfOctetAndSecurityHeaderType.SetSecurityHeaderType(table.inSecurityHeaderType)
@@ -208,5 +212,104 @@ func TestNasTypeNewConfigurationUpdateCommandMessage(t *testing.T) {
 			t.Errorf("Not correct")
 		}
 
+	}
+}
+
+func TestConfigurationUpdateCommandNewIEsEncodeDecode(t *testing.T) {
+	a := nasMessage.NewConfigurationUpdateCommand(0)
+	b := nasMessage.NewConfigurationUpdateCommand(0)
+	if a == nil {
+		t.Fatal("Expected value not to be nil")
+	}
+	if b == nil {
+		t.Fatal("Expected value not to be nil")
+	}
+
+	a.ExtendedProtocolDiscriminator.SetExtendedProtocolDiscriminator(nasMessage.Epd5GSMobilityManagementMessage)
+	a.SpareHalfOctetAndSecurityHeaderType.SetSecurityHeaderType(0x00)
+	a.SpareHalfOctetAndSecurityHeaderType.SetSpareHalfOctet(0x00)
+	a.ConfigurationUpdateCommandMessageIdentity.SetMessageType(nas.MsgTypeConfigurationUpdateCommand)
+
+	a.UERadioCapabilityID = nasType.NewUERadioCapabilityID(nasMessage.ConfigurationUpdateCommandUERadioCapabilityIDType)
+	a.UERadioCapabilityID.SetLen(3)
+	copy(a.UERadioCapabilityID.Buffer, []byte{0x01, 0x02, 0x03})
+
+	a.TruncatedFiveGSTMSIConfiguration = nasType.NewTruncatedFiveGSTMSIConfiguration(nasMessage.ConfigurationUpdateCommandTruncatedFiveGSTMSIConfigurationType)
+	a.TruncatedFiveGSTMSIConfiguration.SetLen(2)
+	copy(a.TruncatedFiveGSTMSIConfiguration.Buffer, []byte{0x01, 0x02})
+
+	a.ExtendedLADNInformation = nasType.NewExtendedLADNInformation(nasMessage.ConfigurationUpdateCommandExtendedLADNInformationType)
+	a.ExtendedLADNInformation.SetLen(5)
+	copy(a.ExtendedLADNInformation.Buffer, []byte{0xAA, 0xBB, 0xCC, 0xDD, 0xEE})
+
+	a.UERadioCapabilityIDDeletionIndicationIE = nasType.NewUERadioCapabilityIDDeletionIndicationIE(nasMessage.ConfigurationUpdateCommandUERadioCapabilityIDDeletionIndicationType)
+	a.UERadioCapabilityIDDeletionIndicationIE.SetDeletionIndicationValue(0x01)
+
+	a.DisasterReturnWaitRange = nasType.NewRegistrationWaitRange(nasMessage.ConfigurationUpdateCommandDisasterReturnWaitRangeType)
+	a.DisasterReturnWaitRange.SetLen(2)
+	copy(a.DisasterReturnWaitRange.Buffer, []byte{0x05, 0x0A})
+
+	a.ExtendedCAGInformationList = nasType.NewExtendedCAGInformationList(nasMessage.ConfigurationUpdateCommandExtendedCAGInformationListType)
+	a.ExtendedCAGInformationList.SetLen(3)
+	copy(a.ExtendedCAGInformationList.Buffer, []byte{0x01, 0x02, 0x03})
+
+	buff := new(bytes.Buffer)
+	a.EncodeConfigurationUpdateCommand(buff)
+	logger.NasMsgLog.Debugln("Encode: ", a)
+
+	data := make([]byte, buff.Len())
+	buff.Read(data)
+	b.DecodeConfigurationUpdateCommand(&data)
+	logger.NasMsgLog.Debugln("Decode: ", b)
+
+	if reflect.DeepEqual(a, b) != true {
+		t.Errorf("ConfigurationUpdateCommand new IEs encode/decode mismatch")
+	}
+}
+
+func TestConfigurationUpdateCommandRel1718IEsEncodeDecode(t *testing.T) {
+	a := nasMessage.NewConfigurationUpdateCommand(0)
+	b := nasMessage.NewConfigurationUpdateCommand(0)
+	if a == nil {
+		t.Fatal("Expected value not to be nil")
+	}
+	if b == nil {
+		t.Fatal("Expected value not to be nil")
+	}
+
+	a.ExtendedProtocolDiscriminator.SetExtendedProtocolDiscriminator(nasMessage.Epd5GSMobilityManagementMessage)
+	a.SpareHalfOctetAndSecurityHeaderType.SetSecurityHeaderType(0x00)
+	a.SpareHalfOctetAndSecurityHeaderType.SetSpareHalfOctet(0x00)
+	a.ConfigurationUpdateCommandMessageIdentity.SetMessageType(nas.MsgTypeConfigurationUpdateCommand)
+
+	a.RegistrationResult5GS = nasType.NewRegistrationResult5GS(nasMessage.ConfigurationUpdateCommandRegistrationResult5GSType)
+	a.RegistrationResult5GS.SetLen(1)
+	a.RegistrationResult5GS.Octet = 0x01
+
+	a.AdditionalConfigurationIndication = nasType.NewAdditionalConfigurationIndication(nasMessage.ConfigurationUpdateCommandAdditionalConfigurationIndicationType)
+	a.AdditionalConfigurationIndication.SetSCMR(0x01)
+
+	a.UpdatedPEIPSAssistanceInformation = nasType.NewUpdatedPEIPSAssistanceInformation(nasMessage.ConfigurationUpdateCommandUpdatedPEIPSAssistanceInformationType)
+	a.UpdatedPEIPSAssistanceInformation.SetLen(2)
+	copy(a.UpdatedPEIPSAssistanceInformation.Buffer, []byte{0xAA, 0xBB})
+
+	a.PriorityIndicator = nasType.NewPriorityIndicator(nasMessage.ConfigurationUpdateCommandPriorityIndicatorType)
+	a.PriorityIndicator.SetMPSI(0x01)
+
+	a.RANTimingSynchronization = nasType.NewRANTimingSynchronization(nasMessage.ConfigurationUpdateCommandRANTimingSynchronizationType)
+	a.RANTimingSynchronization.SetLen(2)
+	copy(a.RANTimingSynchronization.Buffer, []byte{0x01, 0x02})
+
+	buff := new(bytes.Buffer)
+	a.EncodeConfigurationUpdateCommand(buff)
+	logger.NasMsgLog.Debugln("Encode: ", a)
+
+	data := make([]byte, buff.Len())
+	buff.Read(data)
+	b.DecodeConfigurationUpdateCommand(&data)
+	logger.NasMsgLog.Debugln("Decode: ", b)
+
+	if reflect.DeepEqual(a, b) != true {
+		t.Errorf("ConfigurationUpdateCommand Rel-17/18 IEs encode/decode mismatch")
 	}
 }

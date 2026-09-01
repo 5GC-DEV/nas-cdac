@@ -6,15 +6,17 @@
 package nasType_test
 
 import (
+	"reflect"
 	"testing"
 
-	"github.com/5GC-DEV/nas-cdac/nasType"
-	"github.com/stretchr/testify/assert"
+	"github.com/omec-project/nas/v2/nasType"
 )
 
 func TestNasTypeNewRegistrationAcceptMessageIdentity(t *testing.T) {
 	a := nasType.NewRegistrationAcceptMessageIdentity()
-	assert.NotNil(t, a)
+	if a == nil {
+		t.Fatal("Expected value not to be nil")
+	}
 }
 
 type nasTypeRegistrationAcceptMessageIdentity struct {
@@ -30,7 +32,9 @@ func TestNasTypeRegistrationAcceptMessageIdentityGetSetMessageType(t *testing.T)
 	a := nasType.NewRegistrationAcceptMessageIdentity()
 	for _, table := range nasTypeRegistrationAcceptMessageIdentityTable {
 		a.SetMessageType(table.in)
-		assert.Equal(t, table.out, a.GetMessageType())
+		if !reflect.DeepEqual(table.out, a.GetMessageType()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetMessageType())
+		}
 	}
 }
 
@@ -57,6 +61,8 @@ func TestNasTypeRegistrationAcceptMessageIdentity(t *testing.T) {
 		a := nasType.NewRegistrationAcceptMessageIdentity()
 
 		a.SetMessageType(table.in.GetMessageType())
-		assert.Equal(t, table.out.GetMessageType(), a.GetMessageType())
+		if !reflect.DeepEqual(table.out.GetMessageType(), a.GetMessageType()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out.GetMessageType(), a.GetMessageType())
+		}
 	}
 }

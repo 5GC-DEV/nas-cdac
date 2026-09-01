@@ -6,18 +6,20 @@
 package nasType_test
 
 import (
+	"reflect"
 	"testing"
 
-	"github.com/5GC-DEV/nas-cdac/nasMessage"
-	"github.com/5GC-DEV/nas-cdac/nasType"
-	"github.com/stretchr/testify/assert"
+	"github.com/omec-project/nas/v2/nasMessage"
+	"github.com/omec-project/nas/v2/nasType"
 )
 
 var pDUSessionEstablishmentRejectAllowedSSCModeIeiInput uint8 = 0xf
 
 func TestNasTypeNewAllowedSSCMode(t *testing.T) {
 	a := nasType.NewAllowedSSCMode(nasMessage.PDUSessionEstablishmentRejectAllowedSSCModeType)
-	assert.NotNil(t, a)
+	if a == nil {
+		t.Fatal("Expected value not to be nil")
+	}
 }
 
 // var nasTypePDUSessionEstablishmentRejectAllowedSSCModeOut = (nasMessage.PDUSessionEstablishmentRejectAllowedSSCModeType & 15) << 4
@@ -29,7 +31,9 @@ func TestNasTypeAllowedSSCModeGetSetIei(t *testing.T) {
 	a := nasType.NewAllowedSSCMode(nasMessage.PDUSessionEstablishmentRejectAllowedSSCModeType)
 	for _, table := range nasTypePDUSessionEstablishmentRejectAllowedSSCModeTable {
 		a.SetIei(table.in)
-		assert.Equal(t, table.out, a.GetIei())
+		if !reflect.DeepEqual(table.out, a.GetIei()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetIei())
+		}
 	}
 }
 
@@ -41,7 +45,9 @@ func TestNasTypeAllowedSSCModeGetSetSSC1(t *testing.T) {
 	a := nasType.NewAllowedSSCMode(nasMessage.PDUSessionEstablishmentRejectAllowedSSCModeType)
 	for _, table := range AllowedSSCModeSSC1Table {
 		a.SetSSC1(table.in)
-		assert.Equal(t, table.out, a.GetSSC1())
+		if !reflect.DeepEqual(table.out, a.GetSSC1()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetSSC1())
+		}
 	}
 }
 
@@ -53,7 +59,9 @@ func TestNasTypeAllowedSSCModeGetSetSSC2(t *testing.T) {
 	a := nasType.NewAllowedSSCMode(nasMessage.PDUSessionEstablishmentRejectAllowedSSCModeType)
 	for _, table := range AllowedSSCModeSSC2Table {
 		a.SetSSC2(table.in)
-		assert.Equal(t, table.out, a.GetSSC2())
+		if !reflect.DeepEqual(table.out, a.GetSSC2()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetSSC2())
+		}
 	}
 }
 
@@ -65,7 +73,9 @@ func TestNasTypeAllowedSSCModeGetSetSSC3(t *testing.T) {
 	a := nasType.NewAllowedSSCMode(nasMessage.PDUSessionEstablishmentRejectAllowedSSCModeType)
 	for _, table := range AllowedSSCModeSSC3Table {
 		a.SetSSC3(table.in)
-		assert.Equal(t, table.out, a.GetSSC3())
+		if !reflect.DeepEqual(table.out, a.GetSSC3()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetSSC3())
+		}
 	}
 }
 
@@ -95,6 +105,8 @@ func TestNasTypeAllowedSSCMode(t *testing.T) {
 		a.SetSSC2(0x01)
 		a.SetSSC1(0x01)
 
-		assert.Equal(t, table.out.Octet, a.Octet)
+		if !reflect.DeepEqual(table.out.Octet, a.Octet) {
+			t.Errorf("Not equal: expected %v, got %v", table.out.Octet, a.Octet)
+		}
 	}
 }

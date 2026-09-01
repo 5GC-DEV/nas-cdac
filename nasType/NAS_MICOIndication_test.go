@@ -6,17 +6,19 @@
 package nasType_test
 
 import (
+	"reflect"
 	"testing"
 
-	"github.com/5GC-DEV/nas-cdac/nasType"
-	"github.com/stretchr/testify/assert"
+	"github.com/omec-project/nas/v2/nasType"
 )
 
 var ConfigurationUpdateCommandMICOIndicationTypeIeiInput uint8 = 0x0B
 
 func TestNasTypeNewMICOIndication(t *testing.T) {
 	a := nasType.NewMICOIndication(ConfigurationUpdateCommandMICOIndicationTypeIeiInput)
-	assert.NotNil(t, a)
+	if a == nil {
+		t.Fatal("Expected value not to be nil")
+	}
 }
 
 var nasTypeConfigurationUpdateCommandMICOIndicationTable = []NasTypeIeiData{
@@ -27,7 +29,9 @@ func TestNasTypeMICOIndicationGetSetIei(t *testing.T) {
 	a := nasType.NewMICOIndication(ConfigurationUpdateCommandMICOIndicationTypeIeiInput)
 	for _, table := range nasTypeConfigurationUpdateCommandMICOIndicationTable {
 		a.SetIei(table.in)
-		assert.Equal(t, table.out, a.GetIei())
+		if !reflect.DeepEqual(table.out, a.GetIei()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetIei())
+		}
 	}
 }
 
@@ -44,7 +48,9 @@ func TestNasTypeMICOIndicationGetSetRAAI(t *testing.T) {
 	a := nasType.NewMICOIndication(ConfigurationUpdateCommandMICOIndicationTypeIeiInput)
 	for _, table := range nasTypeMICOIndicationRAAITable {
 		a.SetRAAI(table.in)
-		assert.Equal(t, table.out, a.GetRAAI())
+		if !reflect.DeepEqual(table.out, a.GetRAAI()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetRAAI())
+		}
 	}
 }
 
@@ -73,7 +79,9 @@ func TestNasTypeMICOIndication(t *testing.T) {
 		a.SetIei(ConfigurationUpdateCommandMICOIndicationTypeIeiInput)
 		a.SetRAAI(table.inRAAI)
 
-		assert.Equal(t, table.out.Octet, a.Octet)
+		if !reflect.DeepEqual(table.out.Octet, a.Octet) {
+			t.Errorf("Not equal: expected %v, got %v", table.out.Octet, a.Octet)
+		}
 
 	}
 }

@@ -12,10 +12,9 @@ import (
 	"encoding/binary"
 	"fmt"
 
-	"github.com/aead/cmac"
-	"github.com/5GC-DEV/nas-cdac/logger"
-	"github.com/5GC-DEV/nas-cdac/security/snow3g"
-	"github.com/5GC-DEV/nas-cdac/security/zuc"
+	"github.com/omec-project/nas/v2/logger"
+	"github.com/omec-project/nas/v2/security/snow3g"
+	"github.com/omec-project/nas/v2/security/zuc"
 )
 
 func NASEncrypt(AlgoID uint8, KnasEnc [16]byte, Count uint32, Bearer uint8,
@@ -100,7 +99,7 @@ func NASMacCalculate(AlgoID uint8, KnasInt [16]uint8, Count uint32,
 
 func NEA1(ck [16]byte, countC, bearer, direction uint32, ibs []byte, length uint32) (obs []byte, err error) {
 	var k [4]uint32
-	for i := uint32(0); i < 4; i++ {
+	for i := range 4 {
 		k[i] = binary.BigEndian.Uint32(ck[4*(3-i) : 4*(3-i+1)])
 	}
 	iv := [4]uint32{(bearer << 27) | (direction << 26), countC, (bearer << 27) | (direction << 26), countC}
@@ -110,19 +109,24 @@ func NEA1(ck [16]byte, countC, bearer, direction uint32, ibs []byte, length uint
 	r := length % 32
 	ks := make([]uint32, l)
 	snow3g.GenerateKeystream(int(l), ks)
-	// Clear keystream bits which exceed length
-	ks[l-1] &= ^((1 << (32 - r)) - 1)
+	// Clear keystream bits which exceed length.
+	// Guard: when r==0 the length is an exact multiple of 32 bits, so no
+	// masking is needed - without this guard the shift evaluates to zero,
+	// which would erase the entire last keystream word.
+	if r != 0 {
+		ks[l-1] &= ^((uint32(1) << (32 - r)) - 1)
+	}
 
 	obs = make([]byte, len(ibs))
-	var i uint32
+	var i, j uint32
 	for i = 0; i < length/32; i++ {
-		for j := uint32(0); j < 4; j++ {
+		for j = range 4 {
 			obs[4*i+j] = ibs[4*i+j] ^ byte((ks[i]>>(8*(3-j)))&0xff)
 		}
 	}
 	if r != 0 {
 		ll := (r + 7) / 8
-		for j := uint32(0); j < ll; j++ {
+		for j = range ll {
 			obs[4*i+j] = ibs[4*i+j] ^ byte((ks[i]>>(8*(3-j)))&0xff)
 		}
 	}
@@ -162,7 +166,7 @@ func NEA3(key [16]byte, count uint32, bearer uint8, direction uint8, ibs []byte,
 
 	iv := make([]byte, 16)
 
-	for i := 0; i < 4; i++ {
+	for i := range 4 {
 		iv[i] = byte((count >> (24 - 8*i)) & 0xFF)
 	}
 	iv[4] = ((bearer << 3) | ((direction & 1) << 2)) & 0xFC
@@ -173,7 +177,7 @@ func NEA3(key [16]byte, count uint32, bearer uint8, direction uint8, ibs []byte,
 
 	obs = make([]byte, len(ibs))
 
-	for i := 0; i < int(l); i++ {
+	for i := range int(l) {
 		for j := 0; j < 4 && (i*4+j) < int((length+7)/8); j++ {
 			obs[i*4+j] = ibs[i*4+j] ^ byte((z[i]>>(8*(3-j)))&0xff)
 		}
@@ -193,26 +197,24 @@ func NEA3(key [16]byte, count uint32, bearer uint8, direction uint8, ibs []byte,
 func mulx(V, c uint64) uint64 {
 	if V&0x8000000000000000 != 0 {
 		return (V << 1) ^ c
-	} else {
-		return V << 1
 	}
+	return V << 1
 }
 
 // mulxPow() is for NIA1()
 func mulxPow(V, i, c uint64) uint64 {
 	if i == 0 {
 		return V
-	} else {
-		return mulx(mulxPow(V, i-1, c), c)
 	}
+	return mulx(mulxPow(V, i-1, c), c)
 }
 
 // mul() is for NIA1()
 func mul(V, P, c uint64) uint64 {
 	rst := uint64(0)
-	for i := uint64(0); i < 64; i++ {
+	for i := range 64 {
 		if (P>>i)&1 == 1 {
-			rst ^= mulxPow(V, i, c)
+			rst ^= mulxPow(V, uint64(i), c)
 		}
 	}
 	return rst
@@ -223,7 +225,7 @@ func NIA1(ik [16]byte, countI uint32, bearer byte, direction uint32, msg []byte,
 ) {
 	fresh := uint32(bearer) << 27
 	var k [4]uint32
-	for i := uint32(0); i < 4; i++ {
+	for i := range 4 {
 		k[i] = binary.BigEndian.Uint32(ik[4*(3-i) : 4*(3-i+1)])
 	}
 	iv := [4]uint32{fresh ^ (direction << 15), countI ^ (direction << 31), fresh, countI}
@@ -236,7 +238,7 @@ func NIA1(ik [16]byte, countI uint32, bearer byte, direction uint32, msg []byte,
 	Q := (uint64(z[2]) << 32) | uint64(z[3])
 
 	var Eval uint64 = 0
-	for i := uint64(0); i < D-2; i++ {
+	for i := range D - 2 {
 		M := binary.BigEndian.Uint64(msg[8*i:])
 		Eval = mul(Eval^M, P, 0x000000000000001b)
 	}
@@ -269,13 +271,75 @@ func NIA2(key [16]byte, count uint32, bearer uint8, direction uint8, msg []byte)
 
 	copy(m[8:], msg)
 
-	mac, err = cmac.Sum(m, block, 16)
+	mac, err = aesCMACSum(block, m)
 	if err != nil {
 		return nil, err
 	}
 	// only get the most significant 32 bits to be mac value
 	mac = mac[:4]
 	return mac, nil
+}
+
+func aesCMACSum(block cipher.Block, msg []byte) ([]byte, error) {
+	if block.BlockSize() != aes.BlockSize {
+		return nil, fmt.Errorf("cmac requires a 16-byte block cipher")
+	}
+
+	var zero [aes.BlockSize]byte
+	l := make([]byte, aes.BlockSize)
+	block.Encrypt(l, zero[:])
+
+	k1 := cmacSubkey(l)
+	k2 := cmacSubkey(k1)
+
+	blockCount := 1
+	if len(msg) > 0 {
+		blockCount = (len(msg) + aes.BlockSize - 1) / aes.BlockSize
+	}
+
+	x := make([]byte, aes.BlockSize)
+	for i := range blockCount - 1 {
+		start := i * aes.BlockSize
+		for j := range aes.BlockSize {
+			x[j] ^= msg[start+j]
+		}
+		block.Encrypt(x, x)
+	}
+
+	last := make([]byte, aes.BlockSize)
+	if len(msg) > 0 && len(msg)%aes.BlockSize == 0 {
+		copy(last, msg[(blockCount-1)*aes.BlockSize:])
+		xorBytes(last, k1)
+	} else {
+		if rem := len(msg) % aes.BlockSize; rem > 0 {
+			copy(last, msg[(blockCount-1)*aes.BlockSize:])
+		}
+		last[len(msg)%aes.BlockSize] = 0x80
+		xorBytes(last, k2)
+	}
+
+	xorBytes(last, x)
+	block.Encrypt(last, last)
+	return last, nil
+}
+
+func cmacSubkey(src []byte) []byte {
+	dst := make([]byte, len(src))
+	carry := byte(0)
+	for i := len(src) - 1; i >= 0; i-- {
+		dst[i] = (src[i] << 1) | carry
+		carry = src[i] >> 7
+	}
+	if src[0]&0x80 != 0 {
+		dst[len(dst)-1] ^= 0x87
+	}
+	return dst
+}
+
+func xorBytes(dst, src []byte) {
+	for i := range dst {
+		dst[i] ^= src[i]
+	}
 }
 
 // NIA3
@@ -288,10 +352,10 @@ func NIA3(key [16]byte, count uint32, bearer uint8, direction uint8, msg []byte,
 		return nil, fmt.Errorf("length cannot be zero")
 	}
 
-	var n, l, t, i uint32
+	var n, l, t uint32
 	iv := make([]byte, 16)
 
-	for i := 0; i < 4; i++ {
+	for i := range 4 {
 		iv[i] = byte((count >> (24 - 8*i)) & 0xFF)
 	}
 
@@ -312,7 +376,7 @@ func NIA3(key [16]byte, count uint32, bearer uint8, direction uint8, msg []byte,
 	l = (n + 31) / 32
 	z := zuc.Zuc(key[:], iv, l)
 
-	for i = 0; i < length; i++ {
+	for i := range length {
 		if msg[i/8]&(1<<(7-(i%8))) != 0 { // GET_BIT
 			t ^= getWord(z, i)
 		}

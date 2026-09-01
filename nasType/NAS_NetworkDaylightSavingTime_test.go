@@ -6,16 +6,18 @@
 package nasType_test
 
 import (
+	"reflect"
 	"testing"
 
-	"github.com/5GC-DEV/nas-cdac/nasMessage"
-	"github.com/5GC-DEV/nas-cdac/nasType"
-	"github.com/stretchr/testify/assert"
+	"github.com/omec-project/nas/v2/nasMessage"
+	"github.com/omec-project/nas/v2/nasType"
 )
 
 func TestNasTypeNewNetworkDaylightSavingTime(t *testing.T) {
 	a := nasType.NewNetworkDaylightSavingTime(nasMessage.ConfigurationUpdateCommandNetworkDaylightSavingTimeType)
-	assert.NotNil(t, a)
+	if a == nil {
+		t.Fatal("Expected value not to be nil")
+	}
 }
 
 var nasTypeNetworkDaylightSavingTimeConfigurationUpdateCommandNetworkDaylightSavingTimeable = []NasTypeIeiData{
@@ -26,7 +28,9 @@ func TestNasTypeNetworkDaylightSavingTimeGetSetIei(t *testing.T) {
 	a := nasType.NewNetworkDaylightSavingTime(nasMessage.ConfigurationUpdateCommandNetworkDaylightSavingTimeType)
 	for _, table := range nasTypeNetworkDaylightSavingTimeConfigurationUpdateCommandNetworkDaylightSavingTimeable {
 		a.SetIei(table.in)
-		assert.Equal(t, table.out, a.GetIei())
+		if !reflect.DeepEqual(table.out, a.GetIei()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetIei())
+		}
 	}
 }
 
@@ -38,7 +42,9 @@ func TestNasTypeNetworkDaylightSavingTimeGetSetLen(t *testing.T) {
 	a := nasType.NewNetworkDaylightSavingTime(nasMessage.ConfigurationUpdateCommandNetworkDaylightSavingTimeType)
 	for _, table := range nasTypeNetworkDaylightSavingTimeLenTable {
 		a.SetLen(table.in)
-		assert.Equal(t, table.out, a.GetLen())
+		if !reflect.DeepEqual(table.out, a.GetLen()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetLen())
+		}
 	}
 }
 
@@ -55,7 +61,9 @@ func TestNasTypeNetworkDaylightSavingTimeGetSetvalue(t *testing.T) {
 	a := nasType.NewNetworkDaylightSavingTime(nasMessage.ConfigurationUpdateCommandNetworkDaylightSavingTimeType)
 	for _, table := range nasTypeNetworkDaylightSavingTimevalueTable {
 		a.Setvalue(table.in)
-		assert.Equal(t, table.out, a.Getvalue())
+		if !reflect.DeepEqual(table.out, a.Getvalue()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.Getvalue())
+		}
 	}
 }
 
@@ -84,8 +92,14 @@ func TestNasTypeNetworkDaylightSavingTime(t *testing.T) {
 		a.SetLen(table.inLen)
 		a.Setvalue(table.invalue)
 
-		assert.Equalf(t, table.outIei, a.Iei, "in(%v): out %v, actual %x", table.inIei, table.outIei, a.Iei)
-		assert.Equalf(t, table.outLen, a.Len, "in(%v): out %v, actual %x", table.inLen, table.outLen, a.Len)
-		assert.Equalf(t, table.outvalue, a.Getvalue(), "in(%v): out %v, actual %x", table.invalue, table.outvalue, a.Getvalue())
+		if !reflect.DeepEqual(table.outIei, a.Iei) {
+			t.Errorf("in(%v): out %v, actual %x", table.inIei, table.outIei, a.Iei)
+		}
+		if !reflect.DeepEqual(table.outLen, a.Len) {
+			t.Errorf("in(%v): out %v, actual %x", table.inLen, table.outLen, a.Len)
+		}
+		if !reflect.DeepEqual(table.outvalue, a.Getvalue()) {
+			t.Errorf("in(%v): out %v, actual %x", table.invalue, table.outvalue, a.Getvalue())
+		}
 	}
 }

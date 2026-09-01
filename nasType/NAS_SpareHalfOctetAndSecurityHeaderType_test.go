@@ -6,15 +6,17 @@
 package nasType_test
 
 import (
+	"reflect"
 	"testing"
 
-	"github.com/5GC-DEV/nas-cdac/nasType"
-	"github.com/stretchr/testify/assert"
+	"github.com/omec-project/nas/v2/nasType"
 )
 
 func TestNasTypeSpareHalfOctetAndSecurityHeaderType(t *testing.T) {
 	a := nasType.NewSpareHalfOctetAndSecurityHeaderType()
-	assert.NotNil(t, a)
+	if a == nil {
+		t.Fatal("Expected value not to be nil")
+	}
 }
 
 type nasTypeSecurityHeaderTypeAndSpareHalfOctetData struct {
@@ -32,8 +34,12 @@ func TestNasTypeGetSetSpareHalfOctetAndSecurityHeaderType(t *testing.T) {
 	a := nasType.NewSpareHalfOctetAndSecurityHeaderType()
 	for _, table := range nasTypeSecurityHeaderTypeAndSpareHalfOctetTable {
 		a.SetSecurityHeaderType(table.inSecurityHeader)
-		assert.Equal(t, table.outSecurityHeader, a.GetSecurityHeaderType())
+		if !reflect.DeepEqual(table.outSecurityHeader, a.GetSecurityHeaderType()) {
+			t.Errorf("Not equal: expected %v, got %v", table.outSecurityHeader, a.GetSecurityHeaderType())
+		}
 		a.SetSpareHalfOctet(table.inSpareHalfOctet)
-		assert.Equal(t, table.outSpareHalfOctet, a.GetSpareHalfOctet())
+		if !reflect.DeepEqual(table.outSpareHalfOctet, a.GetSpareHalfOctet()) {
+			t.Errorf("Not equal: expected %v, got %v", table.outSpareHalfOctet, a.GetSpareHalfOctet())
+		}
 	}
 }

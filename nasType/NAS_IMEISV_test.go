@@ -6,16 +6,18 @@
 package nasType_test
 
 import (
+	"reflect"
 	"testing"
 
-	"github.com/5GC-DEV/nas-cdac/nasMessage"
-	"github.com/5GC-DEV/nas-cdac/nasType"
-	"github.com/stretchr/testify/assert"
+	"github.com/omec-project/nas/v2/nasMessage"
+	"github.com/omec-project/nas/v2/nasType"
 )
 
 func TestNasTypeNewIMEISV(t *testing.T) {
 	a := nasType.NewIMEISV(nasMessage.SecurityModeCompleteIMEISVType)
-	assert.NotNil(t, a)
+	if a == nil {
+		t.Fatal("Expected value not to be nil")
+	}
 }
 
 var nasTypeSecurityModeCompleteIMEISVTypeTable = []NasTypeIeiData{
@@ -26,7 +28,9 @@ func TestNasTypeIMEISVGetSetIei(t *testing.T) {
 	a := nasType.NewIMEISV(nasMessage.SecurityModeCompleteIMEISVType)
 	for _, table := range nasTypeSecurityModeCompleteIMEISVTypeTable {
 		a.SetIei(table.in)
-		assert.Equal(t, table.out, a.GetIei())
+		if !reflect.DeepEqual(table.out, a.GetIei()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetIei())
+		}
 	}
 }
 
@@ -38,7 +42,9 @@ func TestNasTypeIMEISVGetSetLen(t *testing.T) {
 	a := nasType.NewIMEISV(nasMessage.SecurityModeCompleteIMEISVType)
 	for _, table := range nasTypeIMEISVLenTable {
 		a.SetLen(table.in)
-		assert.Equal(t, table.out, a.GetLen())
+		if !reflect.DeepEqual(table.out, a.GetLen()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetLen())
+		}
 	}
 }
 
@@ -57,7 +63,9 @@ func TestNasTypeIMEISVGetSetIdentityDigit1(t *testing.T) {
 	for _, table := range nasTypeIMEISVIdentityDigit1Table {
 		a.SetLen(table.inLen)
 		a.SetIdentityDigit1(table.in)
-		assert.Equal(t, table.out, a.GetIdentityDigit1())
+		if !reflect.DeepEqual(table.out, a.GetIdentityDigit1()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetIdentityDigit1())
+		}
 	}
 }
 
@@ -76,7 +84,9 @@ func TestNasTypeIMEISVGetSetOddEvenIdic(t *testing.T) {
 	for _, table := range nasTypeIMEISVOddEvenIdicTable {
 		a.SetLen(table.inLen)
 		a.SetOddEvenIdic(table.in)
-		assert.Equal(t, table.out, a.GetOddEvenIdic())
+		if !reflect.DeepEqual(table.out, a.GetOddEvenIdic()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetOddEvenIdic())
+		}
 	}
 }
 
@@ -95,7 +105,9 @@ func TestNasTypeIMEISVGetSetTypeOfIdentity(t *testing.T) {
 	for _, table := range nasTypeIMEISVTypeOfIdentityTable {
 		a.SetLen(table.inLen)
 		a.SetTypeOfIdentity(table.in)
-		assert.Equal(t, table.out, a.GetTypeOfIdentity())
+		if !reflect.DeepEqual(table.out, a.GetTypeOfIdentity()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetTypeOfIdentity())
+		}
 	}
 }
 
@@ -114,7 +126,9 @@ func TestNasTypeIMEISVGetSetIdentityDigitP_1(t *testing.T) {
 	for _, table := range nasTypeIMEISVIdentityDigitP_1Table {
 		a.SetLen(table.inLen)
 		a.SetIdentityDigitP_1(table.in)
-		assert.Equal(t, table.out, a.GetIdentityDigitP_1())
+		if !reflect.DeepEqual(table.out, a.GetIdentityDigitP_1()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetIdentityDigitP_1())
+		}
 	}
 }
 
@@ -133,7 +147,9 @@ func TestNasTypeIMEISVGetSetGetIdentityDigitP(t *testing.T) {
 	for _, table := range nasTypeIMEISVGetIdentityDigitPTable {
 		a.SetLen(table.inLen)
 		a.SetIdentityDigitP(table.in)
-		assert.Equal(t, table.out, a.GetIdentityDigitP())
+		if !reflect.DeepEqual(table.out, a.GetIdentityDigitP()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetIdentityDigitP())
+		}
 	}
 }
 
@@ -175,13 +191,27 @@ func TestNasTypeIMEISV(t *testing.T) {
 		a.SetIdentityDigitP_1(table.inIdentityDigitP_1)
 		a.SetIdentityDigitP(table.inIdentityDigitP)
 
-		assert.Equalf(t, table.outIei, a.GetIei(), "in(%v): out %v, actual %x", table.inIei, table.outIei, a.GetIei())
-		assert.Equalf(t, table.outLen, a.GetLen(), "in(%v): out %v, actual %x", table.inLen, table.outLen, a.GetLen())
-		assert.Equalf(t, table.outIdentityDigit1, a.GetIdentityDigit1(), "in(%v): out %v, actual %x", table.inIdentityDigit1, table.outIdentityDigit1, a.GetIdentityDigit1())
-		assert.Equalf(t, table.outOddEvenIdic, a.GetOddEvenIdic(), "in(%v): out %v, actual %x", table.inOddEvenIdic, table.outOddEvenIdic, a.GetOddEvenIdic())
-		assert.Equalf(t, table.outTypeOfIdentity, a.GetTypeOfIdentity(), "in(%v): out %v, actual %x", table.inTypeOfIdentity, table.outTypeOfIdentity, a.GetTypeOfIdentity())
-		assert.Equalf(t, table.outIdentityDigitP_1, a.GetIdentityDigitP_1(), "in(%v): out %v, actual %x", table.inIdentityDigitP_1, table.outIdentityDigitP_1, a.GetIdentityDigitP_1())
-		assert.Equalf(t, table.outIdentityDigitP, a.GetIdentityDigitP(), "in(%v): out %v, actual %x", table.inIdentityDigitP, table.outIdentityDigitP, a.GetIdentityDigitP())
+		if !reflect.DeepEqual(table.outIei, a.GetIei()) {
+			t.Errorf("in(%v): out %v, actual %x", table.inIei, table.outIei, a.GetIei())
+		}
+		if !reflect.DeepEqual(table.outLen, a.GetLen()) {
+			t.Errorf("in(%v): out %v, actual %x", table.inLen, table.outLen, a.GetLen())
+		}
+		if !reflect.DeepEqual(table.outIdentityDigit1, a.GetIdentityDigit1()) {
+			t.Errorf("in(%v): out %v, actual %x", table.inIdentityDigit1, table.outIdentityDigit1, a.GetIdentityDigit1())
+		}
+		if !reflect.DeepEqual(table.outOddEvenIdic, a.GetOddEvenIdic()) {
+			t.Errorf("in(%v): out %v, actual %x", table.inOddEvenIdic, table.outOddEvenIdic, a.GetOddEvenIdic())
+		}
+		if !reflect.DeepEqual(table.outTypeOfIdentity, a.GetTypeOfIdentity()) {
+			t.Errorf("in(%v): out %v, actual %x", table.inTypeOfIdentity, table.outTypeOfIdentity, a.GetTypeOfIdentity())
+		}
+		if !reflect.DeepEqual(table.outIdentityDigitP_1, a.GetIdentityDigitP_1()) {
+			t.Errorf("in(%v): out %v, actual %x", table.inIdentityDigitP_1, table.outIdentityDigitP_1, a.GetIdentityDigitP_1())
+		}
+		if !reflect.DeepEqual(table.outIdentityDigitP, a.GetIdentityDigitP()) {
+			t.Errorf("in(%v): out %v, actual %x", table.inIdentityDigitP, table.outIdentityDigitP, a.GetIdentityDigitP())
+		}
 
 	}
 }

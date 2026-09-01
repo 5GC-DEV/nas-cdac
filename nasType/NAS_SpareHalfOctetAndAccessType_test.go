@@ -6,15 +6,17 @@
 package nasType_test
 
 import (
+	"reflect"
 	"testing"
 
-	"github.com/5GC-DEV/nas-cdac/nasType"
-	"github.com/stretchr/testify/assert"
+	"github.com/omec-project/nas/v2/nasType"
 )
 
 func TestNasTypeNewSpareHalfOctetAndAccessType(t *testing.T) {
 	a := nasType.NewSpareHalfOctetAndAccessType()
-	assert.NotNil(t, a)
+	if a == nil {
+		t.Fatal("Expected value not to be nil")
+	}
 }
 
 type nasTypeAccessType struct {
@@ -30,7 +32,9 @@ func TestNasTypeGetSetAccessType(t *testing.T) {
 	a := nasType.NewSpareHalfOctetAndAccessType()
 	for _, table := range nasTypeAccessTypeTable {
 		a.SetAccessType(table.in)
-		assert.Equal(t, table.out, a.GetAccessType())
+		if !reflect.DeepEqual(table.out, a.GetAccessType()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetAccessType())
+		}
 	}
 }
 
@@ -57,6 +61,8 @@ func TestNasTypeAccessTypeAndSpareHalfOctet(t *testing.T) {
 		a := nasType.NewSpareHalfOctetAndAccessType()
 
 		a.SetAccessType(table.in.GetAccessType())
-		assert.Equal(t, table.out.GetAccessType(), a.GetAccessType())
+		if !reflect.DeepEqual(table.out.GetAccessType(), a.GetAccessType()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out.GetAccessType(), a.GetAccessType())
+		}
 	}
 }

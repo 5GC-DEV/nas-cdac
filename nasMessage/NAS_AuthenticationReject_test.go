@@ -10,10 +10,9 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/5GC-DEV/nas-cdac/logger"
-	"github.com/5GC-DEV/nas-cdac/nasMessage"
-	"github.com/5GC-DEV/nas-cdac/nasType"
-	"github.com/stretchr/testify/assert"
+	"github.com/omec-project/nas/v2/logger"
+	"github.com/omec-project/nas/v2/nasMessage"
+	"github.com/omec-project/nas/v2/nasType"
 )
 
 type nasMessageAuthenticationRejectData struct {
@@ -36,7 +35,9 @@ var nasMessageAuthenticationRejectTable = []nasMessageAuthenticationRejectData{
 
 func TestNasTypeNewAuthenticationReject(t *testing.T) {
 	a := nasMessage.NewAuthenticationReject(0)
-	assert.NotNil(t, a)
+	if a == nil {
+		t.Fatal("Expected value not to be nil")
+	}
 }
 
 func TestNasTypeNewAuthenticationRejectMessage(t *testing.T) {
@@ -46,7 +47,9 @@ func TestNasTypeNewAuthenticationRejectMessage(t *testing.T) {
 
 		a := nasMessage.NewAuthenticationReject(nasMessage.AuthenticationRejectEAPMessageType)
 		b := nasMessage.NewAuthenticationReject(nasMessage.AuthenticationRejectEAPMessageType)
-		assert.NotNil(t, a)
+		if a == nil {
+			t.Fatal("Expected value not to be nil")
+		}
 
 		a.ExtendedProtocolDiscriminator.SetExtendedProtocolDiscriminator(table.inExtendedProtocolDiscriminator)
 		a.SpareHalfOctetAndSecurityHeaderType.SetSecurityHeaderType(table.inSecurityHeader)

@@ -6,16 +6,18 @@
 package nasType_test
 
 import (
+	"reflect"
 	"testing"
 
-	"github.com/5GC-DEV/nas-cdac/nasMessage"
-	"github.com/5GC-DEV/nas-cdac/nasType"
-	"github.com/stretchr/testify/assert"
+	"github.com/omec-project/nas/v2/nasMessage"
+	"github.com/omec-project/nas/v2/nasType"
 )
 
 func TestNasTypeNewEmergencyNumberList(t *testing.T) {
 	a := nasType.NewEmergencyNumberList(nasMessage.RegistrationAcceptEmergencyNumberListType)
-	assert.NotNil(t, a)
+	if a == nil {
+		t.Fatal("Expected value not to be nil")
+	}
 }
 
 var nasTypeRegistrationAcceptEmergencyNumberListIeiTable = []NasTypeIeiData{
@@ -26,7 +28,9 @@ func TestNasTypeEmergencyNumberListGetSetIei(t *testing.T) {
 	a := nasType.NewEmergencyNumberList(nasMessage.RegistrationAcceptEmergencyNumberListType)
 	for _, table := range nasTypeRegistrationAcceptEmergencyNumberListIeiTable {
 		a.SetIei(table.in)
-		assert.Equal(t, table.out, a.GetIei())
+		if !reflect.DeepEqual(table.out, a.GetIei()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetIei())
+		}
 	}
 }
 
@@ -38,7 +42,9 @@ func TestNasTypeEmergencyNumberListGetSetLen(t *testing.T) {
 	a := nasType.NewEmergencyNumberList(nasMessage.RegistrationAcceptEmergencyNumberListType)
 	for _, table := range nasTypeEmergencyNumberListLenTable {
 		a.SetLen(table.in)
-		assert.Equal(t, table.out, a.GetLen())
+		if !reflect.DeepEqual(table.out, a.GetLen()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetLen())
+		}
 	}
 }
 
@@ -57,7 +63,9 @@ func TestNasTypeEmergencyNumberListGetSetLengthof1EmergencyNumberInformation(t *
 	for _, table := range nasTypeEmergencyNumberListLengthof1EmergencyNumberInformationTable {
 		a.SetLen(table.inLen)
 		a.SetLengthof1EmergencyNumberInformation(table.in[0])
-		assert.Equalf(t, table.out[0], a.GetLengthof1EmergencyNumberInformation(), "in(%v): out %v, actual %x", table.in[0], table.out[0], a.GetLengthof1EmergencyNumberInformation())
+		if !reflect.DeepEqual(table.out[0], a.GetLengthof1EmergencyNumberInformation()) {
+			t.Errorf("in(%v): out %v, actual %x", table.in[0], table.out[0], a.GetLengthof1EmergencyNumberInformation())
+		}
 	}
 }
 
@@ -76,7 +84,9 @@ func TestNasTypeEmergencyNumberListGetSetEmergencyServiceCategoryValue(t *testin
 	for _, table := range nasTypeEmergencyNumberListEmergencyServiceCategoryValueTable {
 		a.SetLen(table.inLen)
 		a.SetEmergencyServiceCategoryValue(table.in[1])
-		assert.Equalf(t, table.out[1], a.GetEmergencyServiceCategoryValue(), "in(%v): out %v, actual %x", table.in[1], table.out[1], a.GetEmergencyServiceCategoryValue())
+		if !reflect.DeepEqual(table.out[1], a.GetEmergencyServiceCategoryValue()) {
+			t.Errorf("in(%v): out %v, actual %x", table.in[1], table.out[1], a.GetEmergencyServiceCategoryValue())
+		}
 	}
 }
 
@@ -95,7 +105,9 @@ func TestNasTypeEmergencyNumberListGetSetEmergencyInformation(t *testing.T) {
 	for _, table := range nasTypeEmergencyNumberListEmergencyInformationTable {
 		a.SetLen(table.inLen)
 		a.SetEmergencyInformation(table.in)
-		assert.Equalf(t, table.out, a.GetEmergencyInformation(), "in(%v): out %v, actual %x", table.in, table.out, a.GetEmergencyInformation())
+		if !reflect.DeepEqual(table.out, a.GetEmergencyInformation()) {
+			t.Errorf("in(%v): out %v, actual %x", table.in, table.out, a.GetEmergencyInformation())
+		}
 	}
 }
 
@@ -125,9 +137,15 @@ func TestNasTypeEmergencyNumberList(t *testing.T) {
 		a.SetLen(table.in.Len)
 		a.SetEmergencyInformation(table.in.Buffer)
 
-		assert.Equalf(t, table.out.Iei, a.Iei, "in(%v): out %v, actual %x", table.in.Iei, table.out.Iei, a.Iei)
-		assert.Equalf(t, table.out.Len, a.Len, "in(%v): out %v, actual %x", table.in.Len, table.out.Len, a.Len)
-		assert.Equalf(t, table.out.Buffer, a.Buffer, "in(%v): out %v, actual %x", table.in.Buffer, table.out.Buffer, a.Buffer)
+		if !reflect.DeepEqual(table.out.Iei, a.Iei) {
+			t.Errorf("in(%v): out %v, actual %x", table.in.Iei, table.out.Iei, a.Iei)
+		}
+		if !reflect.DeepEqual(table.out.Len, a.Len) {
+			t.Errorf("in(%v): out %v, actual %x", table.in.Len, table.out.Len, a.Len)
+		}
+		if !reflect.DeepEqual(table.out.Buffer, a.Buffer) {
+			t.Errorf("in(%v): out %v, actual %x", table.in.Buffer, table.out.Buffer, a.Buffer)
+		}
 
 	}
 }

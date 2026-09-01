@@ -6,16 +6,18 @@
 package nasType_test
 
 import (
+	"reflect"
 	"testing"
 
-	"github.com/5GC-DEV/nas-cdac/nasMessage"
-	"github.com/5GC-DEV/nas-cdac/nasType"
-	"github.com/stretchr/testify/assert"
+	"github.com/omec-project/nas/v2/nasMessage"
+	"github.com/omec-project/nas/v2/nasType"
 )
 
 func TestNasTypeNewSelectedEPSNASSecurityAlgorithms(t *testing.T) {
 	a := nasType.NewSelectedEPSNASSecurityAlgorithms(nasMessage.SecurityModeCommandSelectedEPSNASSecurityAlgorithmsType)
-	assert.NotNil(t, a)
+	if a == nil {
+		t.Fatal("Expected value not to be nil")
+	}
 }
 
 var nasTypePDUSessionReleaseCompleteSelectedEPSNASSecurityAlgorithmsTable = []NasTypeIeiData{
@@ -26,7 +28,9 @@ func TestNasTypeSelectedEPSNASSecurityAlgorithmsGetSetIei(t *testing.T) {
 	a := nasType.NewSelectedEPSNASSecurityAlgorithms(nasMessage.SecurityModeCommandSelectedEPSNASSecurityAlgorithmsType)
 	for _, table := range nasTypePDUSessionReleaseCompleteSelectedEPSNASSecurityAlgorithmsTable {
 		a.SetIei(table.in)
-		assert.Equal(t, table.out, a.GetIei())
+		if !reflect.DeepEqual(table.out, a.GetIei()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetIei())
+		}
 	}
 }
 
@@ -38,7 +42,9 @@ func TestNasTypeSelectedEPSNASSecurityAlgorithmsGetSetTypeOfCipheringAlgorithm(t
 	a := nasType.NewSelectedEPSNASSecurityAlgorithms(nasMessage.SecurityModeCommandSelectedEPSNASSecurityAlgorithmsType)
 	for _, table := range nasTypeSelectedEPSNASSecurityAlgorithmsTypeOfCipheringAlgorithmTable {
 		a.SetTypeOfCipheringAlgorithm(table.in)
-		assert.Equal(t, table.out, a.GetTypeOfCipheringAlgorithm())
+		if !reflect.DeepEqual(table.out, a.GetTypeOfCipheringAlgorithm()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetTypeOfCipheringAlgorithm())
+		}
 	}
 }
 
@@ -55,7 +61,9 @@ func TestNasTypeSelectedEPSNASSecurityAlgorithmsGetSetTypeOfIntegrityProtectionA
 	a := nasType.NewSelectedEPSNASSecurityAlgorithms(nasMessage.SecurityModeCommandSelectedEPSNASSecurityAlgorithmsType)
 	for _, table := range nasTypeSelectedEPSNASSecurityAlgorithmsTypeOfIntegrityProtectionAlgorithmTable {
 		a.SetTypeOfIntegrityProtectionAlgorithm(table.in)
-		assert.Equal(t, table.out, a.GetTypeOfIntegrityProtectionAlgorithm())
+		if !reflect.DeepEqual(table.out, a.GetTypeOfIntegrityProtectionAlgorithm()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetTypeOfIntegrityProtectionAlgorithm())
+		}
 	}
 }
 
@@ -86,8 +94,12 @@ func TestNasTypeSelectedEPSNASSecurityAlgorithms(t *testing.T) {
 		a.SetTypeOfCipheringAlgorithm(table.inTypeOfCipheringAlgorithm)
 		a.SetTypeOfIntegrityProtectionAlgorithm(table.inTypeOfIntegrityProtectionAlgorithm)
 
-		assert.Equalf(t, table.out.Iei, a.Iei, "in(%v): out %v, actual %x", table.in.Iei, table.out.Iei, a.Iei)
-		assert.Equalf(t, table.out.Octet, a.Octet, "in(%v): out %v, actual %x", table.in.Octet, table.out.Octet, a.Octet)
+		if !reflect.DeepEqual(table.out.Iei, a.Iei) {
+			t.Errorf("in(%v): out %v, actual %x", table.in.Iei, table.out.Iei, a.Iei)
+		}
+		if !reflect.DeepEqual(table.out.Octet, a.Octet) {
+			t.Errorf("in(%v): out %v, actual %x", table.in.Octet, table.out.Octet, a.Octet)
+		}
 
 	}
 }

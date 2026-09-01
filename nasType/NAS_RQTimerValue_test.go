@@ -6,16 +6,18 @@
 package nasType_test
 
 import (
+	"reflect"
 	"testing"
 
-	"github.com/5GC-DEV/nas-cdac/nasMessage"
-	"github.com/5GC-DEV/nas-cdac/nasType"
-	"github.com/stretchr/testify/assert"
+	"github.com/omec-project/nas/v2/nasMessage"
+	"github.com/omec-project/nas/v2/nasType"
 )
 
 func TestNasTypeNewRQTimerValue(t *testing.T) {
 	a := nasType.NewRQTimerValue(nasMessage.PDUSessionEstablishmentAcceptRQTimerValueType)
-	assert.NotNil(t, a)
+	if a == nil {
+		t.Fatal("Expected value not to be nil")
+	}
 }
 
 var nasTypePDUSessionReleaseCompleteRQTimerValueTable = []NasTypeIeiData{
@@ -26,7 +28,9 @@ func TestNasTypeRQTimerValueGetSetIei(t *testing.T) {
 	a := nasType.NewRQTimerValue(nasMessage.PDUSessionEstablishmentAcceptRQTimerValueType)
 	for _, table := range nasTypePDUSessionReleaseCompleteRQTimerValueTable {
 		a.SetIei(table.in)
-		assert.Equal(t, table.out, a.GetIei())
+		if !reflect.DeepEqual(table.out, a.GetIei()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetIei())
+		}
 	}
 }
 
@@ -38,7 +42,9 @@ func TestNasTypeRQTimerValueGetSetUint(t *testing.T) {
 	a := nasType.NewRQTimerValue(nasMessage.PDUSessionEstablishmentAcceptRQTimerValueType)
 	for _, table := range nasTypeRQTimerValueUintTable {
 		a.SetUnit(table.in)
-		assert.Equal(t, table.out, a.GetUnit())
+		if !reflect.DeepEqual(table.out, a.GetUnit()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetUnit())
+		}
 	}
 }
 
@@ -55,7 +61,9 @@ func TestNasTypeRQTimerValueGetSetTimerValue(t *testing.T) {
 	a := nasType.NewRQTimerValue(nasMessage.PDUSessionEstablishmentAcceptRQTimerValueType)
 	for _, table := range nasTypeRQTimerValueTimerValueTable {
 		a.SetTimerValue(table.in)
-		assert.Equal(t, table.out, a.GetTimerValue())
+		if !reflect.DeepEqual(table.out, a.GetTimerValue()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetTimerValue())
+		}
 	}
 }
 
@@ -86,8 +94,12 @@ func TestNasTypeRQTimerValue(t *testing.T) {
 		a.SetUnit(table.inUnit)
 		a.SetTimerValue(table.inTimerValue)
 
-		assert.Equalf(t, table.out.Iei, a.Iei, "in(%v): out %v, actual %x", table.in.Iei, table.out.Iei, a.Iei)
-		assert.Equalf(t, table.out.Octet, a.Octet, "in(%v): out %v, actual %x", table.in.Octet, table.out.Octet, a.Octet)
+		if !reflect.DeepEqual(table.out.Iei, a.Iei) {
+			t.Errorf("in(%v): out %v, actual %x", table.in.Iei, table.out.Iei, a.Iei)
+		}
+		if !reflect.DeepEqual(table.out.Octet, a.Octet) {
+			t.Errorf("in(%v): out %v, actual %x", table.in.Octet, table.out.Octet, a.Octet)
+		}
 
 	}
 }

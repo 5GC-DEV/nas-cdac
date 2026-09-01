@@ -6,11 +6,11 @@
 package nasType_test
 
 import (
+	"reflect"
 	"testing"
 
-	"github.com/5GC-DEV/nas-cdac"
-	"github.com/5GC-DEV/nas-cdac/nasType"
-	"github.com/stretchr/testify/assert"
+	"github.com/omec-project/nas/v2"
+	"github.com/omec-project/nas/v2/nasType"
 )
 
 type nasTypeDeregistrationRequestMessageIdentityData struct {
@@ -24,13 +24,17 @@ var nasTypeDeregistrationRequestMessageIdentityTable = []nasTypeDeregistrationRe
 
 func TestNasTypeNewDeregistrationRequestMessageIdentity(t *testing.T) {
 	a := nasType.NewDeregistrationRequestMessageIdentity()
-	assert.NotNil(t, a)
+	if a == nil {
+		t.Fatal("Expected value not to be nil")
+	}
 }
 
 func TestNasTypeGetSetDeregistrationRequestMessageIdentity(t *testing.T) {
 	a := nasType.NewDeregistrationRequestMessageIdentity()
 	for _, table := range nasTypeDeregistrationRequestMessageIdentityTable {
 		a.SetMessageType(table.in)
-		assert.Equal(t, table.out, a.GetMessageType())
+		if !reflect.DeepEqual(table.out, a.GetMessageType()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetMessageType())
+		}
 	}
 }

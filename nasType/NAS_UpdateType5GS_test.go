@@ -6,23 +6,27 @@
 package nasType_test
 
 import (
+	"reflect"
 	"testing"
 
-	"github.com/5GC-DEV/nas-cdac/nasMessage"
-	"github.com/5GC-DEV/nas-cdac/nasType"
-	"github.com/stretchr/testify/assert"
+	"github.com/omec-project/nas/v2/nasMessage"
+	"github.com/omec-project/nas/v2/nasType"
 )
 
 func TestNasTypeNewUpdateType5GS(t *testing.T) {
 	a := nasType.NewUpdateType5GS(nasMessage.RegistrationRequestUpdateType5GSType)
-	assert.NotNil(t, a)
+	if a == nil {
+		t.Fatal("Expected value not to be nil")
+	}
 }
 
 func TestNasTypeUpdateType5GSGetSetIei(t *testing.T) {
 	a := nasType.NewUpdateType5GS(nasMessage.RegistrationRequestUpdateType5GSType)
 	for _, table := range nasTypeRegistrationAcceptNetworkFeatureSupport5GSTable {
 		a.SetIei(table.in)
-		assert.Equal(t, table.out, a.GetIei())
+		if !reflect.DeepEqual(table.out, a.GetIei()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetIei())
+		}
 	}
 }
 
@@ -30,7 +34,9 @@ func TestNasTypeUpdateType5GSGetSetLen(t *testing.T) {
 	a := nasType.NewUpdateType5GS(nasMessage.RegistrationRequestUpdateType5GSType)
 	for _, table := range nasTypeRegistrationAcceptNetworkFeatureSupport5GSLenTable {
 		a.SetLen(table.in)
-		assert.Equal(t, table.out, a.GetLen())
+		if !reflect.DeepEqual(table.out, a.GetLen()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetLen())
+		}
 	}
 }
 
@@ -47,7 +53,9 @@ func TestNasTypeUpdateType5GSGetSetNGRanRcu(t *testing.T) {
 	a := nasType.NewUpdateType5GS(nasMessage.RegistrationRequestUpdateType5GSType)
 	for _, table := range nasTypeUpdateType5GSNGRanRcuTable {
 		a.SetNGRanRcu(table.in)
-		assert.Equal(t, table.out, a.GetNGRanRcu())
+		if !reflect.DeepEqual(table.out, a.GetNGRanRcu()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetNGRanRcu())
+		}
 	}
 }
 
@@ -64,7 +72,9 @@ func TestNasTypeUpdateType5GSGetSetSMSRequested(t *testing.T) {
 	a := nasType.NewUpdateType5GS(nasMessage.RegistrationRequestUpdateType5GSType)
 	for _, table := range nasTypeUpdateType5GSSMSRequestedTable {
 		a.SetSMSRequested(table.in)
-		assert.Equal(t, table.out, a.GetSMSRequested())
+		if !reflect.DeepEqual(table.out, a.GetSMSRequested()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetSMSRequested())
+		}
 	}
 }
 
@@ -92,8 +102,14 @@ func TestNasTypeUpdateType5GS(t *testing.T) {
 		a.SetLen(table.in.Len)
 		a.SetNGRanRcu(0x01)
 		a.SetSMSRequested(0x01)
-		assert.Equal(t, table.out.Iei, a.Iei)
-		assert.Equal(t, table.out.Len, a.Len)
-		assert.Equal(t, table.out.Octet, a.Octet)
+		if !reflect.DeepEqual(table.out.Iei, a.Iei) {
+			t.Errorf("Not equal: expected %v, got %v", table.out.Iei, a.Iei)
+		}
+		if !reflect.DeepEqual(table.out.Len, a.Len) {
+			t.Errorf("Not equal: expected %v, got %v", table.out.Len, a.Len)
+		}
+		if !reflect.DeepEqual(table.out.Octet, a.Octet) {
+			t.Errorf("Not equal: expected %v, got %v", table.out.Octet, a.Octet)
+		}
 	}
 }

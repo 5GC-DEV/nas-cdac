@@ -6,16 +6,18 @@
 package nasType_test
 
 import (
+	"reflect"
 	"testing"
 
-	"github.com/5GC-DEV/nas-cdac/nasMessage"
-	"github.com/5GC-DEV/nas-cdac/nasType"
-	"github.com/stretchr/testify/assert"
+	"github.com/omec-project/nas/v2/nasMessage"
+	"github.com/omec-project/nas/v2/nasType"
 )
 
 func TestNasTypeNewFullNameForNetwork(t *testing.T) {
 	a := nasType.NewFullNameForNetwork(nasMessage.ConfigurationUpdateCommandFullNameForNetworkType)
-	assert.NotNil(t, a)
+	if a == nil {
+		t.Fatal("Expected value not to be nil")
+	}
 }
 
 var nasTypeConfigurationUpdateCommandFullNameForNetworkIeiTable = []NasTypeIeiData{
@@ -26,7 +28,9 @@ func TestNasTypeFullNameForNetworkGetSetIei(t *testing.T) {
 	a := nasType.NewFullNameForNetwork(nasMessage.ConfigurationUpdateCommandFullNameForNetworkType)
 	for _, table := range nasTypeConfigurationUpdateCommandFullNameForNetworkIeiTable {
 		a.SetIei(table.in)
-		assert.Equal(t, table.out, a.GetIei())
+		if !reflect.DeepEqual(table.out, a.GetIei()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetIei())
+		}
 	}
 }
 
@@ -38,7 +42,9 @@ func TestNasTypeFullNameForNetworkGetSetLen(t *testing.T) {
 	a := nasType.NewFullNameForNetwork(nasMessage.ConfigurationUpdateCommandFullNameForNetworkType)
 	for _, table := range nasTypeFullNameForNetworkLenTable {
 		a.SetLen(table.in)
-		assert.Equal(t, table.out, a.GetLen())
+		if !reflect.DeepEqual(table.out, a.GetLen()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetLen())
+		}
 	}
 }
 
@@ -57,7 +63,9 @@ func TestNasTypeFullNameForNetworkGetSetExt(t *testing.T) {
 	for _, table := range nasTypeFullNameForNetworkExtTable {
 		a.SetLen(table.inLen)
 		a.SetExt(table.in)
-		assert.Equalf(t, table.out, a.GetExt(), "in(%v): out %v, actual %x", table.in, table.out, a.GetExt())
+		if !reflect.DeepEqual(table.out, a.GetExt()) {
+			t.Errorf("in(%v): out %v, actual %x", table.in, table.out, a.GetExt())
+		}
 	}
 }
 
@@ -76,7 +84,9 @@ func TestNasTypeFullNameForNetworkGetSetCodingScheme(t *testing.T) {
 	for _, table := range nasTypeFullNameForNetworkCodingSchemeTable {
 		a.SetLen(table.inLen)
 		a.SetCodingScheme(table.in)
-		assert.Equalf(t, table.out, a.GetCodingScheme(), "in(%v): out %v, actual %x", table.in, table.out, a.GetCodingScheme())
+		if !reflect.DeepEqual(table.out, a.GetCodingScheme()) {
+			t.Errorf("in(%v): out %v, actual %x", table.in, table.out, a.GetCodingScheme())
+		}
 	}
 }
 
@@ -95,7 +105,9 @@ func TestNasTypeFullNameForNetworkGetSetAddCI(t *testing.T) {
 	for _, table := range nasTypeFullNameForNetworkAddCITable {
 		a.SetLen(table.inLen)
 		a.SetAddCI(table.in)
-		assert.Equalf(t, table.out, a.GetAddCI(), "in(%v): out %v, actual %x", table.in, table.out, a.GetAddCI())
+		if !reflect.DeepEqual(table.out, a.GetAddCI()) {
+			t.Errorf("in(%v): out %v, actual %x", table.in, table.out, a.GetAddCI())
+		}
 	}
 }
 
@@ -114,7 +126,9 @@ func TestNasTypeFullNameForNetworkGetSetNumberOfSpareBitsInLastOctet(t *testing.
 	for _, table := range nasTypeFullNameForNetworkNumberOfSpareBitsInLastOctetTable {
 		a.SetLen(table.inLen)
 		a.SetNumberOfSpareBitsInLastOctet(table.in)
-		assert.Equalf(t, table.out, a.GetNumberOfSpareBitsInLastOctet(), "in(%v): out %v, actual %x", table.in, table.out, a.GetNumberOfSpareBitsInLastOctet())
+		if !reflect.DeepEqual(table.out, a.GetNumberOfSpareBitsInLastOctet()) {
+			t.Errorf("in(%v): out %v, actual %x", table.in, table.out, a.GetNumberOfSpareBitsInLastOctet())
+		}
 	}
 }
 
@@ -133,7 +147,9 @@ func TestNasTypeFullNameForNetworkGetSetTextString(t *testing.T) {
 	for _, table := range nasTypeFullNameForNetworkTextStringTable {
 		a.SetLen(table.inLen)
 		a.SetTextString(table.in)
-		assert.Equalf(t, table.out, a.GetTextString(), "in(%v): out %v, actual %x", table.in, table.out, a.GetTextString())
+		if !reflect.DeepEqual(table.out, a.GetTextString()) {
+			t.Errorf("in(%v): out %v, actual %x", table.in, table.out, a.GetTextString())
+		}
 	}
 }
 
@@ -171,13 +187,27 @@ func TestNasTypeFullNameForNetwork(t *testing.T) {
 		a.SetNumberOfSpareBitsInLastOctet(table.inNumberOfSpareBitsInLastOctet)
 		a.SetTextString(table.inTextString)
 
-		assert.Equalf(t, table.outIei, a.Iei, "in(%v): out %v, actual %x", table.inIei, table.outIei, a.Iei)
-		assert.Equalf(t, table.outLen, a.Len, "in(%v): out %v, actual %x", table.inLen, table.outLen, a.Len)
-		assert.Equalf(t, table.outExt, a.GetExt(), "in(%v): out %v, actual %x", table.inExt, table.outExt, a.GetExt())
-		assert.Equalf(t, table.outCodingScheme, a.GetCodingScheme(), "in(%v): out %v, actual %x", table.inCodingScheme, table.outCodingScheme, a.GetCodingScheme())
-		assert.Equalf(t, table.outAddCI, a.GetAddCI(), "in(%v): out %v, actual %x", table.inAddCI, table.outAddCI, a.GetAddCI())
-		assert.Equalf(t, table.outNumberOfSpareBitsInLastOctet, a.GetNumberOfSpareBitsInLastOctet(), "in(%v): out %v, actual %x", table.inNumberOfSpareBitsInLastOctet, table.outNumberOfSpareBitsInLastOctet, a.GetNumberOfSpareBitsInLastOctet())
-		assert.Equalf(t, table.outTextString, a.GetTextString(), "in(%v): out %v, actual %x", table.inTextString, table.outTextString, a.GetTextString())
+		if !reflect.DeepEqual(table.outIei, a.Iei) {
+			t.Errorf("in(%v): out %v, actual %x", table.inIei, table.outIei, a.Iei)
+		}
+		if !reflect.DeepEqual(table.outLen, a.Len) {
+			t.Errorf("in(%v): out %v, actual %x", table.inLen, table.outLen, a.Len)
+		}
+		if !reflect.DeepEqual(table.outExt, a.GetExt()) {
+			t.Errorf("in(%v): out %v, actual %x", table.inExt, table.outExt, a.GetExt())
+		}
+		if !reflect.DeepEqual(table.outCodingScheme, a.GetCodingScheme()) {
+			t.Errorf("in(%v): out %v, actual %x", table.inCodingScheme, table.outCodingScheme, a.GetCodingScheme())
+		}
+		if !reflect.DeepEqual(table.outAddCI, a.GetAddCI()) {
+			t.Errorf("in(%v): out %v, actual %x", table.inAddCI, table.outAddCI, a.GetAddCI())
+		}
+		if !reflect.DeepEqual(table.outNumberOfSpareBitsInLastOctet, a.GetNumberOfSpareBitsInLastOctet()) {
+			t.Errorf("in(%v): out %v, actual %x", table.inNumberOfSpareBitsInLastOctet, table.outNumberOfSpareBitsInLastOctet, a.GetNumberOfSpareBitsInLastOctet())
+		}
+		if !reflect.DeepEqual(table.outTextString, a.GetTextString()) {
+			t.Errorf("in(%v): out %v, actual %x", table.inTextString, table.outTextString, a.GetTextString())
+		}
 
 	}
 }

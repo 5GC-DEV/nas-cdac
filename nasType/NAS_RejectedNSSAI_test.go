@@ -6,16 +6,18 @@
 package nasType_test
 
 import (
+	"reflect"
 	"testing"
 
-	"github.com/5GC-DEV/nas-cdac/nasMessage"
-	"github.com/5GC-DEV/nas-cdac/nasType"
-	"github.com/stretchr/testify/assert"
+	"github.com/omec-project/nas/v2/nasMessage"
+	"github.com/omec-project/nas/v2/nasType"
 )
 
 func TestNasTypeNewRejectedNSSAI(t *testing.T) {
 	a := nasType.NewRejectedNSSAI(nasMessage.RegistrationAcceptRejectedNSSAIType)
-	assert.NotNil(t, a)
+	if a == nil {
+		t.Fatal("Expected value not to be nil")
+	}
 }
 
 var nasTypeAuthenticationResultRejectedNSSAITable = []NasTypeIeiData{
@@ -26,7 +28,9 @@ func TestNasTypeRejectedNSSAIGetSetIei(t *testing.T) {
 	a := nasType.NewRejectedNSSAI(nasMessage.RegistrationAcceptRejectedNSSAIType)
 	for _, table := range nasTypeAuthenticationResultRejectedNSSAITable {
 		a.SetIei(table.in)
-		assert.Equal(t, table.out, a.GetIei())
+		if !reflect.DeepEqual(table.out, a.GetIei()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetIei())
+		}
 
 		// if a.GetIei() != table.out {
 		// 	t.Errorf("in(%d): out %d, actual %d", table.in, table.out, a.GetIei())
@@ -42,7 +46,9 @@ func TestNasTypeRejectedNSSAIGetSetLen(t *testing.T) {
 	a := nasType.NewRejectedNSSAI(nasMessage.RegistrationAcceptRejectedNSSAIType)
 	for _, table := range nasTypeAuthenticationResultRejectedNSSAILenTable {
 		a.SetLen(table.in)
-		assert.Equal(t, table.out, a.GetLen())
+		if !reflect.DeepEqual(table.out, a.GetLen()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetLen())
+		}
 		// if a.GetLen() != table.out {
 		// 	t.Errorf("in(%d): out %d, actual %d", table.in, table.out, a.GetLen())
 		// }
@@ -64,7 +70,9 @@ func TestNasTypeRejectedNSSAIGetSetRejectedNSSAIContents(t *testing.T) {
 	for _, table := range nasTypeRejectedNSSAIContentsTable {
 		a.SetLen(table.inLen)
 		a.SetRejectedNSSAIContents(table.in)
-		assert.Equalf(t, table.out, a.GetRejectedNSSAIContents(), "in(%v): out %v, actual %x", table.in, table.out, a.GetRejectedNSSAIContents())
+		if !reflect.DeepEqual(table.out, a.GetRejectedNSSAIContents()) {
+			t.Errorf("in(%v): out %v, actual %x", table.in, table.out, a.GetRejectedNSSAIContents())
+		}
 	}
 }
 
@@ -94,9 +102,15 @@ func TestNasTypeRejectedNSSAI(t *testing.T) {
 		a.SetLen(table.in.Len)
 		a.SetRejectedNSSAIContents(table.in.Buffer)
 
-		assert.Equalf(t, table.out.Iei, a.Iei, "in(%v): out %v, actual %x", table.in.Iei, table.out.Iei, a.Iei)
-		assert.Equalf(t, table.out.Len, a.Len, "in(%v): out %v, actual %x", table.in.Len, table.out.Len, a.Len)
-		assert.Equalf(t, table.out.Buffer, a.Buffer, "in(%v): out %v, actual %x", table.in.Buffer, table.out.Buffer, a.Buffer)
+		if !reflect.DeepEqual(table.out.Iei, a.Iei) {
+			t.Errorf("in(%v): out %v, actual %x", table.in.Iei, table.out.Iei, a.Iei)
+		}
+		if !reflect.DeepEqual(table.out.Len, a.Len) {
+			t.Errorf("in(%v): out %v, actual %x", table.in.Len, table.out.Len, a.Len)
+		}
+		if !reflect.DeepEqual(table.out.Buffer, a.Buffer) {
+			t.Errorf("in(%v): out %v, actual %x", table.in.Buffer, table.out.Buffer, a.Buffer)
+		}
 
 	}
 }

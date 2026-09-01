@@ -9,7 +9,7 @@ import (
 	"bytes"
 	"encoding/binary"
 
-	"github.com/5GC-DEV/nas-cdac/nasType"
+	"github.com/omec-project/nas/v2/nasType"
 )
 
 type AuthenticationResult struct {
@@ -19,6 +19,7 @@ type AuthenticationResult struct {
 	nasType.SpareHalfOctetAndNgksi
 	nasType.EAPMessage
 	*nasType.ABBA
+	*nasType.MasterSessionKey
 }
 
 func NewAuthenticationResult(iei uint8) (authenticationResult *AuthenticationResult) {
@@ -27,7 +28,8 @@ func NewAuthenticationResult(iei uint8) (authenticationResult *AuthenticationRes
 }
 
 const (
-	AuthenticationResultABBAType uint8 = 0x38
+	AuthenticationResultABBAType             uint8 = 0x38
+	AuthenticationResultMasterSessionKeyType uint8 = 0x55
 )
 
 func (a *AuthenticationResult) EncodeAuthenticationResult(buffer *bytes.Buffer) {
@@ -41,6 +43,11 @@ func (a *AuthenticationResult) EncodeAuthenticationResult(buffer *bytes.Buffer) 
 		binary.Write(buffer, binary.BigEndian, a.ABBA.GetIei())
 		binary.Write(buffer, binary.BigEndian, a.ABBA.GetLen())
 		binary.Write(buffer, binary.BigEndian, &a.ABBA.Buffer)
+	}
+	if a.MasterSessionKey != nil {
+		binary.Write(buffer, binary.BigEndian, a.MasterSessionKey.GetIei())
+		binary.Write(buffer, binary.BigEndian, a.MasterSessionKey.GetLen())
+		binary.Write(buffer, binary.BigEndian, &a.MasterSessionKey.Buffer)
 	}
 }
 
@@ -68,6 +75,11 @@ func (a *AuthenticationResult) DecodeAuthenticationResult(byteArray *[]byte) {
 			binary.Read(buffer, binary.BigEndian, &a.ABBA.Len)
 			a.ABBA.SetLen(a.ABBA.GetLen())
 			binary.Read(buffer, binary.BigEndian, a.ABBA.Buffer[:a.ABBA.GetLen()])
+		case AuthenticationResultMasterSessionKeyType:
+			a.MasterSessionKey = nasType.NewMasterSessionKey(ieiN)
+			binary.Read(buffer, binary.BigEndian, &a.MasterSessionKey.Len)
+			a.MasterSessionKey.SetLen(a.MasterSessionKey.GetLen())
+			binary.Read(buffer, binary.BigEndian, a.MasterSessionKey.Buffer[:a.MasterSessionKey.GetLen()])
 		default:
 		}
 	}

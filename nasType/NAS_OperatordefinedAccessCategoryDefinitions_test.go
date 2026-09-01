@@ -6,16 +6,18 @@
 package nasType_test
 
 import (
+	"reflect"
 	"testing"
 
-	"github.com/5GC-DEV/nas-cdac/nasMessage"
-	"github.com/5GC-DEV/nas-cdac/nasType"
-	"github.com/stretchr/testify/assert"
+	"github.com/omec-project/nas/v2/nasMessage"
+	"github.com/omec-project/nas/v2/nasType"
 )
 
 func TestNasTypeNewOperatordefinedAccessCategoryDefinitions(t *testing.T) {
 	a := nasType.NewOperatordefinedAccessCategoryDefinitions(nasMessage.ConfigurationUpdateCommandOperatordefinedAccessCategoryDefinitionsType)
-	assert.NotNil(t, a)
+	if a == nil {
+		t.Fatal("Expected value not to be nil")
+	}
 }
 
 var nasTypeOperatordefinedAccessCategoryDefinitionsConfigurationUpdateCommandOperatordefinedAccessCategoryDefinitionsTypeTable = []NasTypeIeiData{
@@ -26,7 +28,9 @@ func TestNasTypeOperatordefinedAccessCategoryDefinitionsGetSetIei(t *testing.T) 
 	a := nasType.NewOperatordefinedAccessCategoryDefinitions(nasMessage.ConfigurationUpdateCommandOperatordefinedAccessCategoryDefinitionsType)
 	for _, table := range nasTypeOperatordefinedAccessCategoryDefinitionsConfigurationUpdateCommandOperatordefinedAccessCategoryDefinitionsTypeTable {
 		a.SetIei(table.in)
-		assert.Equal(t, table.out, a.GetIei())
+		if !reflect.DeepEqual(table.out, a.GetIei()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetIei())
+		}
 	}
 }
 
@@ -38,7 +42,9 @@ func TestNasTypeOperatordefinedAccessCategoryDefinitionsGetSetLen(t *testing.T) 
 	a := nasType.NewOperatordefinedAccessCategoryDefinitions(nasMessage.ConfigurationUpdateCommandOperatordefinedAccessCategoryDefinitionsType)
 	for _, table := range nasTypeOperatordefinedAccessCategoryDefinitionsLenTable {
 		a.SetLen(table.in)
-		assert.Equal(t, table.out, a.GetLen())
+		if !reflect.DeepEqual(table.out, a.GetLen()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetLen())
+		}
 	}
 }
 
@@ -57,7 +63,9 @@ func TestNasTypeOperatordefinedAccessCategoryDefinitionsGetSetOperatorDefinedAcc
 	for _, table := range nasTypeOperatordefinedAccessCategoryDefinitionsOperatorDefinedAccessCategoryDefintiionTable {
 		a.SetLen(table.inLen)
 		a.SetOperatorDefinedAccessCategoryDefintiion(table.in)
-		assert.Equal(t, table.out, a.GetOperatorDefinedAccessCategoryDefintiion())
+		if !reflect.DeepEqual(table.out, a.GetOperatorDefinedAccessCategoryDefintiion()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetOperatorDefinedAccessCategoryDefintiion())
+		}
 	}
 }
 
@@ -88,8 +96,14 @@ func TestNasTypeOperatordefinedAccessCategoryDefinitions(t *testing.T) {
 		a.SetLen(table.inLen)
 		a.SetOperatorDefinedAccessCategoryDefintiion(table.inOperatorDefinedAccessCategoryDefintiion)
 
-		assert.Equalf(t, table.outIei, a.Iei, "in(%v): out %v, actual %x", table.inIei, table.outIei, a.Iei)
-		assert.Equalf(t, table.outLen, a.Len, "in(%v): out %v, actual %x", table.inLen, table.outLen, a.Len)
-		assert.Equalf(t, table.outOperatorDefinedAccessCategoryDefintiion, a.GetOperatorDefinedAccessCategoryDefintiion(), "in(%v): out %v, actual %x", table.inOperatorDefinedAccessCategoryDefintiion, table.outOperatorDefinedAccessCategoryDefintiion, a.GetOperatorDefinedAccessCategoryDefintiion())
+		if !reflect.DeepEqual(table.outIei, a.Iei) {
+			t.Errorf("in(%v): out %v, actual %x", table.inIei, table.outIei, a.Iei)
+		}
+		if !reflect.DeepEqual(table.outLen, a.Len) {
+			t.Errorf("in(%v): out %v, actual %x", table.inLen, table.outLen, a.Len)
+		}
+		if !reflect.DeepEqual(table.outOperatorDefinedAccessCategoryDefintiion, a.GetOperatorDefinedAccessCategoryDefintiion()) {
+			t.Errorf("in(%v): out %v, actual %x", table.inOperatorDefinedAccessCategoryDefintiion, table.outOperatorDefinedAccessCategoryDefintiion, a.GetOperatorDefinedAccessCategoryDefintiion())
+		}
 	}
 }

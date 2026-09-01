@@ -6,16 +6,18 @@
 package nasType_test
 
 import (
+	"reflect"
 	"testing"
 
-	"github.com/5GC-DEV/nas-cdac/nasMessage"
-	"github.com/5GC-DEV/nas-cdac/nasType"
-	"github.com/stretchr/testify/assert"
+	"github.com/omec-project/nas/v2/nasMessage"
+	"github.com/omec-project/nas/v2/nasType"
 )
 
 func TestNasTypeNewPDUSessionID(t *testing.T) {
 	a := nasType.NewPDUSessionID()
-	assert.NotNil(t, a)
+	if a == nil {
+		t.Fatal("Expected value not to be nil")
+	}
 }
 
 var nasTypePDUSessionIDULNASTransportOldPDUSessionIDTypeTable = []NasTypeIeiData{
@@ -26,7 +28,9 @@ func TestNasTypePDUSessionIDGetSetIei(t *testing.T) {
 	a := nasType.NewPDUSessionID()
 	for _, table := range nasTypePDUSessionIDULNASTransportOldPDUSessionIDTypeTable {
 		a.SetPDUSessionID(table.in)
-		assert.Equal(t, table.out, a.GetPDUSessionID())
+		if !reflect.DeepEqual(table.out, a.GetPDUSessionID()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetPDUSessionID())
+		}
 	}
 }
 
@@ -43,7 +47,9 @@ func TestNasTypePDUSessionIDGetSetPduSessionIdentity2Value(t *testing.T) {
 	a := nasType.NewPDUSessionID()
 	for _, table := range nasTypePDUSessionIDPduSessionIdentity2ValueTable {
 		a.SetPDUSessionID(table.in)
-		assert.Equal(t, table.out, a.GetPDUSessionID())
+		if !reflect.DeepEqual(table.out, a.GetPDUSessionID()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetPDUSessionID())
+		}
 	}
 }
 
@@ -62,6 +68,8 @@ func TestNasTypePDUSessionID(t *testing.T) {
 		a := nasType.NewPDUSessionID()
 		a.SetPDUSessionID(table.inPduSessionIdentity2Value)
 
-		assert.Equalf(t, table.outPduSessionIdentity2Value, a.GetPDUSessionID(), "in(%v): out %v, actual %x", table.inPduSessionIdentity2Value, table.outPduSessionIdentity2Value, a.GetPDUSessionID())
+		if !reflect.DeepEqual(table.outPduSessionIdentity2Value, a.GetPDUSessionID()) {
+			t.Errorf("in(%v): out %v, actual %x", table.inPduSessionIdentity2Value, table.outPduSessionIdentity2Value, a.GetPDUSessionID())
+		}
 	}
 }

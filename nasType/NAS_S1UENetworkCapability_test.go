@@ -6,16 +6,18 @@
 package nasType_test
 
 import (
+	"reflect"
 	"testing"
 
-	"github.com/5GC-DEV/nas-cdac/nasMessage"
-	"github.com/5GC-DEV/nas-cdac/nasType"
-	"github.com/stretchr/testify/assert"
+	"github.com/omec-project/nas/v2/nasMessage"
+	"github.com/omec-project/nas/v2/nasType"
 )
 
 func TestNasTypeNewS1UENetworkCapability(t *testing.T) {
 	a := nasType.NewS1UENetworkCapability(nasMessage.RegistrationRequestS1UENetworkCapabilityType)
-	assert.NotNil(t, a)
+	if a == nil {
+		t.Fatal("Expected value not to be nil")
+	}
 }
 
 var nasTypeServiceS1UENetworkCapabilityTable = []NasTypeIeiData{
@@ -26,7 +28,9 @@ func TestNasTypeS1UENetworkCapabilityGetSetIei(t *testing.T) {
 	a := nasType.NewS1UENetworkCapability(nasMessage.RegistrationRequestS1UENetworkCapabilityType)
 	for _, table := range nasTypeServiceS1UENetworkCapabilityTable {
 		a.SetIei(table.in)
-		assert.Equal(t, table.out, a.GetIei())
+		if !reflect.DeepEqual(table.out, a.GetIei()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetIei())
+		}
 	}
 }
 
@@ -38,7 +42,9 @@ func TestNasTypeS1UENetworkCapabilityGetSetLen(t *testing.T) {
 	a := nasType.NewS1UENetworkCapability(nasMessage.RegistrationRequestS1UENetworkCapabilityType)
 	for _, table := range nasTypeServiceS1UENetworkCapabilityLenTable {
 		a.SetLen(table.in)
-		assert.Equal(t, table.out, a.GetLen())
+		if !reflect.DeepEqual(table.out, a.GetLen()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetLen())
+		}
 	}
 }
 
@@ -58,7 +64,9 @@ func TestNasTypeS1UENetworkCapabilityGetSetEEA0(t *testing.T) {
 		a.SetLen(table.inLen)
 		a.SetEEA0(table.in)
 
-		assert.Equal(t, table.out, a.GetEEA0())
+		if !reflect.DeepEqual(table.out, a.GetEEA0()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetEEA0())
+		}
 	}
 }
 
@@ -78,7 +86,9 @@ func TestNasTypeS1UENetworkCapabilityGetSetEEA1_128(t *testing.T) {
 		a.SetLen(table.inLen)
 		a.SetEEA1_128(table.in)
 
-		assert.Equal(t, table.out, a.GetEEA1_128())
+		if !reflect.DeepEqual(table.out, a.GetEEA1_128()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetEEA1_128())
+		}
 	}
 }
 
@@ -98,7 +108,9 @@ func TestNasTypeS1UENetworkCapabilityGetSetEEA2_128(t *testing.T) {
 		a.SetLen(table.inLen)
 		a.SetEEA2_128(table.in)
 
-		assert.Equal(t, table.out, a.GetEEA2_128())
+		if !reflect.DeepEqual(table.out, a.GetEEA2_128()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetEEA2_128())
+		}
 	}
 }
 
@@ -118,7 +130,9 @@ func TestNasTypeS1UENetworkCapabilityGetSetEEA3_128(t *testing.T) {
 		a.SetLen(table.inLen)
 		a.SetEEA3_128(table.in)
 
-		assert.Equal(t, table.out, a.GetEEA3_128())
+		if !reflect.DeepEqual(table.out, a.GetEEA3_128()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetEEA3_128())
+		}
 	}
 }
 
@@ -138,7 +152,9 @@ func TestNasTypeS1UENetworkCapabilityGetSetEEA4(t *testing.T) {
 		a.SetLen(table.inLen)
 		a.SetEEA4(table.in)
 
-		assert.Equal(t, table.out, a.GetEEA4())
+		if !reflect.DeepEqual(table.out, a.GetEEA4()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetEEA4())
+		}
 	}
 }
 
@@ -158,7 +174,9 @@ func TestNasTypeS1UENetworkCapabilityGetSetEEA5(t *testing.T) {
 		a.SetLen(table.inLen)
 		a.SetEEA5(table.in)
 
-		assert.Equal(t, table.out, a.GetEEA5())
+		if !reflect.DeepEqual(table.out, a.GetEEA5()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetEEA5())
+		}
 	}
 }
 
@@ -178,7 +196,9 @@ func TestNasTypeS1UENetworkCapabilityGetSetEEA6(t *testing.T) {
 		a.SetLen(table.inLen)
 		a.SetEEA6(table.in)
 
-		assert.Equal(t, table.out, a.GetEEA6())
+		if !reflect.DeepEqual(table.out, a.GetEEA6()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetEEA6())
+		}
 	}
 }
 
@@ -198,7 +218,9 @@ func TestNasTypeS1UENetworkCapabilityGetSetEEA7(t *testing.T) {
 		a.SetLen(table.inLen)
 		a.SetEEA7(table.in)
 
-		assert.Equal(t, table.out, a.GetEEA7())
+		if !reflect.DeepEqual(table.out, a.GetEEA7()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetEEA7())
+		}
 	}
 }
 
@@ -218,7 +240,9 @@ func TestNasTypeS1UENetworkCapabilityGetSetEIA0(t *testing.T) {
 		a.SetLen(table.inLen)
 		a.SetEIA0(table.in)
 
-		assert.Equal(t, table.out, a.GetEIA0())
+		if !reflect.DeepEqual(table.out, a.GetEIA0()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetEIA0())
+		}
 	}
 }
 
@@ -238,7 +262,9 @@ func TestNasTypeS1UENetworkCapabilityGetSetEIA1_128(t *testing.T) {
 		a.SetLen(table.inLen)
 		a.SetEIA1_128(table.in)
 
-		assert.Equal(t, table.out, a.GetEIA1_128())
+		if !reflect.DeepEqual(table.out, a.GetEIA1_128()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetEIA1_128())
+		}
 	}
 }
 
@@ -258,7 +284,9 @@ func TestNasTypeS1UENetworkCapabilityGetSetEIA2_128(t *testing.T) {
 		a.SetLen(table.inLen)
 		a.SetEIA2_128(table.in)
 
-		assert.Equal(t, table.out, a.GetEIA2_128())
+		if !reflect.DeepEqual(table.out, a.GetEIA2_128()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetEIA2_128())
+		}
 	}
 }
 
@@ -278,7 +306,9 @@ func TestNasTypeS1UENetworkCapabilityGetSetEIA3_128(t *testing.T) {
 		a.SetLen(table.inLen)
 		a.SetEIA3_128(table.in)
 
-		assert.Equal(t, table.out, a.GetEIA3_128())
+		if !reflect.DeepEqual(table.out, a.GetEIA3_128()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetEIA3_128())
+		}
 	}
 }
 
@@ -298,7 +328,9 @@ func TestNasTypeS1UENetworkCapabilityGetSetEIA4(t *testing.T) {
 		a.SetLen(table.inLen)
 		a.SetEIA4(table.in)
 
-		assert.Equal(t, table.out, a.GetEIA4())
+		if !reflect.DeepEqual(table.out, a.GetEIA4()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetEIA4())
+		}
 	}
 }
 
@@ -312,7 +344,9 @@ func TestNasTypeS1UENetworkCapabilityGetSetEIA5(t *testing.T) {
 		a.SetLen(table.inLen)
 		a.SetEIA5(table.in)
 
-		assert.Equal(t, table.out, a.GetEIA5())
+		if !reflect.DeepEqual(table.out, a.GetEIA5()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetEIA5())
+		}
 	}
 }
 
@@ -332,7 +366,9 @@ func TestNasTypeS1UENetworkCapabilityGetSetEIA6(t *testing.T) {
 		a.SetLen(table.inLen)
 		a.SetEIA6(table.in)
 
-		assert.Equal(t, table.out, a.GetEIA6())
+		if !reflect.DeepEqual(table.out, a.GetEIA6()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetEIA6())
+		}
 	}
 }
 
@@ -352,7 +388,9 @@ func TestNasTypeS1UENetworkCapabilityGetSetEIA7(t *testing.T) {
 		a.SetLen(table.inLen)
 		a.SetEIA7(table.in)
 
-		assert.Equal(t, table.out, a.GetEIA7())
+		if !reflect.DeepEqual(table.out, a.GetEIA7()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetEIA7())
+		}
 	}
 }
 
@@ -372,7 +410,9 @@ func TestNasTypeS1UENetworkCapabilityGetSetUEA0(t *testing.T) {
 		a.SetLen(table.inLen)
 		a.SetUEA0(0x01)
 
-		assert.Equal(t, table.out, a.GetUEA0())
+		if !reflect.DeepEqual(table.out, a.GetUEA0()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetUEA0())
+		}
 	}
 }
 
@@ -392,7 +432,9 @@ func TestNasTypeS1UENetworkCapabilityGetSetUEA1(t *testing.T) {
 		a.SetLen(table.inLen)
 		a.SetUEA1(table.in)
 
-		assert.Equal(t, table.out, a.GetUEA1())
+		if !reflect.DeepEqual(table.out, a.GetUEA1()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetUEA1())
+		}
 	}
 }
 
@@ -412,7 +454,9 @@ func TestNasTypeS1UENetworkCapabilityGetSetUEA2(t *testing.T) {
 		a.SetLen(table.inLen)
 		a.SetUEA2(table.in)
 
-		assert.Equal(t, table.out, a.GetUEA2())
+		if !reflect.DeepEqual(table.out, a.GetUEA2()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetUEA2())
+		}
 	}
 }
 
@@ -432,7 +476,9 @@ func TestNasTypeS1UENetworkCapabilityGetSetUEA3(t *testing.T) {
 		a.SetLen(table.inLen)
 		a.SetUEA3(table.in)
 
-		assert.Equal(t, table.out, a.GetUEA3())
+		if !reflect.DeepEqual(table.out, a.GetUEA3()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetUEA3())
+		}
 	}
 }
 
@@ -452,7 +498,9 @@ func TestNasTypeS1UENetworkCapabilityGetSetUEA4(t *testing.T) {
 		a.SetLen(table.inLen)
 		a.SetUEA4(table.in)
 
-		assert.Equal(t, table.out, a.GetUEA4())
+		if !reflect.DeepEqual(table.out, a.GetUEA4()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetUEA4())
+		}
 	}
 }
 
@@ -466,7 +514,9 @@ func TestNasTypeS1UENetworkCapabilityGetSetUEA5(t *testing.T) {
 		a.SetLen(table.inLen)
 		a.SetUEA5(table.in)
 
-		assert.Equal(t, table.out, a.GetUEA5())
+		if !reflect.DeepEqual(table.out, a.GetUEA5()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetUEA5())
+		}
 	}
 }
 
@@ -486,7 +536,9 @@ func TestNasTypeS1UENetworkCapabilityGetSetUEA6(t *testing.T) {
 		a.SetLen(table.inLen)
 		a.SetUEA6(table.in)
 
-		assert.Equal(t, table.out, a.GetUEA6())
+		if !reflect.DeepEqual(table.out, a.GetUEA6()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetUEA6())
+		}
 	}
 }
 
@@ -506,7 +558,9 @@ func TestNasTypeS1UENetworkCapabilityGetSetUEA7(t *testing.T) {
 		a.SetLen(table.inLen)
 		a.SetUEA7(table.in)
 
-		assert.Equal(t, table.out, a.GetUEA7())
+		if !reflect.DeepEqual(table.out, a.GetUEA7()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetUEA7())
+		}
 	}
 }
 
@@ -526,7 +580,9 @@ func TestNasTypeS1UENetworkCapabilityGetSetUCS2(t *testing.T) {
 		a.SetLen(table.inLen)
 		a.SetUCS2(table.in)
 
-		assert.Equal(t, table.out, a.GetUCS2())
+		if !reflect.DeepEqual(table.out, a.GetUCS2()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetUCS2())
+		}
 	}
 }
 
@@ -546,7 +602,9 @@ func TestNasTypeS1UENetworkCapabilityGetSetUIA1(t *testing.T) {
 		a.SetLen(table.inLen)
 		a.SetUIA1(table.in)
 
-		assert.Equal(t, table.out, a.GetUIA1())
+		if !reflect.DeepEqual(table.out, a.GetUIA1()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetUIA1())
+		}
 	}
 }
 
@@ -566,7 +624,9 @@ func TestNasTypeS1UENetworkCapabilityGetSetUIA2(t *testing.T) {
 		a.SetLen(table.inLen)
 		a.SetUIA2(table.in)
 
-		assert.Equal(t, table.out, a.GetUIA2())
+		if !reflect.DeepEqual(table.out, a.GetUIA2()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetUIA2())
+		}
 	}
 }
 
@@ -586,7 +646,9 @@ func TestNasTypeS1UENetworkCapabilityGetSetUIA3(t *testing.T) {
 		a.SetLen(table.inLen)
 		a.SetUIA3(table.in)
 
-		assert.Equal(t, table.out, a.GetUIA3())
+		if !reflect.DeepEqual(table.out, a.GetUIA3()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetUIA3())
+		}
 	}
 }
 
@@ -606,7 +668,9 @@ func TestNasTypeS1UENetworkCapabilityGetSetUIA4(t *testing.T) {
 		a.SetLen(table.inLen)
 		a.SetUIA4(table.in)
 
-		assert.Equal(t, table.out, a.GetUIA4())
+		if !reflect.DeepEqual(table.out, a.GetUIA4()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetUIA4())
+		}
 	}
 }
 
@@ -620,7 +684,9 @@ func TestNasTypeS1UENetworkCapabilityGetSetUIA5(t *testing.T) {
 		a.SetLen(table.inLen)
 		a.SetUIA5(table.in)
 
-		assert.Equal(t, table.out, a.GetUIA5())
+		if !reflect.DeepEqual(table.out, a.GetUIA5()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetUIA5())
+		}
 	}
 }
 
@@ -640,7 +706,9 @@ func TestNasTypeS1UENetworkCapabilityGetSetUIA6(t *testing.T) {
 		a.SetLen(table.inLen)
 		a.SetUIA6(table.in)
 
-		assert.Equal(t, table.out, a.GetUIA6())
+		if !reflect.DeepEqual(table.out, a.GetUIA6()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetUIA6())
+		}
 	}
 }
 
@@ -660,7 +728,9 @@ func TestNasTypeS1UENetworkCapabilityGetSetUIA7(t *testing.T) {
 		a.SetLen(table.inLen)
 		a.SetUIA7(table.in)
 
-		assert.Equal(t, table.out, a.GetUIA7())
+		if !reflect.DeepEqual(table.out, a.GetUIA7()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetUIA7())
+		}
 	}
 }
 
@@ -680,7 +750,9 @@ func TestNasTypeS1UENetworkCapabilityGetSetProSedd(t *testing.T) {
 		a.SetLen(table.inLen)
 		a.SetProSedd(table.in)
 
-		assert.Equal(t, table.out, a.GetProSedd())
+		if !reflect.DeepEqual(table.out, a.GetProSedd()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetProSedd())
+		}
 	}
 }
 
@@ -700,7 +772,9 @@ func TestNasTypeS1UENetworkCapabilityGetSetProSe(t *testing.T) {
 		a.SetLen(table.inLen)
 		a.SetProSe(table.in)
 
-		assert.Equal(t, table.out, a.GetProSe())
+		if !reflect.DeepEqual(table.out, a.GetProSe()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetProSe())
+		}
 	}
 }
 
@@ -720,7 +794,9 @@ func TestNasTypeS1UENetworkCapabilityGetSetH245ASH(t *testing.T) {
 		a.SetLen(table.inLen)
 		a.SetH245ASH(table.in)
 
-		assert.Equal(t, table.out, a.GetH245ASH())
+		if !reflect.DeepEqual(table.out, a.GetH245ASH()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetH245ASH())
+		}
 	}
 }
 
@@ -740,7 +816,9 @@ func TestNasTypeS1UENetworkCapabilityGetSetACCCSFB(t *testing.T) {
 		a.SetLen(table.inLen)
 		a.SetACCCSFB(table.in)
 
-		assert.Equal(t, table.out, a.GetACCCSFB())
+		if !reflect.DeepEqual(table.out, a.GetACCCSFB()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetACCCSFB())
+		}
 	}
 }
 
@@ -754,7 +832,9 @@ func TestNasTypeS1UENetworkCapabilityGetSetLPP(t *testing.T) {
 		a.SetLen(table.inLen)
 		a.SetLPP(table.in)
 
-		assert.Equal(t, table.out, a.GetLPP())
+		if !reflect.DeepEqual(table.out, a.GetLPP()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetLPP())
+		}
 	}
 }
 
@@ -774,7 +854,9 @@ func TestNasTypeS1UENetworkCapabilityGetSetLCS(t *testing.T) {
 		a.SetLen(table.inLen)
 		a.SetLCS(table.in)
 
-		assert.Equal(t, table.out, a.GetLCS())
+		if !reflect.DeepEqual(table.out, a.GetLCS()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetLCS())
+		}
 	}
 }
 
@@ -794,7 +876,9 @@ func TestNasTypeS1UENetworkCapabilityGetSetxSRVCC(t *testing.T) {
 		a.SetLen(table.inLen)
 		a.SetxSRVCC(table.in)
 
-		assert.Equal(t, table.out, a.GetxSRVCC())
+		if !reflect.DeepEqual(table.out, a.GetxSRVCC()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetxSRVCC())
+		}
 	}
 }
 
@@ -814,7 +898,9 @@ func TestNasTypeS1UENetworkCapabilityGetSetNF(t *testing.T) {
 		a.SetLen(table.inLen)
 		a.SetNF(table.in)
 
-		assert.Equal(t, table.out, a.GetNF())
+		if !reflect.DeepEqual(table.out, a.GetNF()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetNF())
+		}
 	}
 }
 
@@ -834,7 +920,9 @@ func TestNasTypeS1UENetworkCapabilityGetSetEPCO(t *testing.T) {
 		a.SetLen(table.inLen)
 		a.SetEPCO(table.in)
 
-		assert.Equal(t, table.out, a.GetEPCO())
+		if !reflect.DeepEqual(table.out, a.GetEPCO()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetEPCO())
+		}
 	}
 }
 
@@ -854,7 +942,9 @@ func TestNasTypeS1UENetworkCapabilityGetSetHCCPCIOT(t *testing.T) {
 		a.SetLen(table.inLen)
 		a.SetHCCPCIOT(table.in)
 
-		assert.Equal(t, table.out, a.GetHCCPCIOT())
+		if !reflect.DeepEqual(table.out, a.GetHCCPCIOT()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetHCCPCIOT())
+		}
 	}
 }
 
@@ -874,7 +964,9 @@ func TestNasTypeS1UENetworkCapabilityGetSetERwoPDN(t *testing.T) {
 		a.SetLen(table.inLen)
 		a.SetERwoPDN(table.in)
 
-		assert.Equal(t, table.out, a.GetERwoPDN())
+		if !reflect.DeepEqual(table.out, a.GetERwoPDN()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetERwoPDN())
+		}
 	}
 }
 
@@ -888,7 +980,9 @@ func TestNasTypeS1UENetworkCapabilityGetSetS1UData(t *testing.T) {
 		a.SetLen(table.inLen)
 		a.SetS1UData(table.in)
 
-		assert.Equal(t, table.out, a.GetS1UData())
+		if !reflect.DeepEqual(table.out, a.GetS1UData()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetS1UData())
+		}
 	}
 }
 
@@ -908,7 +1002,9 @@ func TestNasTypeS1UENetworkCapabilityGetSetUPCIot(t *testing.T) {
 		a.SetLen(table.inLen)
 		a.SetUPCIot(table.in)
 
-		assert.Equal(t, table.out, a.GetUPCIot())
+		if !reflect.DeepEqual(table.out, a.GetUPCIot()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetUPCIot())
+		}
 	}
 }
 
@@ -928,7 +1024,9 @@ func TestNasTypeS1UENetworkCapabilityGetSetCPCIot(t *testing.T) {
 		a.SetLen(table.inLen)
 		a.SetCPCIot(table.in)
 
-		assert.Equal(t, table.out, a.GetCPCIot())
+		if !reflect.DeepEqual(table.out, a.GetCPCIot()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetCPCIot())
+		}
 	}
 }
 
@@ -948,7 +1046,9 @@ func TestNasTypeS1UENetworkCapabilityGetSetProserelay(t *testing.T) {
 		a.SetLen(table.inLen)
 		a.SetProserelay(table.in)
 
-		assert.Equal(t, table.out, a.GetProserelay())
+		if !reflect.DeepEqual(table.out, a.GetProserelay()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetProserelay())
+		}
 	}
 }
 
@@ -968,7 +1068,9 @@ func TestNasTypeS1UENetworkCapabilityGetSetProSedc(t *testing.T) {
 		a.SetLen(table.inLen)
 		a.SetProSedc(table.in)
 
-		assert.Equal(t, table.out, a.GetProSedc())
+		if !reflect.DeepEqual(table.out, a.GetProSedc()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetProSedc())
+		}
 	}
 }
 
@@ -988,7 +1090,9 @@ func TestNasTypeS1UENetworkCapabilityGetSetBearer15(t *testing.T) {
 		a.SetLen(table.inLen)
 		a.SetBearer15(table.in)
 
-		assert.Equal(t, table.out, a.GetBearer15())
+		if !reflect.DeepEqual(table.out, a.GetBearer15()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetBearer15())
+		}
 	}
 }
 
@@ -1008,7 +1112,9 @@ func TestNasTypeS1UENetworkCapabilityGetSetSGC(t *testing.T) {
 		a.SetLen(table.inLen)
 		a.SetSGC(table.in)
 
-		assert.Equal(t, table.out, a.GetSGC())
+		if !reflect.DeepEqual(table.out, a.GetSGC()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetSGC())
+		}
 	}
 }
 
@@ -1022,7 +1128,9 @@ func TestNasTypeS1UENetworkCapabilityGetSetN1mode(t *testing.T) {
 		a.SetLen(table.inLen)
 		a.SetN1mode(table.in)
 
-		assert.Equal(t, table.out, a.GetN1mode())
+		if !reflect.DeepEqual(table.out, a.GetN1mode()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetN1mode())
+		}
 	}
 }
 
@@ -1042,7 +1150,9 @@ func TestNasTypeS1UENetworkCapabilityGetSetDCNR(t *testing.T) {
 		a.SetLen(table.inLen)
 		a.SetDCNR(table.in)
 
-		assert.Equal(t, table.out, a.GetDCNR())
+		if !reflect.DeepEqual(table.out, a.GetDCNR()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetDCNR())
+		}
 	}
 }
 
@@ -1062,7 +1172,9 @@ func TestNasTypeS1UENetworkCapabilityGetSetCPbackoff(t *testing.T) {
 		a.SetLen(table.inLen)
 		a.SetCPbackoff(table.in)
 
-		assert.Equal(t, table.out, a.GetCPbackoff())
+		if !reflect.DeepEqual(table.out, a.GetCPbackoff()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetCPbackoff())
+		}
 	}
 }
 
@@ -1082,7 +1194,9 @@ func TestNasTypeS1UENetworkCapabilityGetSetRestrictEC(t *testing.T) {
 		a.SetLen(table.inLen)
 		a.SetRestrictEC(table.in)
 
-		assert.Equal(t, table.out, a.GetRestrictEC())
+		if !reflect.DeepEqual(table.out, a.GetRestrictEC()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetRestrictEC())
+		}
 	}
 }
 
@@ -1102,7 +1216,9 @@ func TestNasTypeS1UENetworkCapabilityGetSetV2XPC5(t *testing.T) {
 		a.SetLen(table.inLen)
 		a.SetV2XPC5(table.in)
 
-		assert.Equal(t, table.out, a.GetV2XPC5())
+		if !reflect.DeepEqual(table.out, a.GetV2XPC5()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetV2XPC5())
+		}
 	}
 }
 
@@ -1122,7 +1238,9 @@ func TestNasTypeS1UENetworkCapabilityGetSetMulitpeDRB(t *testing.T) {
 		a.SetLen(table.inLen)
 		a.SetMulitpeDRB(table.in)
 
-		assert.Equal(t, table.out, a.GetMulitpeDRB())
+		if !reflect.DeepEqual(table.out, a.GetMulitpeDRB()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetMulitpeDRB())
+		}
 	}
 }
 
@@ -1142,7 +1260,9 @@ func TestNasTypeS1UENetworkCapabilityGetSetSpare(t *testing.T) {
 		a.SetLen(table.inLen)
 		a.SetSpare(table.in)
 
-		assert.Equal(t, table.out, a.GetSpare())
+		if !reflect.DeepEqual(table.out, a.GetSpare()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetSpare())
+		}
 	}
 }
 
@@ -1225,8 +1345,14 @@ func TestNasTypeS1UENetworkCapability(t *testing.T) {
 		a.SetMulitpeDRB(0x01)
 		a.SetSpare([]uint8{0x01, 0x01})
 
-		assert.Equal(t, table.out.Iei, a.Iei)
-		assert.Equal(t, table.out.Len, a.Len)
-		assert.Equal(t, table.out.Buffer, a.Buffer)
+		if !reflect.DeepEqual(table.out.Iei, a.Iei) {
+			t.Errorf("Not equal: expected %v, got %v", table.out.Iei, a.Iei)
+		}
+		if !reflect.DeepEqual(table.out.Len, a.Len) {
+			t.Errorf("Not equal: expected %v, got %v", table.out.Len, a.Len)
+		}
+		if !reflect.DeepEqual(table.out.Buffer, a.Buffer) {
+			t.Errorf("Not equal: expected %v, got %v", table.out.Buffer, a.Buffer)
+		}
 	}
 }

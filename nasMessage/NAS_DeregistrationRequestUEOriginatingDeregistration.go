@@ -1,7 +1,6 @@
+// Copyright (C) 2026 Intel Corporation
 // Copyright 2019 free5GC.org
-//
 // SPDX-License-Identifier: Apache-2.0
-//
 
 package nasMessage
 
@@ -9,7 +8,7 @@ import (
 	"bytes"
 	"encoding/binary"
 
-	"github.com/5GC-DEV/nas-cdac/nasType"
+	"github.com/omec-project/nas/v2/nasType"
 )
 
 type DeregistrationRequestUEOriginatingDeregistration struct {
@@ -18,12 +17,19 @@ type DeregistrationRequestUEOriginatingDeregistration struct {
 	nasType.DeregistrationRequestMessageIdentity
 	nasType.NgksiAndDeregistrationType
 	nasType.MobileIdentity5GS
+	*nasType.LowerBoundTimerValue
+	*nasType.NASMessageContainer
 }
 
 func NewDeregistrationRequestUEOriginatingDeregistration(iei uint8) (deregistrationRequestUEOriginatingDeregistration *DeregistrationRequestUEOriginatingDeregistration) {
 	deregistrationRequestUEOriginatingDeregistration = &DeregistrationRequestUEOriginatingDeregistration{}
 	return deregistrationRequestUEOriginatingDeregistration
 }
+
+const (
+	DeregistrationRequestUEOriginatingDeregistrationUnavailabilityPeriodType uint8 = 0x3C
+	DeregistrationRequestUEOriginatingDeregistrationNASMessageContainerType  uint8 = 0x71
+)
 
 func (a *DeregistrationRequestUEOriginatingDeregistration) EncodeDeregistrationRequestUEOriginatingDeregistration(buffer *bytes.Buffer) {
 	binary.Write(buffer, binary.BigEndian, &a.ExtendedProtocolDiscriminator.Octet)
@@ -32,6 +38,16 @@ func (a *DeregistrationRequestUEOriginatingDeregistration) EncodeDeregistrationR
 	binary.Write(buffer, binary.BigEndian, &a.NgksiAndDeregistrationType.Octet)
 	binary.Write(buffer, binary.BigEndian, a.MobileIdentity5GS.GetLen())
 	binary.Write(buffer, binary.BigEndian, &a.MobileIdentity5GS.Buffer)
+	if a.LowerBoundTimerValue != nil {
+		binary.Write(buffer, binary.BigEndian, a.LowerBoundTimerValue.GetIei())
+		binary.Write(buffer, binary.BigEndian, a.LowerBoundTimerValue.GetLen())
+		binary.Write(buffer, binary.BigEndian, &a.LowerBoundTimerValue.Octet)
+	}
+	if a.NASMessageContainer != nil {
+		binary.Write(buffer, binary.BigEndian, a.NASMessageContainer.GetIei())
+		binary.Write(buffer, binary.BigEndian, a.NASMessageContainer.GetLen())
+		binary.Write(buffer, binary.BigEndian, &a.NASMessageContainer.Buffer)
+	}
 }
 
 func (a *DeregistrationRequestUEOriginatingDeregistration) DecodeDeregistrationRequestUEOriginatingDeregistration(byteArray *[]byte) {
@@ -53,6 +69,16 @@ func (a *DeregistrationRequestUEOriginatingDeregistration) DecodeDeregistrationR
 			tmpIeiN = ieiN
 		}
 		switch tmpIeiN {
+		case DeregistrationRequestUEOriginatingDeregistrationUnavailabilityPeriodType:
+			a.LowerBoundTimerValue = nasType.NewLowerBoundTimerValue(ieiN)
+			binary.Read(buffer, binary.BigEndian, &a.LowerBoundTimerValue.Len)
+			a.LowerBoundTimerValue.SetLen(a.LowerBoundTimerValue.GetLen())
+			binary.Read(buffer, binary.BigEndian, &a.LowerBoundTimerValue.Octet)
+		case DeregistrationRequestUEOriginatingDeregistrationNASMessageContainerType:
+			a.NASMessageContainer = nasType.NewNASMessageContainer(ieiN)
+			binary.Read(buffer, binary.BigEndian, &a.NASMessageContainer.Len)
+			a.NASMessageContainer.SetLen(a.NASMessageContainer.GetLen())
+			binary.Read(buffer, binary.BigEndian, &a.NASMessageContainer.Buffer)
 		default:
 		}
 	}

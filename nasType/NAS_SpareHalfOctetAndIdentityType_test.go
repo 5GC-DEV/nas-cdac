@@ -6,10 +6,10 @@
 package nasType_test
 
 import (
+	"reflect"
 	"testing"
 
-	"github.com/5GC-DEV/nas-cdac/nasType"
-	"github.com/stretchr/testify/assert"
+	"github.com/omec-project/nas/v2/nasType"
 )
 
 type nasTypeIdentityTypeAndSpareHalfOctetData struct {
@@ -23,13 +23,17 @@ var nasTypeIdentityTypeAndSpareHalfOctetTable = []nasTypeIdentityTypeAndSpareHal
 
 func TestNasTypeNewSpareHalfOctetAndIdentityType(t *testing.T) {
 	a := nasType.NewSpareHalfOctetAndIdentityType()
-	assert.NotNil(t, a)
+	if a == nil {
+		t.Fatal("Expected value not to be nil")
+	}
 }
 
 func TestNasTypeIdentityTypeAndSpareHalfOctet(t *testing.T) {
 	a := nasType.NewSpareHalfOctetAndIdentityType()
 	for _, table := range nasTypeIdentityTypeAndSpareHalfOctetTable {
 		a.SetTypeOfIdentity(table.in)
-		assert.Equal(t, table.out, a.GetTypeOfIdentity())
+		if !reflect.DeepEqual(table.out, a.GetTypeOfIdentity()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetTypeOfIdentity())
+		}
 	}
 }

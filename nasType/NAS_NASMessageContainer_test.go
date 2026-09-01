@@ -6,16 +6,18 @@
 package nasType_test
 
 import (
+	"reflect"
 	"testing"
 
-	"github.com/5GC-DEV/nas-cdac/nasMessage"
-	"github.com/5GC-DEV/nas-cdac/nasType"
-	"github.com/stretchr/testify/assert"
+	"github.com/omec-project/nas/v2/nasMessage"
+	"github.com/omec-project/nas/v2/nasType"
 )
 
 func TestNasTypeNewNASMessageContainer(t *testing.T) {
 	a := nasType.NewNASMessageContainer(nasMessage.SecurityModeCompleteNASMessageContainerType)
-	assert.NotNil(t, a)
+	if a == nil {
+		t.Fatal("Expected value not to be nil")
+	}
 }
 
 var nasTypeNASMessageContainerRegistrationRequestAdditionalGUTITable = []NasTypeIeiData{
@@ -26,7 +28,9 @@ func TestNasTypeNASMessageContainerGetSetIei(t *testing.T) {
 	a := nasType.NewNASMessageContainer(nasMessage.SecurityModeCompleteNASMessageContainerType)
 	for _, table := range nasTypeNASMessageContainerRegistrationRequestAdditionalGUTITable {
 		a.SetIei(table.in)
-		assert.Equal(t, table.out, a.GetIei())
+		if !reflect.DeepEqual(table.out, a.GetIei()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetIei())
+		}
 	}
 }
 
@@ -38,7 +42,9 @@ func TestNasTypeNASMessageContainerGetSetLen(t *testing.T) {
 	a := nasType.NewNASMessageContainer(nasMessage.SecurityModeCompleteNASMessageContainerType)
 	for _, table := range nasTypeNASMessageContainerLenTable {
 		a.SetLen(table.in)
-		assert.Equal(t, table.out, a.GetLen())
+		if !reflect.DeepEqual(table.out, a.GetLen()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetLen())
+		}
 	}
 }
 
@@ -57,7 +63,9 @@ func TestNasTypeNASMessageContainerGetSetNASMessageContainerContents(t *testing.
 	for _, table := range nasTypeNASMessageContainerNASMessageContainerContentsTable {
 		a.SetLen(table.inLen)
 		a.SetNASMessageContainerContents(table.in)
-		assert.Equal(t, table.out, a.GetNASMessageContainerContents())
+		if !reflect.DeepEqual(table.out, a.GetNASMessageContainerContents()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetNASMessageContainerContents())
+		}
 	}
 }
 
@@ -88,8 +96,14 @@ func TestNasTypeNASMessageContainer(t *testing.T) {
 		a.SetLen(table.inLen)
 		a.SetNASMessageContainerContents(table.inNASMessageContainerContents)
 
-		assert.Equalf(t, table.outIei, a.Iei, "in(%v): out %v, actual %x", table.inIei, table.outIei, a.Iei)
-		assert.Equalf(t, table.outLen, a.Len, "in(%v): out %v, actual %x", table.inLen, table.outLen, a.Len)
-		assert.Equalf(t, table.outNASMessageContainerContents, a.GetNASMessageContainerContents(), "in(%v): out %v, actual %x", table.inNASMessageContainerContents, table.outNASMessageContainerContents, a.GetNASMessageContainerContents())
+		if !reflect.DeepEqual(table.outIei, a.Iei) {
+			t.Errorf("in(%v): out %v, actual %x", table.inIei, table.outIei, a.Iei)
+		}
+		if !reflect.DeepEqual(table.outLen, a.Len) {
+			t.Errorf("in(%v): out %v, actual %x", table.inLen, table.outLen, a.Len)
+		}
+		if !reflect.DeepEqual(table.outNASMessageContainerContents, a.GetNASMessageContainerContents()) {
+			t.Errorf("in(%v): out %v, actual %x", table.inNASMessageContainerContents, table.outNASMessageContainerContents, a.GetNASMessageContainerContents())
+		}
 	}
 }

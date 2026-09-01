@@ -6,16 +6,18 @@
 package nasType_test
 
 import (
+	"reflect"
 	"testing"
 
-	"github.com/5GC-DEV/nas-cdac/nasMessage"
-	"github.com/5GC-DEV/nas-cdac/nasType"
-	"github.com/stretchr/testify/assert"
+	"github.com/omec-project/nas/v2/nasMessage"
+	"github.com/omec-project/nas/v2/nasType"
 )
 
 func TestNasTypeNewNon3GppDeregistrationTimerValue(t *testing.T) {
 	a := nasType.NewNon3GppDeregistrationTimerValue(nasMessage.ServiceRejectT3346ValueType)
-	assert.NotNil(t, a)
+	if a == nil {
+		t.Fatal("Expected value not to be nil")
+	}
 }
 
 var nasTypeNon3GppDeregistrationTimerValueServiceRejectT3346ValueTypeTable = []NasTypeIeiData{
@@ -26,7 +28,9 @@ func TestNasTypeNon3GppDeregistrationTimerValueGetSetIei(t *testing.T) {
 	a := nasType.NewNon3GppDeregistrationTimerValue(nasMessage.ServiceRejectT3346ValueType)
 	for _, table := range nasTypeNon3GppDeregistrationTimerValueServiceRejectT3346ValueTypeTable {
 		a.SetIei(table.in)
-		assert.Equal(t, table.out, a.GetIei())
+		if !reflect.DeepEqual(table.out, a.GetIei()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetIei())
+		}
 	}
 }
 
@@ -38,7 +42,9 @@ func TestNasTypeNon3GppDeregistrationTimerValueGetSetLen(t *testing.T) {
 	a := nasType.NewNon3GppDeregistrationTimerValue(nasMessage.ServiceRejectT3346ValueType)
 	for _, table := range nasTypeNon3GppDeregistrationTimerValueLenTable {
 		a.SetLen(table.in)
-		assert.Equal(t, table.out, a.GetLen())
+		if !reflect.DeepEqual(table.out, a.GetLen()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetLen())
+		}
 	}
 }
 
@@ -55,7 +61,9 @@ func TestNasTypeNon3GppDeregistrationTimerValueGetSetGPRSTimer2Value(t *testing.
 	a := nasType.NewNon3GppDeregistrationTimerValue(nasMessage.ServiceRejectT3346ValueType)
 	for _, table := range nasTypeNon3GppDeregistrationTimerValueGPRSTimer2ValueTable {
 		a.SetGPRSTimer2Value(table.in)
-		assert.Equal(t, table.out, a.GetGPRSTimer2Value())
+		if !reflect.DeepEqual(table.out, a.GetGPRSTimer2Value()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetGPRSTimer2Value())
+		}
 	}
 }
 
@@ -84,8 +92,14 @@ func TestNasTypeNon3GppDeregistrationTimerValue(t *testing.T) {
 		a.SetLen(table.inLen)
 		a.SetGPRSTimer2Value(table.inGPRSTimer2Value)
 
-		assert.Equalf(t, table.outIei, a.Iei, "in(%v): out %v, actual %x", table.inIei, table.outIei, a.Iei)
-		assert.Equalf(t, table.outLen, a.Len, "in(%v): out %v, actual %x", table.inLen, table.outLen, a.Len)
-		assert.Equalf(t, table.outGPRSTimer2Value, a.GetGPRSTimer2Value(), "in(%v): out %v, actual %x", table.inGPRSTimer2Value, table.outGPRSTimer2Value, a.GetGPRSTimer2Value())
+		if !reflect.DeepEqual(table.outIei, a.Iei) {
+			t.Errorf("in(%v): out %v, actual %x", table.inIei, table.outIei, a.Iei)
+		}
+		if !reflect.DeepEqual(table.outLen, a.Len) {
+			t.Errorf("in(%v): out %v, actual %x", table.inLen, table.outLen, a.Len)
+		}
+		if !reflect.DeepEqual(table.outGPRSTimer2Value, a.GetGPRSTimer2Value()) {
+			t.Errorf("in(%v): out %v, actual %x", table.inGPRSTimer2Value, table.outGPRSTimer2Value, a.GetGPRSTimer2Value())
+		}
 	}
 }

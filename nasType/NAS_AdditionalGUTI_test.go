@@ -6,16 +6,18 @@
 package nasType_test
 
 import (
+	"reflect"
 	"testing"
 
-	"github.com/5GC-DEV/nas-cdac/nasMessage"
-	"github.com/5GC-DEV/nas-cdac/nasType"
-	"github.com/stretchr/testify/assert"
+	"github.com/omec-project/nas/v2/nasMessage"
+	"github.com/omec-project/nas/v2/nasType"
 )
 
 func TestNasTypeNewAdditionalGUTI(t *testing.T) {
 	a := nasType.NewAdditionalGUTI(nasMessage.RegistrationRequestAdditionalGUTIType)
-	assert.NotNil(t, a)
+	if a == nil {
+		t.Fatal("Expected value not to be nil")
+	}
 }
 
 var nasTypeRegistrationRequestAdditionalGUTITable = []NasTypeIeiData{
@@ -26,7 +28,9 @@ func TestNasTypeAdditionalGUTIGetSetIei(t *testing.T) {
 	a := nasType.NewAdditionalGUTI(nasMessage.RegistrationRequestAdditionalGUTIType)
 	for _, table := range nasTypeRegistrationRequestAdditionalGUTITable {
 		a.SetIei(table.in)
-		assert.Equal(t, table.out, a.GetIei())
+		if !reflect.DeepEqual(table.out, a.GetIei()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetIei())
+		}
 	}
 }
 
@@ -38,7 +42,9 @@ func TestNasTypeAdditionalGUTIGetSetLen(t *testing.T) {
 	a := nasType.NewAdditionalGUTI(nasMessage.RegistrationRequestAdditionalGUTIType)
 	for _, table := range nasTypeRegistrationRequestAdditionalGUTILenTable {
 		a.SetLen(table.in)
-		assert.Equal(t, table.out, a.GetLen())
+		if !reflect.DeepEqual(table.out, a.GetLen()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetLen())
+		}
 	}
 }
 
@@ -50,7 +56,9 @@ func TestNasTypeAdditionalGUTIGetSetSpare(t *testing.T) {
 	a := nasType.NewAdditionalGUTI(nasMessage.RegistrationRequestAdditionalGUTIType)
 	for _, table := range nasTypeSpareTable {
 		a.SetSpare(table.in)
-		assert.Equal(t, table.out, a.GetSpare())
+		if !reflect.DeepEqual(table.out, a.GetSpare()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetSpare())
+		}
 	}
 }
 
@@ -67,7 +75,9 @@ func TestNasTypeAdditionalGUTIGetSetTypeOfIdentity(t *testing.T) {
 	a := nasType.NewAdditionalGUTI(nasMessage.RegistrationRequestAdditionalGUTIType)
 	for _, table := range nasTypeTypeOfIdentityTable {
 		a.SetTypeOfIdentity(table.in)
-		assert.Equal(t, table.out, a.GetTypeOfIdentity())
+		if !reflect.DeepEqual(table.out, a.GetTypeOfIdentity()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetTypeOfIdentity())
+		}
 	}
 }
 
@@ -84,7 +94,9 @@ func TestNasTypeAdditionalGUTIGetSetMCCDigit2(t *testing.T) {
 	a := nasType.NewAdditionalGUTI(nasMessage.RegistrationRequestAdditionalGUTIType)
 	for _, table := range nasTypeMCCDigit2Table {
 		a.SetMCCDigit2(table.in)
-		assert.Equal(t, table.out, a.GetMCCDigit2())
+		if !reflect.DeepEqual(table.out, a.GetMCCDigit2()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetMCCDigit2())
+		}
 	}
 }
 
@@ -101,7 +113,9 @@ func TestNasTypeAdditionalGUTIGetSetMCCDigit1(t *testing.T) {
 	a := nasType.NewAdditionalGUTI(nasMessage.RegistrationRequestAdditionalGUTIType)
 	for _, table := range nasTypeMCCDigit1Table {
 		a.SetMCCDigit1(table.in)
-		assert.Equal(t, table.out, a.GetMCCDigit1())
+		if !reflect.DeepEqual(table.out, a.GetMCCDigit1()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetMCCDigit1())
+		}
 	}
 }
 
@@ -118,7 +132,9 @@ func TestNasTypeAdditionalGUTIGetSetMNCDigit3(t *testing.T) {
 	a := nasType.NewAdditionalGUTI(nasMessage.RegistrationRequestAdditionalGUTIType)
 	for _, table := range nasTypeMNCDigit3Table {
 		a.SetMNCDigit3(table.in)
-		assert.Equal(t, table.out, a.GetMNCDigit3())
+		if !reflect.DeepEqual(table.out, a.GetMNCDigit3()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetMNCDigit3())
+		}
 	}
 }
 
@@ -135,7 +151,9 @@ func TestNasTypeAdditionalGUTIGetSetMCCDigit3(t *testing.T) {
 	a := nasType.NewAdditionalGUTI(nasMessage.RegistrationRequestAdditionalGUTIType)
 	for _, table := range nasTypeMCCDigit3Table {
 		a.SetMCCDigit3(table.in)
-		assert.Equal(t, table.out, a.GetMCCDigit3())
+		if !reflect.DeepEqual(table.out, a.GetMCCDigit3()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetMCCDigit3())
+		}
 	}
 }
 
@@ -152,7 +170,9 @@ func TestNasTypeAdditionalGUTIGetSetMNCDigit2(t *testing.T) {
 	a := nasType.NewAdditionalGUTI(nasMessage.RegistrationRequestAdditionalGUTIType)
 	for _, table := range nasTypeMNCDigit2Table {
 		a.SetMNCDigit2(table.in)
-		assert.Equal(t, table.out, a.GetMNCDigit2())
+		if !reflect.DeepEqual(table.out, a.GetMNCDigit2()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetMNCDigit2())
+		}
 	}
 }
 
@@ -169,7 +189,9 @@ func TestNasTypeAdditionalGUTIGetSetMNCDigit1(t *testing.T) {
 	a := nasType.NewAdditionalGUTI(nasMessage.RegistrationRequestAdditionalGUTIType)
 	for _, table := range nasTypeMNCDigit1Table {
 		a.SetMNCDigit1(table.in)
-		assert.Equal(t, table.out, a.GetMNCDigit1())
+		if !reflect.DeepEqual(table.out, a.GetMNCDigit1()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetMNCDigit1())
+		}
 	}
 }
 
@@ -186,7 +208,9 @@ func TestNasTypeAdditionalGUTIGetSetAMFRegionID(t *testing.T) {
 	a := nasType.NewAdditionalGUTI(nasMessage.RegistrationRequestAdditionalGUTIType)
 	for _, table := range nasTypeAMFRegionIDTable {
 		a.SetAMFRegionID(table.in)
-		assert.Equal(t, table.out, a.GetAMFRegionID())
+		if !reflect.DeepEqual(table.out, a.GetAMFRegionID()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetAMFRegionID())
+		}
 	}
 }
 
@@ -200,7 +224,9 @@ func TestNasTypeAdditionalGUTIGetSetAMFSetID(t *testing.T) {
 	a := nasType.NewAdditionalGUTI(nasMessage.RegistrationRequestAdditionalGUTIType)
 	for _, table := range nasTypeAMFSetIDTable {
 		a.SetAMFSetID(table.in)
-		assert.Equal(t, table.out, a.GetAMFSetID())
+		if !reflect.DeepEqual(table.out, a.GetAMFSetID()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetAMFSetID())
+		}
 	}
 }
 
@@ -217,7 +243,9 @@ func TestNasTypeAdditionalGUTIGetSetAMFPointer(t *testing.T) {
 	a := nasType.NewAdditionalGUTI(nasMessage.RegistrationRequestAdditionalGUTIType)
 	for _, table := range nasTypeAMFPointerTable {
 		a.SetAMFPointer(table.in)
-		assert.Equal(t, table.out, a.GetAMFPointer())
+		if !reflect.DeepEqual(table.out, a.GetAMFPointer()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetAMFPointer())
+		}
 	}
 }
 
@@ -235,7 +263,9 @@ func TestNasTypeAdditionalGUTIGetSetTMSI5G(t *testing.T) {
 	a := nasType.NewAdditionalGUTI(nasMessage.RegistrationRequestAdditionalGUTIType)
 	for _, table := range nasTypeTMSI5GTable {
 		a.SetTMSI5G(table.in)
-		assert.Equal(t, table.out, a.GetTMSI5G())
+		if !reflect.DeepEqual(table.out, a.GetTMSI5G()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetTMSI5G())
+		}
 	}
 }
 
@@ -274,8 +304,14 @@ func TestNasTypeAdditionalGUTI(t *testing.T) {
 		a.SetAMFSetID(0x03FF)
 		a.SetAMFPointer(0x3F)
 		a.SetTMSI5G([4]uint8{0xFF, 0xFF, 0xFF, 0xFF})
-		assert.Equal(t, table.out.Iei, a.Iei)
-		assert.Equal(t, table.out.Len, a.Len)
-		assert.Equal(t, table.out.Octet, a.Octet)
+		if !reflect.DeepEqual(table.out.Iei, a.Iei) {
+			t.Errorf("Not equal: expected %v, got %v", table.out.Iei, a.Iei)
+		}
+		if !reflect.DeepEqual(table.out.Len, a.Len) {
+			t.Errorf("Not equal: expected %v, got %v", table.out.Len, a.Len)
+		}
+		if !reflect.DeepEqual(table.out.Octet, a.Octet) {
+			t.Errorf("Not equal: expected %v, got %v", table.out.Octet, a.Octet)
+		}
 	}
 }

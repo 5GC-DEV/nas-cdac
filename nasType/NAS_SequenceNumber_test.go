@@ -6,15 +6,17 @@
 package nasType_test
 
 import (
+	"reflect"
 	"testing"
 
-	"github.com/5GC-DEV/nas-cdac/nasType"
-	"github.com/stretchr/testify/assert"
+	"github.com/omec-project/nas/v2/nasType"
 )
 
 func TestNasTypeNewSequenceNumber(t *testing.T) {
 	a := nasType.NewSequenceNumber()
-	assert.NotNil(t, a)
+	if a == nil {
+		t.Fatal("Expected value not to be nil")
+	}
 }
 
 type nasTypeSequenceNumber struct {
@@ -30,7 +32,9 @@ func TestNasTypeSequenceNumberGetSetSQN(t *testing.T) {
 	a := nasType.NewSequenceNumber()
 	for _, table := range nasTypeSequenceNumberTable {
 		a.SetSQN(table.in)
-		assert.Equal(t, table.out, a.GetSQN())
+		if !reflect.DeepEqual(table.out, a.GetSQN()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetSQN())
+		}
 	}
 }
 
@@ -57,6 +61,8 @@ func TestNasTypeSequenceNumber(t *testing.T) {
 		a := nasType.NewSequenceNumber()
 
 		a.SetSQN(table.in.GetSQN())
-		assert.Equal(t, table.out.GetSQN(), a.GetSQN())
+		if !reflect.DeepEqual(table.out.GetSQN(), a.GetSQN()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out.GetSQN(), a.GetSQN())
+		}
 	}
 }

@@ -6,17 +6,19 @@
 package nasType_test
 
 import (
+	"reflect"
 	"testing"
 
-	"github.com/5GC-DEV/nas-cdac/nasType"
-	"github.com/stretchr/testify/assert"
+	"github.com/omec-project/nas/v2/nasType"
 )
 
 var RegistrationRequestNoncurrentNativeNASKeySetIdentifierTypeIeiInput uint8 = 0x0C
 
 func TestNasTypeNewNoncurrentNativeNASKeySetIdentifier(t *testing.T) {
 	a := nasType.NewNoncurrentNativeNASKeySetIdentifier(RegistrationRequestNoncurrentNativeNASKeySetIdentifierTypeIeiInput)
-	assert.NotNil(t, a)
+	if a == nil {
+		t.Fatal("Expected value not to be nil")
+	}
 }
 
 var nasTypeConfigurationUpdateCommandNoncurrentNativeNASKeySetIdentifierTable = []NasTypeIeiData{
@@ -27,7 +29,9 @@ func TestNasTypeNoncurrentNativeNASKeySetIdentifierGetSetIei(t *testing.T) {
 	a := nasType.NewNoncurrentNativeNASKeySetIdentifier(RegistrationRequestNoncurrentNativeNASKeySetIdentifierTypeIeiInput)
 	for _, table := range nasTypeConfigurationUpdateCommandNoncurrentNativeNASKeySetIdentifierTable {
 		a.SetIei(table.in)
-		assert.Equal(t, table.out, a.GetIei())
+		if !reflect.DeepEqual(table.out, a.GetIei()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetIei())
+		}
 	}
 }
 
@@ -53,8 +57,14 @@ func TestNasTypeNoncurrentNativeNASKeySetIdentifier(t *testing.T) {
 		a.SetTsc(table.inTsc)
 		a.SetNasKeySetIdentifiler(table.inNasKeySetIdentifiler)
 
-		assert.Equal(t, table.outIei, a.GetIei())
-		assert.Equal(t, table.outTsc, a.GetTsc())
-		assert.Equal(t, table.outNasKeySetIdentifiler, a.GetNasKeySetIdentifiler())
+		if !reflect.DeepEqual(table.outIei, a.GetIei()) {
+			t.Errorf("Not equal: expected %v, got %v", table.outIei, a.GetIei())
+		}
+		if !reflect.DeepEqual(table.outTsc, a.GetTsc()) {
+			t.Errorf("Not equal: expected %v, got %v", table.outTsc, a.GetTsc())
+		}
+		if !reflect.DeepEqual(table.outNasKeySetIdentifiler, a.GetNasKeySetIdentifiler()) {
+			t.Errorf("Not equal: expected %v, got %v", table.outNasKeySetIdentifiler, a.GetNasKeySetIdentifiler())
+		}
 	}
 }

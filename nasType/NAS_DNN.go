@@ -1,13 +1,10 @@
 // Copyright 2019 free5GC.org
+// SPDX-FileCopyrightText: 2025 Intel Corporation
 //
 // SPDX-License-Identifier: Apache-2.0
 //
 
 package nasType
-
-import (
-	"github.com/5GC-DEV/util-cdac/util_3gpp"
-)
 
 // DNN 9.11.2.1A
 // DNN Row, sBit, len = [0, 0], 8 , INF
@@ -62,7 +59,7 @@ func (a *DNN) GetDNN() (dNN []uint8) {
 // DNN 9.11.2.1A
 // DNN Row, sBit, len = [0, 0], 8 , INF
 func (a *DNN) SetDNN(dNN []uint8) {
-	tmp := (util_3gpp.Dnn)(dNN)
+	tmp := (Dnn)(dNN)
 	dnn, _ := tmp.MarshalBinary()
 	a.Buffer = dnn
 	a.Len = uint8(len(a.Buffer))
