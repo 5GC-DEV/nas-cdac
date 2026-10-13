@@ -1,7 +1,7 @@
-github.com/5GC-DEV/openapi-cdac v0.4.2 h1:nHHusGmBkFOqjyJgvf8JOlJ2GlrF71aFD+HRzjGg904=
-github.com/5GC-DEV/openapi-cdac v0.4.2/go.mod h1:KLX5UeLe67E9SQC/vVNArCa4KK4luoDNAS0kRGkdE74=
-github.com/5GC-DEV/util-cdac v0.0.0-20250930103432-58951725c085 h1:KLL6S+ytEGgr3dX0sg6xDQ2TXZMtVt9TboPcu1j2nes=
-github.com/5GC-DEV/util-cdac v0.0.0-20250930103432-58951725c085/go.mod h1:IHTEJn2S2C/SDlKxFkgXbepYFhgxSTm7uhbxHOF42xQ=
+github.com/5GC-DEV/openapi-cdac v0.4.3 h1:aHHJpuwVe+8k3faUxp0LKEia7e6Cv8oYLS5AqtBb6Xg=
+github.com/5GC-DEV/openapi-cdac v0.4.3/go.mod h1:C9NUfKZO1bMwFxB/ZSKqSS6g0B3gBA+n1B1N2YZoCh0=
+github.com/5GC-DEV/util-cdac v0.5.1 h1:sUOKEp8jNlG4IvTPWixXE66Ynnde7/LLwt7mBua/mhY=
+github.com/5GC-DEV/util-cdac v0.5.1/go.mod h1:IHTEJn2S2C/SDlKxFkgXbepYFhgxSTm7uhbxHOF42xQ=
 github.com/aead/cmac v0.0.0-20160719120800-7af84192f0b1 h1:+JkXLHME8vLJafGhOH4aoV2Iu8bR55nU6iKMVfYVLjY=
 github.com/aead/cmac v0.0.0-20160719120800-7af84192f0b1/go.mod h1:nuudZmJhzWtx2212z+pkuy7B6nkBqa+xwNXZHL1j8cg=
 github.com/creack/pty v1.1.9/go.mod h1:oKZEueFk5CKHvIhNR5MUki03XCEU+Q6VDXinZuGJ33E=
