@@ -48,10 +48,12 @@ func (a *DNN) SetLen(len uint8) {
 // DNN 9.11.2.1A
 // DNN Row, sBit, len = [0, 0], 8 , INF
 func (a *DNN) GetDNN() (dNN []uint8) {
-	dnn := new(util_3gpp.Dnn)
-	err := dnn.UnmarshalBinary(a.Buffer)
-	if err != nil {
-		return []byte{}
+	if len(a.Buffer) == 0 {
+		return nil
+	}
+	dnn := new(Dnn)
+	if err := dnn.UnmarshalBinary(a.Buffer); err != nil {
+		return nil
 	}
 	return *dnn
 }
