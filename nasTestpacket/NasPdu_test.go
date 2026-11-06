@@ -9,8 +9,8 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/omec-project/nas/v2"
-	"github.com/omec-project/nas/v2/nasMessage"
+	"github.com/5GC-DEV/nas-cdac/v2"
+	"github.com/5GC-DEV/nas-cdac/v2/nasMessage"
 )
 
 func TestGetSecurityModeComplete(t *testing.T) {

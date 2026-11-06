@@ -9,7 +9,7 @@ import (
 	"encoding/binary"
 	"fmt"
 
-	"github.com/omec-project/nas/v2/nasMessage"
+	"github.com/5GC-DEV/nas-cdac/v2/nasMessage"
 )
 
 // Message TODO：description

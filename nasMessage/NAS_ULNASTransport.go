@@ -8,7 +8,7 @@ import (
 	"bytes"
 	"encoding/binary"
 
-	"github.com/omec-project/nas/v2/nasType"
+	"github.com/5GC-DEV/nas-cdac/v2/nasType"
 )
 
 type ULNASTransport struct {

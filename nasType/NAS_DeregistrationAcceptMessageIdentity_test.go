@@ -9,8 +9,8 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/omec-project/nas/v2"
-	"github.com/omec-project/nas/v2/nasType"
+	"github.com/5GC-DEV/nas-cdac/v2"
+	"github.com/5GC-DEV/nas-cdac/v2/nasType"
 )
 
 type nasTypeDeregistrationAcceptMessageIdentityData struct {

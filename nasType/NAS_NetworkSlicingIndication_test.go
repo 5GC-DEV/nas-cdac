@@ -9,7 +9,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/omec-project/nas/v2/nasType"
+	"github.com/5GC-DEV/nas-cdac/v2/nasType"
 )
 
 var ConfigurationUpdateCommandNetworkSlicingIndicationTypeIeiInput uint8 = 0x09

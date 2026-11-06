@@ -8,7 +8,7 @@ package nasConvert
 import (
 	"strings"
 
-	"github.com/omec-project/nas/v2/nasType"
+	"github.com/5GC-DEV/nas-cdac/v2/nasType"
 )
 
 func LocalTimeZoneToNas(timezone string) (nasTimezone nasType.LocalTimeZone) {

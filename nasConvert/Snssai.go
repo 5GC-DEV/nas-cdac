@@ -8,10 +8,10 @@ package nasConvert
 import (
 	"encoding/hex"
 
-	"github.com/omec-project/nas/v2/logger"
-	"github.com/omec-project/nas/v2/nasType"
-	"github.com/omec-project/openapi/v2"
-	"github.com/omec-project/openapi/v2/models"
+	"github.com/5GC-DEV/nas-cdac/v2/logger"
+	"github.com/5GC-DEV/nas-cdac/v2/nasType"
+	"github.com/5GC-DEV/openapi-cdac/v2"
+	"github.com/5GC-DEV/openapi-cdac/v2/models"
 )
 
 func SnssaiToModels(nasSnssai *nasType.SNSSAI) (snssai models.Snssai) {

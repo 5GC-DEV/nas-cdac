@@ -9,8 +9,8 @@ import (
 	"encoding/hex"
 	"strconv"
 
-	"github.com/omec-project/nas/v2/logger"
-	"github.com/omec-project/openapi/v2/models"
+	"github.com/5GC-DEV/nas-cdac/v2/logger"
+	"github.com/5GC-DEV/openapi-cdac/v2/models"
 )
 
 func PlmnIDToNas(plmnID models.PlmnId) []uint8 {

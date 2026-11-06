@@ -3,7 +3,7 @@ module github.com/5GC-DEV/nas-cdac/v2
 go 1.25.0
 
 require (
-	github.com/omec-project/openapi/v2 v2.1.5
+	github.com/5GC-DEV/openapi-cdac/v2 v2.0.0-20260709101533-7c1bcc29a402 // indirect
 	go.uber.org/zap v1.28.0
 )
 

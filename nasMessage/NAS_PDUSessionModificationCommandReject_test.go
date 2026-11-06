@@ -10,10 +10,10 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/omec-project/nas/v2"
-	"github.com/omec-project/nas/v2/logger"
-	"github.com/omec-project/nas/v2/nasMessage"
-	"github.com/omec-project/nas/v2/nasType"
+	"github.com/5GC-DEV/nas-cdac/v2"
+	"github.com/5GC-DEV/nas-cdac/v2/logger"
+	"github.com/5GC-DEV/nas-cdac/v2/nasMessage"
+	"github.com/5GC-DEV/nas-cdac/v2/nasType"
 )
 
 type nasMessagePDUSessionModificationCommandRejectData struct {

@@ -12,9 +12,9 @@ import (
 	"encoding/binary"
 	"fmt"
 
-	"github.com/omec-project/nas/v2/logger"
-	"github.com/omec-project/nas/v2/security/snow3g"
-	"github.com/omec-project/nas/v2/security/zuc"
+	"github.com/5GC-DEV/nas-cdac/v2/logger"
+	"github.com/5GC-DEV/nas-cdac/v2/security/snow3g"
+	"github.com/5GC-DEV/nas-cdac/v2/security/zuc"
 )
 
 func NASEncrypt(AlgoID uint8, KnasEnc [16]byte, Count uint32, Bearer uint8,
