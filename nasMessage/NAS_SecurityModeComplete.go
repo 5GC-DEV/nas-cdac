@@ -1,8 +1,3 @@
-// Copyright 2019 free5GC.org
-//
-// SPDX-License-Identifier: Apache-2.0
-//
-
 package nasMessage
 
 import (
@@ -77,7 +72,7 @@ func (a *SecurityModeComplete) EncodeSecurityModeComplete(buffer *bytes.Buffer) 
 	}
 }
 
-func (a *SecurityModeComplete) DecodeSecurityModeComplete(byteArray *[]byte) error {
+func (a *SecurityModeComplete) DecodeSecurityModeComplete(byteArray *[]byte) {
 	buffer := bytes.NewBuffer(*byteArray)
 	if err := binary.Read(buffer, binary.BigEndian, &a.ExtendedProtocolDiscriminator.Octet); err != nil {
 		return
@@ -130,5 +125,4 @@ func (a *SecurityModeComplete) DecodeSecurityModeComplete(byteArray *[]byte) err
 		default:
 		}
 	}
-	return nil
 }
