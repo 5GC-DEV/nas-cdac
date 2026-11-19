@@ -22,7 +22,7 @@ func NewNetworkSlicingIndication(iei uint8) (networkSlicingIndication *NetworkSl
 // NetworkSlicingIndication 9.11.3.36
 // Iei Row, sBit, len = [0, 0], 8 , 4
 func (a *NetworkSlicingIndication) GetIei() (iei uint8) {
-	return a.Octet & GetBitMask(8, 4) >> (4)
+	return a.Octet & GetBitMask(8, 4) >> 4
 }
 
 // NetworkSlicingIndication 9.11.3.36
@@ -34,7 +34,7 @@ func (a *NetworkSlicingIndication) SetIei(iei uint8) {
 // NetworkSlicingIndication 9.11.3.36
 // DCNI Row, sBit, len = [0, 0], 2 , 1
 func (a *NetworkSlicingIndication) GetDCNI() (dCNI uint8) {
-	return a.Octet & GetBitMask(2, 1) >> (1)
+	return a.Octet & GetBitMask(2, 1) >> 1
 }
 
 // NetworkSlicingIndication 9.11.3.36

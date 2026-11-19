@@ -21,7 +21,7 @@ func NewMICOIndication(iei uint8) (mICOIndication *MICOIndication) {
 // MICOIndication 9.11.3.31
 // Iei Row, sBit, len = [0, 0], 8 , 4
 func (a *MICOIndication) GetIei() (iei uint8) {
-	return a.Octet & GetBitMask(8, 4) >> (4)
+	return a.Octet & GetBitMask(8, 4) >> 4
 }
 
 // MICOIndication 9.11.3.31

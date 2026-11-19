@@ -33,14 +33,14 @@ func (a *RequestedQosFlowDescriptions) SetIei(iei uint8) {
 
 // RequestedQosFlowDescriptions 9.11.4.12
 // Len Row, sBit, len = [], 8, 16
-func (a *RequestedQosFlowDescriptions) GetLen() (len uint16) {
+func (a *RequestedQosFlowDescriptions) GetLen() (length uint16) {
 	return a.Len
 }
 
 // RequestedQosFlowDescriptions 9.11.4.12
 // Len Row, sBit, len = [], 8, 16
-func (a *RequestedQosFlowDescriptions) SetLen(len uint16) {
-	a.Len = len
+func (a *RequestedQosFlowDescriptions) SetLen(length uint16) {
+	a.Len = length
 	a.Buffer = make([]uint8, a.Len)
 }
 

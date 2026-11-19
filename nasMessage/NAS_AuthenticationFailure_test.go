@@ -10,10 +10,9 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/5GC-DEV/nas-cdac/logger"
-	"github.com/5GC-DEV/nas-cdac/nasMessage"
-	"github.com/5GC-DEV/nas-cdac/nasType"
-	"github.com/stretchr/testify/assert"
+	"github.com/5GC-DEV/nas-cdac/v2/logger"
+	"github.com/5GC-DEV/nas-cdac/v2/nasMessage"
+	"github.com/5GC-DEV/nas-cdac/v2/nasType"
 )
 
 type nasMessageAuthenticationFailureData struct {
@@ -46,7 +45,9 @@ var nasMessageAuthenticationFailureTable = []nasMessageAuthenticationFailureData
 
 func TestNasTypeNewAuthenticationFailure(t *testing.T) {
 	a := nasMessage.NewAuthenticationFailure(0)
-	assert.NotNil(t, a)
+	if a == nil {
+		t.Fatal("Expected value not to be nil")
+	}
 }
 
 func TestNasTypeNewAuthenticationFailureMessage(t *testing.T) {
@@ -55,13 +56,17 @@ func TestNasTypeNewAuthenticationFailureMessage(t *testing.T) {
 		t.Logf("Test Cnt:%d", i)
 		a := nasMessage.NewAuthenticationFailure(0)
 		b := nasMessage.NewAuthenticationFailure(0)
-		assert.NotNil(t, a)
-		assert.NotNil(t, b)
+		if a == nil {
+			t.Fatal("Expected value not to be nil")
+		}
+		if b == nil {
+			t.Fatal("Expected value not to be nil")
+		}
 
-		a.ExtendedProtocolDiscriminator.SetExtendedProtocolDiscriminator(table.inExtendedProtocolDiscriminator)
-		a.SpareHalfOctetAndSecurityHeaderType.SetSecurityHeaderType(table.inSecurityHeader)
-		a.SpareHalfOctetAndSecurityHeaderType.SetSpareHalfOctet(table.inSpareHalfOctet)
-		a.AuthenticationFailureMessageIdentity.SetMessageType(table.inAuthenticationFailureMessageIdentity)
+		a.SetExtendedProtocolDiscriminator(table.inExtendedProtocolDiscriminator)
+		a.SetSecurityHeaderType(table.inSecurityHeader)
+		a.SetSpareHalfOctet(table.inSpareHalfOctet)
+		a.SetMessageType(table.inAuthenticationFailureMessageIdentity)
 		a.Cause5GMM = table.in5GMMCause
 		a.AuthenticationFailureParameter = nasType.NewAuthenticationFailureParameter(nasMessage.AuthenticationFailureAuthenticationFailureParameterType)
 		a.AuthenticationFailureParameter = &table.inAuthenticationFailureParameter
@@ -71,7 +76,9 @@ func TestNasTypeNewAuthenticationFailureMessage(t *testing.T) {
 		logger.NasMsgLog.Debugln("encode:", a)
 
 		data := make([]byte, buff.Len())
-		buff.Read(data)
+		if _, err := buff.Read(data); err != nil {
+			t.Fatal(err)
+		}
 		logger.NasMsgLog.Debugln("data:", data)
 		b.DecodeAuthenticationFailure(&data)
 		logger.NasMsgLog.Debugln("decode:", b)
@@ -79,6 +86,5 @@ func TestNasTypeNewAuthenticationFailureMessage(t *testing.T) {
 		if reflect.DeepEqual(a, b) != true {
 			t.Errorf("Not correct")
 		}
-
 	}
 }

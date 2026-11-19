@@ -34,20 +34,20 @@ func (a *UEStatus) SetIei(iei uint8) {
 
 // UEStatus 9.11.3.56
 // Len Row, sBit, len = [], 8, 8
-func (a *UEStatus) GetLen() (len uint8) {
+func (a *UEStatus) GetLen() (length uint8) {
 	return a.Len
 }
 
 // UEStatus 9.11.3.56
 // Len Row, sBit, len = [], 8, 8
-func (a *UEStatus) SetLen(len uint8) {
-	a.Len = len
+func (a *UEStatus) SetLen(length uint8) {
+	a.Len = length
 }
 
 // UEStatus 9.11.3.56
 // N1ModeReg Row, sBit, len = [0, 0], 2 , 1
 func (a *UEStatus) GetN1ModeReg() (n1ModeReg uint8) {
-	return a.Octet & GetBitMask(2, 1) >> (1)
+	return a.Octet & GetBitMask(2, 1) >> 1
 }
 
 // UEStatus 9.11.3.56

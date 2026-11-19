@@ -9,7 +9,7 @@ import (
 	"bytes"
 	"encoding/binary"
 
-	"github.com/5GC-DEV/nas-cdac/nasType"
+	"github.com/5GC-DEV/nas-cdac/v2/nasType"
 )
 
 type RegistrationComplete struct {
@@ -29,25 +29,45 @@ const (
 )
 
 func (a *RegistrationComplete) EncodeRegistrationComplete(buffer *bytes.Buffer) {
-	binary.Write(buffer, binary.BigEndian, &a.ExtendedProtocolDiscriminator.Octet)
-	binary.Write(buffer, binary.BigEndian, &a.SpareHalfOctetAndSecurityHeaderType.Octet)
-	binary.Write(buffer, binary.BigEndian, &a.RegistrationCompleteMessageIdentity.Octet)
+	if err := binary.Write(buffer, binary.BigEndian, &a.ExtendedProtocolDiscriminator.Octet); err != nil {
+		return
+	}
+	if err := binary.Write(buffer, binary.BigEndian, &a.SpareHalfOctetAndSecurityHeaderType.Octet); err != nil {
+		return
+	}
+	if err := binary.Write(buffer, binary.BigEndian, &a.RegistrationCompleteMessageIdentity.Octet); err != nil {
+		return
+	}
 	if a.SORTransparentContainer != nil {
-		binary.Write(buffer, binary.BigEndian, a.SORTransparentContainer.GetIei())
-		binary.Write(buffer, binary.BigEndian, a.SORTransparentContainer.GetLen())
-		binary.Write(buffer, binary.BigEndian, &a.SORTransparentContainer.Buffer)
+		if err := binary.Write(buffer, binary.BigEndian, a.GetIei()); err != nil {
+			return
+		}
+		if err := binary.Write(buffer, binary.BigEndian, a.GetLen()); err != nil {
+			return
+		}
+		if err := binary.Write(buffer, binary.BigEndian, &a.Buffer); err != nil {
+			return
+		}
 	}
 }
 
 func (a *RegistrationComplete) DecodeRegistrationComplete(byteArray *[]byte) {
 	buffer := bytes.NewBuffer(*byteArray)
-	binary.Read(buffer, binary.BigEndian, &a.ExtendedProtocolDiscriminator.Octet)
-	binary.Read(buffer, binary.BigEndian, &a.SpareHalfOctetAndSecurityHeaderType.Octet)
-	binary.Read(buffer, binary.BigEndian, &a.RegistrationCompleteMessageIdentity.Octet)
+	if err := binary.Read(buffer, binary.BigEndian, &a.ExtendedProtocolDiscriminator.Octet); err != nil {
+		return
+	}
+	if err := binary.Read(buffer, binary.BigEndian, &a.SpareHalfOctetAndSecurityHeaderType.Octet); err != nil {
+		return
+	}
+	if err := binary.Read(buffer, binary.BigEndian, &a.RegistrationCompleteMessageIdentity.Octet); err != nil {
+		return
+	}
 	for buffer.Len() > 0 {
 		var ieiN uint8
 		var tmpIeiN uint8
-		binary.Read(buffer, binary.BigEndian, &ieiN)
+		if err := binary.Read(buffer, binary.BigEndian, &ieiN); err != nil {
+			return
+		}
 		if ieiN >= 0x80 {
 			tmpIeiN = (ieiN & 0xf0) >> 4
 		} else {
@@ -56,9 +76,13 @@ func (a *RegistrationComplete) DecodeRegistrationComplete(byteArray *[]byte) {
 		switch tmpIeiN {
 		case RegistrationCompleteSORTransparentContainerType:
 			a.SORTransparentContainer = nasType.NewSORTransparentContainer(ieiN)
-			binary.Read(buffer, binary.BigEndian, &a.SORTransparentContainer.Len)
-			a.SORTransparentContainer.SetLen(a.SORTransparentContainer.GetLen())
-			binary.Read(buffer, binary.BigEndian, a.SORTransparentContainer.Buffer[:a.SORTransparentContainer.GetLen()])
+			if err := binary.Read(buffer, binary.BigEndian, &a.Len); err != nil {
+				return
+			}
+			a.SetLen(a.GetLen())
+			if err := binary.Read(buffer, binary.BigEndian, a.Buffer[:a.GetLen()]); err != nil {
+				return
+			}
 		default:
 		}
 	}

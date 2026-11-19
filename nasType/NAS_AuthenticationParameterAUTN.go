@@ -33,14 +33,14 @@ func (a *AuthenticationParameterAUTN) SetIei(iei uint8) {
 
 // AuthenticationParameterAUTN 9.11.3.15
 // Len Row, sBit, len = [], 8, 8
-func (a *AuthenticationParameterAUTN) GetLen() (len uint8) {
+func (a *AuthenticationParameterAUTN) GetLen() (length uint8) {
 	return a.Len
 }
 
 // AuthenticationParameterAUTN 9.11.3.15
 // Len Row, sBit, len = [], 8, 8
-func (a *AuthenticationParameterAUTN) SetLen(len uint8) {
-	a.Len = len
+func (a *AuthenticationParameterAUTN) SetLen(length uint8) {
+	a.Len = length
 }
 
 // AuthenticationParameterAUTN 9.11.3.15

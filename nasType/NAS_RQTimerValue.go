@@ -34,7 +34,7 @@ func (a *RQTimerValue) SetIei(iei uint8) {
 // RQTimerValue 9.11.2.3
 // Unit Row, sBit, len = [0, 0], 8 , 3
 func (a *RQTimerValue) GetUnit() (unit uint8) {
-	return a.Octet & GetBitMask(8, 5) >> (5)
+	return a.Octet & GetBitMask(8, 5) >> 5
 }
 
 // RQTimerValue 9.11.2.3

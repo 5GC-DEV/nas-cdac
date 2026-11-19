@@ -35,14 +35,14 @@ func (a *EmergencyNumberList) SetIei(iei uint8) {
 
 // EmergencyNumberList 9.11.3.23
 // Len Row, sBit, len = [], 8, 8
-func (a *EmergencyNumberList) GetLen() (len uint8) {
+func (a *EmergencyNumberList) GetLen() (length uint8) {
 	return a.Len
 }
 
 // EmergencyNumberList 9.11.3.23
 // Len Row, sBit, len = [], 8, 8
-func (a *EmergencyNumberList) SetLen(len uint8) {
-	a.Len = len
+func (a *EmergencyNumberList) SetLen(length uint8) {
+	a.Len = length
 	a.Buffer = make([]uint8, a.Len)
 }
 

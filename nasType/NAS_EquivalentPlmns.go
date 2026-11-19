@@ -122,20 +122,20 @@ func (a *EquivalentPlmns) SetIei(iei uint8) {
 
 // EquivalentPlmns 9.11.3.45
 // Len Row, sBit, len = [], 8, 8
-func (a *EquivalentPlmns) GetLen() (len uint8) {
+func (a *EquivalentPlmns) GetLen() (length uint8) {
 	return a.Len
 }
 
 // EquivalentPlmns 9.11.3.45
 // Len Row, sBit, len = [], 8, 8
-func (a *EquivalentPlmns) SetLen(len uint8) {
-	a.Len = len
+func (a *EquivalentPlmns) SetLen(length uint8) {
+	a.Len = length
 }
 
 // EquivalentPlmns 9.11.3.45
 // MCCDigit2PLMN1 Row, sBit, len = [0, 0], 8 , 4
 func (a *EquivalentPlmns) GetMCCDigit2PLMN1() (mCCDigit2PLMN1 uint8) {
-	return a.Octet[0] & GetBitMask(8, 4) >> (4)
+	return a.Octet[0] & GetBitMask(8, 4) >> 4
 }
 
 // EquivalentPlmns 9.11.3.45
@@ -159,7 +159,7 @@ func (a *EquivalentPlmns) SetMCCDigit1PLMN1(mCCDigit1PLMN1 uint8) {
 // EquivalentPlmns 9.11.3.45
 // MNCDigit3PLMN1 Row, sBit, len = [1, 1], 8 , 4
 func (a *EquivalentPlmns) GetMNCDigit3PLMN1() (mNCDigit3PLMN1 uint8) {
-	return a.Octet[1] & GetBitMask(8, 4) >> (4)
+	return a.Octet[1] & GetBitMask(8, 4) >> 4
 }
 
 // EquivalentPlmns 9.11.3.45
@@ -183,7 +183,7 @@ func (a *EquivalentPlmns) SetMCCDigit3PLMN1(mCCDigit3PLMN1 uint8) {
 // EquivalentPlmns 9.11.3.45
 // MNCDigit2PLMN1 Row, sBit, len = [2, 2], 8 , 4
 func (a *EquivalentPlmns) GetMNCDigit2PLMN1() (mNCDigit2PLMN1 uint8) {
-	return a.Octet[2] & GetBitMask(8, 4) >> (4)
+	return a.Octet[2] & GetBitMask(8, 4) >> 4
 }
 
 // EquivalentPlmns 9.11.3.45
@@ -207,7 +207,7 @@ func (a *EquivalentPlmns) SetMNCDigit1PLMN1(mNCDigit1PLMN1 uint8) {
 // EquivalentPlmns 9.11.3.45
 // MCCDigit2PLMN2 Row, sBit, len = [3, 3], 8 , 4
 func (a *EquivalentPlmns) GetMCCDigit2PLMN2() (mCCDigit2PLMN2 uint8) {
-	return a.Octet[3] & GetBitMask(8, 4) >> (4)
+	return a.Octet[3] & GetBitMask(8, 4) >> 4
 }
 
 // EquivalentPlmns 9.11.3.45
@@ -231,7 +231,7 @@ func (a *EquivalentPlmns) SetMCCDigit1PLMN2(mCCDigit1PLMN2 uint8) {
 // EquivalentPlmns 9.11.3.45
 // MNCDigit3PLMN2 Row, sBit, len = [4, 4], 8 , 4
 func (a *EquivalentPlmns) GetMNCDigit3PLMN2() (mNCDigit3PLMN2 uint8) {
-	return a.Octet[4] & GetBitMask(8, 4) >> (4)
+	return a.Octet[4] & GetBitMask(8, 4) >> 4
 }
 
 // EquivalentPlmns 9.11.3.45
@@ -255,7 +255,7 @@ func (a *EquivalentPlmns) SetMCCDigit3PLMN2(mCCDigit3PLMN2 uint8) {
 // EquivalentPlmns 9.11.3.45
 // MNCDigit2PLMN2 Row, sBit, len = [5, 5], 8 , 4
 func (a *EquivalentPlmns) GetMNCDigit2PLMN2() (mNCDigit2PLMN2 uint8) {
-	return a.Octet[5] & GetBitMask(8, 4) >> (4)
+	return a.Octet[5] & GetBitMask(8, 4) >> 4
 }
 
 // EquivalentPlmns 9.11.3.45
@@ -279,7 +279,7 @@ func (a *EquivalentPlmns) SetMNCDigit1PLMN2(mNCDigit1PLMN2 uint8) {
 // EquivalentPlmns 9.11.3.45
 // MCCDigit2PLMN3 Row, sBit, len = [6, 6], 8 , 4
 func (a *EquivalentPlmns) GetMCCDigit2PLMN3() (mCCDigit2PLMN3 uint8) {
-	return a.Octet[6] & GetBitMask(8, 4) >> (4)
+	return a.Octet[6] & GetBitMask(8, 4) >> 4
 }
 
 // EquivalentPlmns 9.11.3.45
@@ -303,7 +303,7 @@ func (a *EquivalentPlmns) SetMCCDigit1PLMN3(mCCDigit1PLMN3 uint8) {
 // EquivalentPlmns 9.11.3.45
 // MNCDigit3PLMN3 Row, sBit, len = [7, 7], 8 , 4
 func (a *EquivalentPlmns) GetMNCDigit3PLMN3() (mNCDigit3PLMN3 uint8) {
-	return a.Octet[7] & GetBitMask(8, 4) >> (4)
+	return a.Octet[7] & GetBitMask(8, 4) >> 4
 }
 
 // EquivalentPlmns 9.11.3.45
@@ -327,7 +327,7 @@ func (a *EquivalentPlmns) SetMCCDigit3PLMN3(mCCDigit3PLMN3 uint8) {
 // EquivalentPlmns 9.11.3.45
 // MNCDigit2PLMN3 Row, sBit, len = [8, 8], 8 , 4
 func (a *EquivalentPlmns) GetMNCDigit2PLMN3() (mNCDigit2PLMN3 uint8) {
-	return a.Octet[8] & GetBitMask(8, 4) >> (4)
+	return a.Octet[8] & GetBitMask(8, 4) >> 4
 }
 
 // EquivalentPlmns 9.11.3.45
@@ -351,7 +351,7 @@ func (a *EquivalentPlmns) SetMNCDigit1PLMN3(mNCDigit1PLMN3 uint8) {
 // EquivalentPlmns 9.11.3.45
 // MCCDigit2PLMN4 Row, sBit, len = [9, 9], 8 , 4
 func (a *EquivalentPlmns) GetMCCDigit2PLMN4() (mCCDigit2PLMN4 uint8) {
-	return a.Octet[9] & GetBitMask(8, 4) >> (4)
+	return a.Octet[9] & GetBitMask(8, 4) >> 4
 }
 
 // EquivalentPlmns 9.11.3.45
@@ -375,7 +375,7 @@ func (a *EquivalentPlmns) SetMCCDigit1PLMN4(mCCDigit1PLMN4 uint8) {
 // EquivalentPlmns 9.11.3.45
 // MNCDigit3PLMN4 Row, sBit, len = [10, 10], 8 , 4
 func (a *EquivalentPlmns) GetMNCDigit3PLMN4() (mNCDigit3PLMN4 uint8) {
-	return a.Octet[10] & GetBitMask(8, 4) >> (4)
+	return a.Octet[10] & GetBitMask(8, 4) >> 4
 }
 
 // EquivalentPlmns 9.11.3.45
@@ -399,7 +399,7 @@ func (a *EquivalentPlmns) SetMCCDigit3PLMN4(mCCDigit3PLMN4 uint8) {
 // EquivalentPlmns 9.11.3.45
 // MNCDigit2PLMN4 Row, sBit, len = [11, 11], 8 , 4
 func (a *EquivalentPlmns) GetMNCDigit2PLMN4() (mNCDigit2PLMN4 uint8) {
-	return a.Octet[11] & GetBitMask(8, 4) >> (4)
+	return a.Octet[11] & GetBitMask(8, 4) >> 4
 }
 
 // EquivalentPlmns 9.11.3.45
@@ -423,7 +423,7 @@ func (a *EquivalentPlmns) SetMNCDigit1PLMN4(mNCDigit1PLMN4 uint8) {
 // EquivalentPlmns 9.11.3.45
 // MCCDigit2PLMN5 Row, sBit, len = [12, 12], 8 , 4
 func (a *EquivalentPlmns) GetMCCDigit2PLMN5() (mCCDigit2PLMN5 uint8) {
-	return a.Octet[12] & GetBitMask(8, 4) >> (4)
+	return a.Octet[12] & GetBitMask(8, 4) >> 4
 }
 
 // EquivalentPlmns 9.11.3.45
@@ -447,7 +447,7 @@ func (a *EquivalentPlmns) SetMCCDigit1PLMN5(mCCDigit1PLMN5 uint8) {
 // EquivalentPlmns 9.11.3.45
 // MNCDigit3PLMN5 Row, sBit, len = [13, 13], 8 , 4
 func (a *EquivalentPlmns) GetMNCDigit3PLMN5() (mNCDigit3PLMN5 uint8) {
-	return a.Octet[13] & GetBitMask(8, 4) >> (4)
+	return a.Octet[13] & GetBitMask(8, 4) >> 4
 }
 
 // EquivalentPlmns 9.11.3.45
@@ -471,7 +471,7 @@ func (a *EquivalentPlmns) SetMCCDigit3PLMN5(mCCDigit3PLMN5 uint8) {
 // EquivalentPlmns 9.11.3.45
 // MNCDigit2PLMN5 Row, sBit, len = [14, 14], 8 , 4
 func (a *EquivalentPlmns) GetMNCDigit2PLMN5() (mNCDigit2PLMN5 uint8) {
-	return a.Octet[14] & GetBitMask(8, 4) >> (4)
+	return a.Octet[14] & GetBitMask(8, 4) >> 4
 }
 
 // EquivalentPlmns 9.11.3.45
@@ -495,7 +495,7 @@ func (a *EquivalentPlmns) SetMNCDigit1PLMN5(mNCDigit1PLMN5 uint8) {
 // EquivalentPlmns 9.11.3.45
 // MCCDigit2PLMN6 Row, sBit, len = [15, 15], 8 , 4
 func (a *EquivalentPlmns) GetMCCDigit2PLMN6() (mCCDigit2PLMN6 uint8) {
-	return a.Octet[15] & GetBitMask(8, 4) >> (4)
+	return a.Octet[15] & GetBitMask(8, 4) >> 4
 }
 
 // EquivalentPlmns 9.11.3.45
@@ -519,7 +519,7 @@ func (a *EquivalentPlmns) SetMCCDigit1PLMN6(mCCDigit1PLMN6 uint8) {
 // EquivalentPlmns 9.11.3.45
 // MNCDigit3PLMN6 Row, sBit, len = [16, 16], 8 , 4
 func (a *EquivalentPlmns) GetMNCDigit3PLMN6() (mNCDigit3PLMN6 uint8) {
-	return a.Octet[16] & GetBitMask(8, 4) >> (4)
+	return a.Octet[16] & GetBitMask(8, 4) >> 4
 }
 
 // EquivalentPlmns 9.11.3.45
@@ -543,7 +543,7 @@ func (a *EquivalentPlmns) SetMCCDigit3PLMN6(mCCDigit3PLMN6 uint8) {
 // EquivalentPlmns 9.11.3.45
 // MNCDigit2PLMN6 Row, sBit, len = [17, 17], 8 , 4
 func (a *EquivalentPlmns) GetMNCDigit2PLMN6() (mNCDigit2PLMN6 uint8) {
-	return a.Octet[17] & GetBitMask(8, 4) >> (4)
+	return a.Octet[17] & GetBitMask(8, 4) >> 4
 }
 
 // EquivalentPlmns 9.11.3.45
@@ -567,7 +567,7 @@ func (a *EquivalentPlmns) SetMNCDigit1PLMN6(mNCDigit1PLMN6 uint8) {
 // EquivalentPlmns 9.11.3.45
 // MCCDigit2PLMN7 Row, sBit, len = [18, 18], 8 , 4
 func (a *EquivalentPlmns) GetMCCDigit2PLMN7() (mCCDigit2PLMN7 uint8) {
-	return a.Octet[18] & GetBitMask(8, 4) >> (4)
+	return a.Octet[18] & GetBitMask(8, 4) >> 4
 }
 
 // EquivalentPlmns 9.11.3.45
@@ -591,7 +591,7 @@ func (a *EquivalentPlmns) SetMCCDigit1PLMN7(mCCDigit1PLMN7 uint8) {
 // EquivalentPlmns 9.11.3.45
 // MNCDigit3PLMN7 Row, sBit, len = [19, 19], 8 , 4
 func (a *EquivalentPlmns) GetMNCDigit3PLMN7() (mNCDigit3PLMN7 uint8) {
-	return a.Octet[19] & GetBitMask(8, 4) >> (4)
+	return a.Octet[19] & GetBitMask(8, 4) >> 4
 }
 
 // EquivalentPlmns 9.11.3.45
@@ -615,7 +615,7 @@ func (a *EquivalentPlmns) SetMCCDigit3PLMN7(mCCDigit3PLMN7 uint8) {
 // EquivalentPlmns 9.11.3.45
 // MNCDigit2PLMN7 Row, sBit, len = [20, 20], 8 , 4
 func (a *EquivalentPlmns) GetMNCDigit2PLMN7() (mNCDigit2PLMN7 uint8) {
-	return a.Octet[20] & GetBitMask(8, 4) >> (4)
+	return a.Octet[20] & GetBitMask(8, 4) >> 4
 }
 
 // EquivalentPlmns 9.11.3.45
@@ -639,7 +639,7 @@ func (a *EquivalentPlmns) SetMNCDigit1PLMN7(mNCDigit1PLMN7 uint8) {
 // EquivalentPlmns 9.11.3.45
 // MCCDigit2PLMN8 Row, sBit, len = [21, 21], 8 , 4
 func (a *EquivalentPlmns) GetMCCDigit2PLMN8() (mCCDigit2PLMN8 uint8) {
-	return a.Octet[21] & GetBitMask(8, 4) >> (4)
+	return a.Octet[21] & GetBitMask(8, 4) >> 4
 }
 
 // EquivalentPlmns 9.11.3.45
@@ -663,7 +663,7 @@ func (a *EquivalentPlmns) SetMCCDigit1PLMN8(mCCDigit1PLMN8 uint8) {
 // EquivalentPlmns 9.11.3.45
 // MNCDigit3PLMN8 Row, sBit, len = [22, 22], 8 , 4
 func (a *EquivalentPlmns) GetMNCDigit3PLMN8() (mNCDigit3PLMN8 uint8) {
-	return a.Octet[22] & GetBitMask(8, 4) >> (4)
+	return a.Octet[22] & GetBitMask(8, 4) >> 4
 }
 
 // EquivalentPlmns 9.11.3.45
@@ -687,7 +687,7 @@ func (a *EquivalentPlmns) SetMCCDigit3PLMN8(mCCDigit3PLMN8 uint8) {
 // EquivalentPlmns 9.11.3.45
 // MNCDigit2PLMN8 Row, sBit, len = [23, 23], 8 , 4
 func (a *EquivalentPlmns) GetMNCDigit2PLMN8() (mNCDigit2PLMN8 uint8) {
-	return a.Octet[23] & GetBitMask(8, 4) >> (4)
+	return a.Octet[23] & GetBitMask(8, 4) >> 4
 }
 
 // EquivalentPlmns 9.11.3.45
@@ -711,7 +711,7 @@ func (a *EquivalentPlmns) SetMNCDigit1PLMN8(mNCDigit1PLMN8 uint8) {
 // EquivalentPlmns 9.11.3.45
 // MCCDigit2PLMN9 Row, sBit, len = [24, 24], 8 , 4
 func (a *EquivalentPlmns) GetMCCDigit2PLMN9() (mCCDigit2PLMN9 uint8) {
-	return a.Octet[24] & GetBitMask(8, 4) >> (4)
+	return a.Octet[24] & GetBitMask(8, 4) >> 4
 }
 
 // EquivalentPlmns 9.11.3.45
@@ -735,7 +735,7 @@ func (a *EquivalentPlmns) SetMCCDigit1PLMN9(mCCDigit1PLMN9 uint8) {
 // EquivalentPlmns 9.11.3.45
 // MNCDigit3PLMN9 Row, sBit, len = [25, 25], 8 , 4
 func (a *EquivalentPlmns) GetMNCDigit3PLMN9() (mNCDigit3PLMN9 uint8) {
-	return a.Octet[25] & GetBitMask(8, 4) >> (4)
+	return a.Octet[25] & GetBitMask(8, 4) >> 4
 }
 
 // EquivalentPlmns 9.11.3.45
@@ -759,7 +759,7 @@ func (a *EquivalentPlmns) SetMCCDigit3PLMN9(mCCDigit3PLMN9 uint8) {
 // EquivalentPlmns 9.11.3.45
 // MNCDigit2PLMN9 Row, sBit, len = [26, 26], 8 , 4
 func (a *EquivalentPlmns) GetMNCDigit2PLMN9() (mNCDigit2PLMN9 uint8) {
-	return a.Octet[26] & GetBitMask(8, 4) >> (4)
+	return a.Octet[26] & GetBitMask(8, 4) >> 4
 }
 
 // EquivalentPlmns 9.11.3.45
@@ -783,7 +783,7 @@ func (a *EquivalentPlmns) SetMNCDigit1PLMN9(mNCDigit1PLMN9 uint8) {
 // EquivalentPlmns 9.11.3.45
 // MCCDigit2PLMN10 Row, sBit, len = [27, 27], 8 , 4
 func (a *EquivalentPlmns) GetMCCDigit2PLMN10() (mCCDigit2PLMN10 uint8) {
-	return a.Octet[27] & GetBitMask(8, 4) >> (4)
+	return a.Octet[27] & GetBitMask(8, 4) >> 4
 }
 
 // EquivalentPlmns 9.11.3.45
@@ -807,7 +807,7 @@ func (a *EquivalentPlmns) SetMCCDigit1PLMN10(mCCDigit1PLMN10 uint8) {
 // EquivalentPlmns 9.11.3.45
 // MNCDigit3PLMN10 Row, sBit, len = [28, 28], 8 , 4
 func (a *EquivalentPlmns) GetMNCDigit3PLMN10() (mNCDigit3PLMN10 uint8) {
-	return a.Octet[28] & GetBitMask(8, 4) >> (4)
+	return a.Octet[28] & GetBitMask(8, 4) >> 4
 }
 
 // EquivalentPlmns 9.11.3.45
@@ -831,7 +831,7 @@ func (a *EquivalentPlmns) SetMCCDigit3PLMN10(mCCDigit3PLMN10 uint8) {
 // EquivalentPlmns 9.11.3.45
 // MNCDigit2PLMN10 Row, sBit, len = [29, 29], 8 , 4
 func (a *EquivalentPlmns) GetMNCDigit2PLMN10() (mNCDigit2PLMN10 uint8) {
-	return a.Octet[29] & GetBitMask(8, 4) >> (4)
+	return a.Octet[29] & GetBitMask(8, 4) >> 4
 }
 
 // EquivalentPlmns 9.11.3.45
@@ -855,7 +855,7 @@ func (a *EquivalentPlmns) SetMNCDigit1PLMN10(mNCDigit1PLMN10 uint8) {
 // EquivalentPlmns 9.11.3.45
 // MCCDigit2PLMN11 Row, sBit, len = [30, 30], 8 , 4
 func (a *EquivalentPlmns) GetMCCDigit2PLMN11() (mCCDigit2PLMN11 uint8) {
-	return a.Octet[30] & GetBitMask(8, 4) >> (4)
+	return a.Octet[30] & GetBitMask(8, 4) >> 4
 }
 
 // EquivalentPlmns 9.11.3.45
@@ -879,7 +879,7 @@ func (a *EquivalentPlmns) SetMCCDigit1PLMN11(mCCDigit1PLMN11 uint8) {
 // EquivalentPlmns 9.11.3.45
 // MNCDigit3PLMN11 Row, sBit, len = [31, 31], 8 , 4
 func (a *EquivalentPlmns) GetMNCDigit3PLMN11() (mNCDigit3PLMN11 uint8) {
-	return a.Octet[31] & GetBitMask(8, 4) >> (4)
+	return a.Octet[31] & GetBitMask(8, 4) >> 4
 }
 
 // EquivalentPlmns 9.11.3.45
@@ -903,7 +903,7 @@ func (a *EquivalentPlmns) SetMCCDigit3PLMN11(mCCDigit3PLMN11 uint8) {
 // EquivalentPlmns 9.11.3.45
 // MNCDigit2PLMN11 Row, sBit, len = [32, 32], 8 , 4
 func (a *EquivalentPlmns) GetMNCDigit2PLMN11() (mNCDigit2PLMN11 uint8) {
-	return a.Octet[32] & GetBitMask(8, 4) >> (4)
+	return a.Octet[32] & GetBitMask(8, 4) >> 4
 }
 
 // EquivalentPlmns 9.11.3.45
@@ -927,7 +927,7 @@ func (a *EquivalentPlmns) SetMNCDigit1PLMN11(mNCDigit1PLMN11 uint8) {
 // EquivalentPlmns 9.11.3.45
 // MCCDigit2PLMN12 Row, sBit, len = [33, 33], 8 , 4
 func (a *EquivalentPlmns) GetMCCDigit2PLMN12() (mCCDigit2PLMN12 uint8) {
-	return a.Octet[33] & GetBitMask(8, 4) >> (4)
+	return a.Octet[33] & GetBitMask(8, 4) >> 4
 }
 
 // EquivalentPlmns 9.11.3.45
@@ -951,7 +951,7 @@ func (a *EquivalentPlmns) SetMCCDigit1PLMN12(mCCDigit1PLMN12 uint8) {
 // EquivalentPlmns 9.11.3.45
 // MNCDigit3PLMN12 Row, sBit, len = [34, 34], 8 , 4
 func (a *EquivalentPlmns) GetMNCDigit3PLMN12() (mNCDigit3PLMN12 uint8) {
-	return a.Octet[34] & GetBitMask(8, 4) >> (4)
+	return a.Octet[34] & GetBitMask(8, 4) >> 4
 }
 
 // EquivalentPlmns 9.11.3.45
@@ -975,7 +975,7 @@ func (a *EquivalentPlmns) SetMCCDigit3PLMN12(mCCDigit3PLMN12 uint8) {
 // EquivalentPlmns 9.11.3.45
 // MNCDigit2PLMN12 Row, sBit, len = [35, 35], 8 , 4
 func (a *EquivalentPlmns) GetMNCDigit2PLMN12() (mNCDigit2PLMN12 uint8) {
-	return a.Octet[35] & GetBitMask(8, 4) >> (4)
+	return a.Octet[35] & GetBitMask(8, 4) >> 4
 }
 
 // EquivalentPlmns 9.11.3.45
@@ -999,7 +999,7 @@ func (a *EquivalentPlmns) SetMNCDigit1PLMN12(mNCDigit1PLMN12 uint8) {
 // EquivalentPlmns 9.11.3.45
 // MCCDigit2PLMN13 Row, sBit, len = [36, 36], 8 , 4
 func (a *EquivalentPlmns) GetMCCDigit2PLMN13() (mCCDigit2PLMN13 uint8) {
-	return a.Octet[36] & GetBitMask(8, 4) >> (4)
+	return a.Octet[36] & GetBitMask(8, 4) >> 4
 }
 
 // EquivalentPlmns 9.11.3.45
@@ -1023,7 +1023,7 @@ func (a *EquivalentPlmns) SetMCCDigit1PLMN13(mCCDigit1PLMN13 uint8) {
 // EquivalentPlmns 9.11.3.45
 // MNCDigit3PLMN13 Row, sBit, len = [37, 37], 8 , 4
 func (a *EquivalentPlmns) GetMNCDigit3PLMN13() (mNCDigit3PLMN13 uint8) {
-	return a.Octet[37] & GetBitMask(8, 4) >> (4)
+	return a.Octet[37] & GetBitMask(8, 4) >> 4
 }
 
 // EquivalentPlmns 9.11.3.45
@@ -1047,7 +1047,7 @@ func (a *EquivalentPlmns) SetMCCDigit3PLMN13(mCCDigit3PLMN13 uint8) {
 // EquivalentPlmns 9.11.3.45
 // MNCDigit2PLMN13 Row, sBit, len = [38, 38], 8 , 4
 func (a *EquivalentPlmns) GetMNCDigit2PLMN13() (mNCDigit2PLMN13 uint8) {
-	return a.Octet[38] & GetBitMask(8, 4) >> (4)
+	return a.Octet[38] & GetBitMask(8, 4) >> 4
 }
 
 // EquivalentPlmns 9.11.3.45
@@ -1071,7 +1071,7 @@ func (a *EquivalentPlmns) SetMNCDigit1PLMN13(mNCDigit1PLMN13 uint8) {
 // EquivalentPlmns 9.11.3.45
 // MCCDigit2PLMN14 Row, sBit, len = [39, 39], 8 , 4
 func (a *EquivalentPlmns) GetMCCDigit2PLMN14() (mCCDigit2PLMN14 uint8) {
-	return a.Octet[39] & GetBitMask(8, 4) >> (4)
+	return a.Octet[39] & GetBitMask(8, 4) >> 4
 }
 
 // EquivalentPlmns 9.11.3.45
@@ -1095,7 +1095,7 @@ func (a *EquivalentPlmns) SetMCCDigit1PLMN14(mCCDigit1PLMN14 uint8) {
 // EquivalentPlmns 9.11.3.45
 // MNCDigit3PLMN14 Row, sBit, len = [40, 40], 8 , 4
 func (a *EquivalentPlmns) GetMNCDigit3PLMN14() (mNCDigit3PLMN14 uint8) {
-	return a.Octet[40] & GetBitMask(8, 4) >> (4)
+	return a.Octet[40] & GetBitMask(8, 4) >> 4
 }
 
 // EquivalentPlmns 9.11.3.45
@@ -1119,7 +1119,7 @@ func (a *EquivalentPlmns) SetMCCDigit3PLMN14(mCCDigit3PLMN14 uint8) {
 // EquivalentPlmns 9.11.3.45
 // MNCDigit2PLMN14 Row, sBit, len = [41, 41], 8 , 4
 func (a *EquivalentPlmns) GetMNCDigit2PLMN14() (mNCDigit2PLMN14 uint8) {
-	return a.Octet[41] & GetBitMask(8, 4) >> (4)
+	return a.Octet[41] & GetBitMask(8, 4) >> 4
 }
 
 // EquivalentPlmns 9.11.3.45
@@ -1143,7 +1143,7 @@ func (a *EquivalentPlmns) SetMNCDigit1PLMN14(mNCDigit1PLMN14 uint8) {
 // EquivalentPlmns 9.11.3.45
 // MCCDigit2PLMN15 Row, sBit, len = [42, 42], 8 , 4
 func (a *EquivalentPlmns) GetMCCDigit2PLMN15() (mCCDigit2PLMN15 uint8) {
-	return a.Octet[42] & GetBitMask(8, 4) >> (4)
+	return a.Octet[42] & GetBitMask(8, 4) >> 4
 }
 
 // EquivalentPlmns 9.11.3.45
@@ -1167,7 +1167,7 @@ func (a *EquivalentPlmns) SetMCCDigit1PLMN15(mCCDigit1PLMN15 uint8) {
 // EquivalentPlmns 9.11.3.45
 // MNCDigit3PLMN15 Row, sBit, len = [43, 43], 8 , 4
 func (a *EquivalentPlmns) GetMNCDigit3PLMN15() (mNCDigit3PLMN15 uint8) {
-	return a.Octet[43] & GetBitMask(8, 4) >> (4)
+	return a.Octet[43] & GetBitMask(8, 4) >> 4
 }
 
 // EquivalentPlmns 9.11.3.45
@@ -1191,7 +1191,7 @@ func (a *EquivalentPlmns) SetMCCDigit3PLMN15(mCCDigit3PLMN15 uint8) {
 // EquivalentPlmns 9.11.3.45
 // MNCDigit2PLMN15 Row, sBit, len = [44, 44], 8 , 4
 func (a *EquivalentPlmns) GetMNCDigit2PLMN15() (mNCDigit2PLMN15 uint8) {
-	return a.Octet[44] & GetBitMask(8, 4) >> (4)
+	return a.Octet[44] & GetBitMask(8, 4) >> 4
 }
 
 // EquivalentPlmns 9.11.3.45

@@ -10,11 +10,10 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/5GC-DEV/nas-cdac"
-	"github.com/5GC-DEV/nas-cdac/logger"
-	"github.com/5GC-DEV/nas-cdac/nasMessage"
-	"github.com/5GC-DEV/nas-cdac/nasType"
-	"github.com/stretchr/testify/assert"
+	"github.com/5GC-DEV/nas-cdac/v2"
+	"github.com/5GC-DEV/nas-cdac/v2/logger"
+	"github.com/5GC-DEV/nas-cdac/v2/nasMessage"
+	"github.com/5GC-DEV/nas-cdac/v2/nasType"
 )
 
 type nasMessageSecurityModeCommandData struct {
@@ -79,7 +78,9 @@ var nasMessageSecurityModeCommandTable = []nasMessageSecurityModeCommandData{
 
 func TestNasTypeNewSecurityModeCommand(t *testing.T) {
 	a := nasMessage.NewSecurityModeCommand(0)
-	assert.NotNil(t, a)
+	if a == nil {
+		t.Fatal("Expected value not to be nil")
+	}
 }
 
 func TestNasTypeNewSecurityModeCommandMessage(t *testing.T) {
@@ -87,17 +88,21 @@ func TestNasTypeNewSecurityModeCommandMessage(t *testing.T) {
 		t.Logf("Test Cnt:%d", i)
 		a := nasMessage.NewSecurityModeCommand(0)
 		b := nasMessage.NewSecurityModeCommand(0)
-		assert.NotNil(t, a)
-		assert.NotNil(t, b)
+		if a == nil {
+			t.Fatal("Expected value not to be nil")
+		}
+		if b == nil {
+			t.Fatal("Expected value not to be nil")
+		}
 
-		a.ExtendedProtocolDiscriminator.SetExtendedProtocolDiscriminator(table.inExtendedProtocolDiscriminator)
-		a.SpareHalfOctetAndSecurityHeaderType.SetSecurityHeaderType(table.inSecurityHeader)
+		a.SetExtendedProtocolDiscriminator(table.inExtendedProtocolDiscriminator)
+		a.SetSecurityHeaderType(table.inSecurityHeader)
 		a.SpareHalfOctetAndSecurityHeaderType.SetSpareHalfOctet(table.inSpareHalfOctet)
-		a.SecurityModeCommandMessageIdentity.SetMessageType(table.inSecurityModeCommandMessageIdentity)
+		a.SetMessageType(table.inSecurityModeCommandMessageIdentity)
 
 		a.SelectedNASSecurityAlgorithms = table.inSelectedNASSecurityAlgorithms
 		a.SpareHalfOctetAndNgksi.SetSpareHalfOctet(table.inSpareHalfOctet)
-		a.SpareHalfOctetAndNgksi.SetNasKeySetIdentifiler(table.inNgksi)
+		a.SetNasKeySetIdentifiler(table.inNgksi)
 
 		a.ReplayedUESecurityCapabilities = table.inReplayedUESecurityCapabilities
 
@@ -124,7 +129,9 @@ func TestNasTypeNewSecurityModeCommandMessage(t *testing.T) {
 		logger.NasMsgLog.Debugln("Encode: ", a)
 
 		data := make([]byte, buff.Len())
-		buff.Read(data)
+		if _, err := buff.Read(data); err != nil {
+			t.Fatal(err)
+		}
 		logger.NasMsgLog.Debugln(data)
 		b.DecodeSecurityModeCommand(&data)
 		logger.NasMsgLog.Debugln("Decode: ", b)

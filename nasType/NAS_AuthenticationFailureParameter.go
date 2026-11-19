@@ -33,14 +33,14 @@ func (a *AuthenticationFailureParameter) SetIei(iei uint8) {
 
 // AuthenticationFailureParameter 9.11.3.14
 // Len Row, sBit, len = [], 8, 8
-func (a *AuthenticationFailureParameter) GetLen() (len uint8) {
+func (a *AuthenticationFailureParameter) GetLen() (length uint8) {
 	return a.Len
 }
 
 // AuthenticationFailureParameter 9.11.3.14
 // Len Row, sBit, len = [], 8, 8
-func (a *AuthenticationFailureParameter) SetLen(len uint8) {
-	a.Len = len
+func (a *AuthenticationFailureParameter) SetLen(length uint8) {
+	a.Len = length
 }
 
 // AuthenticationFailureParameter 9.11.3.14

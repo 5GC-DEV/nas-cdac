@@ -33,14 +33,14 @@ func (a *EAPMessage) SetIei(iei uint8) {
 
 // EAPMessage 9.11.2.2
 // Len Row, sBit, len = [], 8, 16
-func (a *EAPMessage) GetLen() (len uint16) {
+func (a *EAPMessage) GetLen() (length uint16) {
 	return a.Len
 }
 
 // EAPMessage 9.11.2.2
 // Len Row, sBit, len = [], 8, 16
-func (a *EAPMessage) SetLen(len uint16) {
-	a.Len = len
+func (a *EAPMessage) SetLen(length uint16) {
+	a.Len = length
 	a.Buffer = make([]uint8, a.Len)
 }
 

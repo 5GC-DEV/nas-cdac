@@ -9,7 +9,7 @@ import (
 	"bytes"
 	"encoding/binary"
 
-	"github.com/5GC-DEV/nas-cdac/nasType"
+	"github.com/5GC-DEV/nas-cdac/v2/nasType"
 )
 
 type PDUSessionModificationComplete struct {
@@ -30,27 +30,51 @@ const (
 )
 
 func (a *PDUSessionModificationComplete) EncodePDUSessionModificationComplete(buffer *bytes.Buffer) {
-	binary.Write(buffer, binary.BigEndian, &a.ExtendedProtocolDiscriminator.Octet)
-	binary.Write(buffer, binary.BigEndian, &a.PDUSessionID.Octet)
-	binary.Write(buffer, binary.BigEndian, &a.PTI.Octet)
-	binary.Write(buffer, binary.BigEndian, &a.PDUSESSIONMODIFICATIONCOMPLETEMessageIdentity.Octet)
+	if err := binary.Write(buffer, binary.BigEndian, &a.ExtendedProtocolDiscriminator.Octet); err != nil {
+		return
+	}
+	if err := binary.Write(buffer, binary.BigEndian, &a.PDUSessionID.Octet); err != nil {
+		return
+	}
+	if err := binary.Write(buffer, binary.BigEndian, &a.PTI.Octet); err != nil {
+		return
+	}
+	if err := binary.Write(buffer, binary.BigEndian, &a.PDUSESSIONMODIFICATIONCOMPLETEMessageIdentity.Octet); err != nil {
+		return
+	}
 	if a.ExtendedProtocolConfigurationOptions != nil {
-		binary.Write(buffer, binary.BigEndian, a.ExtendedProtocolConfigurationOptions.GetIei())
-		binary.Write(buffer, binary.BigEndian, a.ExtendedProtocolConfigurationOptions.GetLen())
-		binary.Write(buffer, binary.BigEndian, &a.ExtendedProtocolConfigurationOptions.Buffer)
+		if err := binary.Write(buffer, binary.BigEndian, a.GetIei()); err != nil {
+			return
+		}
+		if err := binary.Write(buffer, binary.BigEndian, a.GetLen()); err != nil {
+			return
+		}
+		if err := binary.Write(buffer, binary.BigEndian, &a.Buffer); err != nil {
+			return
+		}
 	}
 }
 
 func (a *PDUSessionModificationComplete) DecodePDUSessionModificationComplete(byteArray *[]byte) {
 	buffer := bytes.NewBuffer(*byteArray)
-	binary.Read(buffer, binary.BigEndian, &a.ExtendedProtocolDiscriminator.Octet)
-	binary.Read(buffer, binary.BigEndian, &a.PDUSessionID.Octet)
-	binary.Read(buffer, binary.BigEndian, &a.PTI.Octet)
-	binary.Read(buffer, binary.BigEndian, &a.PDUSESSIONMODIFICATIONCOMPLETEMessageIdentity.Octet)
+	if err := binary.Read(buffer, binary.BigEndian, &a.ExtendedProtocolDiscriminator.Octet); err != nil {
+		return
+	}
+	if err := binary.Read(buffer, binary.BigEndian, &a.PDUSessionID.Octet); err != nil {
+		return
+	}
+	if err := binary.Read(buffer, binary.BigEndian, &a.PTI.Octet); err != nil {
+		return
+	}
+	if err := binary.Read(buffer, binary.BigEndian, &a.PDUSESSIONMODIFICATIONCOMPLETEMessageIdentity.Octet); err != nil {
+		return
+	}
 	for buffer.Len() > 0 {
 		var ieiN uint8
 		var tmpIeiN uint8
-		binary.Read(buffer, binary.BigEndian, &ieiN)
+		if err := binary.Read(buffer, binary.BigEndian, &ieiN); err != nil {
+			return
+		}
 		if ieiN >= 0x80 {
 			tmpIeiN = (ieiN & 0xf0) >> 4
 		} else {
@@ -59,9 +83,13 @@ func (a *PDUSessionModificationComplete) DecodePDUSessionModificationComplete(by
 		switch tmpIeiN {
 		case PDUSessionModificationCompleteExtendedProtocolConfigurationOptionsType:
 			a.ExtendedProtocolConfigurationOptions = nasType.NewExtendedProtocolConfigurationOptions(ieiN)
-			binary.Read(buffer, binary.BigEndian, &a.ExtendedProtocolConfigurationOptions.Len)
-			a.ExtendedProtocolConfigurationOptions.SetLen(a.ExtendedProtocolConfigurationOptions.GetLen())
-			binary.Read(buffer, binary.BigEndian, a.ExtendedProtocolConfigurationOptions.Buffer[:a.ExtendedProtocolConfigurationOptions.GetLen()])
+			if err := binary.Read(buffer, binary.BigEndian, &a.Len); err != nil {
+				return
+			}
+			a.SetLen(a.GetLen())
+			if err := binary.Read(buffer, binary.BigEndian, a.Buffer[:a.GetLen()]); err != nil {
+				return
+			}
 		default:
 		}
 	}

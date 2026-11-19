@@ -23,7 +23,7 @@ func NewNgksiAndDeregistrationType() (ngksiAndDeregistrationType *NgksiAndDeregi
 // NgksiAndDeregistrationType 9.11.3.20 9.11.3.32
 // TSC Row, sBit, len = [0, 0], 8 , 1
 func (a *NgksiAndDeregistrationType) GetTSC() (tSC uint8) {
-	return a.Octet & GetBitMask(8, 7) >> (7)
+	return a.Octet & GetBitMask(8, 7) >> 7
 }
 
 // NgksiAndDeregistrationType 9.11.3.20 9.11.3.32
@@ -35,7 +35,7 @@ func (a *NgksiAndDeregistrationType) SetTSC(tSC uint8) {
 // NgksiAndDeregistrationType 9.11.3.20 9.11.3.32
 // NasKeySetIdentifiler Row, sBit, len = [0, 0], 7 , 3
 func (a *NgksiAndDeregistrationType) GetNasKeySetIdentifiler() (nasKeySetIdentifiler uint8) {
-	return a.Octet & GetBitMask(7, 4) >> (4)
+	return a.Octet & GetBitMask(7, 4) >> 4
 }
 
 // NgksiAndDeregistrationType 9.11.3.20 9.11.3.32
@@ -47,7 +47,7 @@ func (a *NgksiAndDeregistrationType) SetNasKeySetIdentifiler(nasKeySetIdentifile
 // NgksiAndDeregistrationType 9.11.3.20 9.11.3.32
 // SwitchOff Row, sBit, len = [0, 0], 4 , 1
 func (a *NgksiAndDeregistrationType) GetSwitchOff() (switchOff uint8) {
-	return a.Octet & GetBitMask(4, 3) >> (3)
+	return a.Octet & GetBitMask(4, 3) >> 3
 }
 
 // NgksiAndDeregistrationType 9.11.3.20 9.11.3.32
@@ -59,7 +59,7 @@ func (a *NgksiAndDeregistrationType) SetSwitchOff(switchOff uint8) {
 // NgksiAndDeregistrationType 9.11.3.20 9.11.3.32
 // ReRegistrationRequired Row, sBit, len = [0, 0], 3 , 1
 func (a *NgksiAndDeregistrationType) GetReRegistrationRequired() (reRegistrationRequired uint8) {
-	return a.Octet & GetBitMask(3, 2) >> (2)
+	return a.Octet & GetBitMask(3, 2) >> 2
 }
 
 // NgksiAndDeregistrationType 9.11.3.20 9.11.3.32

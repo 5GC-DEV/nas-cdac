@@ -11,8 +11,8 @@ import (
 	"fmt"
 	"net"
 
-	"github.com/5GC-DEV/nas-cdac/logger"
-	"github.com/5GC-DEV/nas-cdac/nasMessage"
+	"github.com/5GC-DEV/nas-cdac/v2/logger"
+	"github.com/5GC-DEV/nas-cdac/v2/nasMessage"
 )
 
 type ProtocolOrContainerUnit struct {
@@ -57,7 +57,7 @@ func (protocolConfigurationOptions *ProtocolConfigurationOptions) Marshal() []by
 	var configurationProtocol uint8 = 0
 	buffer := new(bytes.Buffer)
 
-	metaInfo = (extension << 7) | (spare << 6) | (configurationProtocol)
+	metaInfo = (extension << 7) | (spare << 6) | configurationProtocol
 	if err := binary.Write(buffer, binary.BigEndian, &metaInfo); err != nil {
 		logger.ConvertLog.Warnf("write metaInfo failed: %+v", err)
 	}

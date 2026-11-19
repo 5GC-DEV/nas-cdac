@@ -33,14 +33,14 @@ func (a *UesUsageSetting) SetIei(iei uint8) {
 
 // UesUsageSetting 9.11.3.55
 // Len Row, sBit, len = [], 8, 8
-func (a *UesUsageSetting) GetLen() (len uint8) {
+func (a *UesUsageSetting) GetLen() (length uint8) {
 	return a.Len
 }
 
 // UesUsageSetting 9.11.3.55
 // Len Row, sBit, len = [], 8, 8
-func (a *UesUsageSetting) SetLen(len uint8) {
-	a.Len = len
+func (a *UesUsageSetting) SetLen(length uint8) {
+	a.Len = length
 }
 
 // UesUsageSetting 9.11.3.55

@@ -1,3 +1,4 @@
+// SPDX-FileCopyrightText: 2025 Intel Corporation
 // Copyright 2019 free5GC.org
 //
 // SPDX-License-Identifier: Apache-2.0
@@ -10,12 +11,12 @@ import (
 	"encoding/base64"
 	"encoding/hex"
 
-	"github.com/5GC-DEV/nas-cdac"
-	"github.com/5GC-DEV/nas-cdac/logger"
-	"github.com/5GC-DEV/nas-cdac/nasConvert"
-	"github.com/5GC-DEV/nas-cdac/nasMessage"
-	"github.com/5GC-DEV/nas-cdac/nasType"
-	"github.com/5GC-DEV/openapi-cdac/models"
+	"github.com/5GC-DEV/nas-cdac/v2"
+	"github.com/5GC-DEV/nas-cdac/v2/logger"
+	"github.com/5GC-DEV/nas-cdac/v2/nasConvert"
+	"github.com/5GC-DEV/nas-cdac/v2/nasMessage"
+	"github.com/5GC-DEV/nas-cdac/v2/nasType"
+	"github.com/5GC-DEV/openapi-cdac/v2/models"
 )
 
 const (
@@ -43,13 +44,13 @@ func GetRegistrationRequest(
 
 	registrationRequest := nasMessage.NewRegistrationRequest(0)
 	registrationRequest.SetExtendedProtocolDiscriminator(nasMessage.Epd5GSMobilityManagementMessage)
-	registrationRequest.SpareHalfOctetAndSecurityHeaderType.SetSecurityHeaderType(nas.SecurityHeaderTypePlainNas)
-	registrationRequest.SpareHalfOctetAndSecurityHeaderType.SetSpareHalfOctet(0x00)
-	registrationRequest.RegistrationRequestMessageIdentity.SetMessageType(nas.MsgTypeRegistrationRequest)
-	registrationRequest.NgksiAndRegistrationType5GS.SetTSC(nasMessage.TypeOfSecurityContextFlagNative)
+	registrationRequest.SetSecurityHeaderType(nas.SecurityHeaderTypePlainNas)
+	registrationRequest.SetSpareHalfOctet(0x00)
+	registrationRequest.SetMessageType(nas.MsgTypeRegistrationRequest)
+	registrationRequest.SetTSC(nasMessage.TypeOfSecurityContextFlagNative)
 	registrationRequest.NgksiAndRegistrationType5GS.SetNasKeySetIdentifiler(0x7)
-	registrationRequest.NgksiAndRegistrationType5GS.SetFOR(1)
-	registrationRequest.NgksiAndRegistrationType5GS.SetRegistrationType5GS(registrationType)
+	registrationRequest.SetFOR(1)
+	registrationRequest.SetRegistrationType5GS(registrationType)
 	registrationRequest.MobileIdentity5GS = mobileIdentity
 
 	registrationRequest.UESecurityCapability = ueSecurityCapability
@@ -61,10 +62,10 @@ func GetRegistrationRequest(
 		registrationRequest.NASMessageContainer = nasType.NewNASMessageContainer(
 			nasMessage.RegistrationRequestNASMessageContainerType)
 		registrationRequest.NASMessageContainer.SetLen(uint16(len(nasMessageContainer)))
-		registrationRequest.NASMessageContainer.SetNASMessageContainerContents(nasMessageContainer)
+		registrationRequest.SetNASMessageContainerContents(nasMessageContainer)
 	}
 
-	m.GmmMessage.RegistrationRequest = registrationRequest
+	m.RegistrationRequest = registrationRequest
 
 	data := new(bytes.Buffer)
 	err := m.GmmMessageEncode(data)
@@ -81,18 +82,16 @@ func GetPduSessionEstablishmentRequest(pduSessionId uint8) []byte {
 	m.GsmHeader.SetMessageType(nas.MsgTypePDUSessionEstablishmentRequest)
 
 	pduSessionEstablishmentRequest := nasMessage.NewPDUSessionEstablishmentRequest(0)
-	pduSessionEstablishmentRequest.ExtendedProtocolDiscriminator.SetExtendedProtocolDiscriminator(
+	pduSessionEstablishmentRequest.SetExtendedProtocolDiscriminator(
 		nasMessage.Epd5GSSessionManagementMessage)
 	pduSessionEstablishmentRequest.SetMessageType(nas.MsgTypePDUSessionEstablishmentRequest)
-	pduSessionEstablishmentRequest.PDUSessionID.SetPDUSessionID(pduSessionId)
-	pduSessionEstablishmentRequest.PTI.SetPTI(0x01)
-	pduSessionEstablishmentRequest.IntegrityProtectionMaximumDataRate.
-		SetMaximumDataRatePerUEForUserPlaneIntegrityProtectionForDownLink(0xff)
-	pduSessionEstablishmentRequest.IntegrityProtectionMaximumDataRate.
-		SetMaximumDataRatePerUEForUserPlaneIntegrityProtectionForUpLink(0xff)
+	pduSessionEstablishmentRequest.SetPDUSessionID(pduSessionId)
+	pduSessionEstablishmentRequest.SetPTI(0x01)
+	pduSessionEstablishmentRequest.SetMaximumDataRatePerUEForUserPlaneIntegrityProtectionForDownLink(0xff)
+	pduSessionEstablishmentRequest.SetMaximumDataRatePerUEForUserPlaneIntegrityProtectionForUpLink(0xff)
 
 	pduSessionEstablishmentRequest.PDUSessionType = nasType.NewPDUSessionType(nasMessage.PDUSessionEstablishmentRequestPDUSessionTypeType)
-	pduSessionEstablishmentRequest.PDUSessionType.SetPDUSessionTypeValue(uint8(0x01)) // IPv4 type
+	pduSessionEstablishmentRequest.SetPDUSessionTypeValue(uint8(0x01)) // IPv4 type
 
 	pduSessionEstablishmentRequest.ExtendedProtocolConfigurationOptions = nasType.NewExtendedProtocolConfigurationOptions(
 		nasMessage.PDUSessionEstablishmentRequestExtendedProtocolConfigurationOptionsType)
@@ -103,10 +102,9 @@ func GetPduSessionEstablishmentRequest(pduSessionId uint8) []byte {
 	pcoContents := protocolConfigurationOptions.Marshal()
 	pcoContentsLength := len(pcoContents)
 	pduSessionEstablishmentRequest.ExtendedProtocolConfigurationOptions.SetLen(uint16(pcoContentsLength))
-	pduSessionEstablishmentRequest.ExtendedProtocolConfigurationOptions.
-		SetExtendedProtocolConfigurationOptionsContents(pcoContents)
+	pduSessionEstablishmentRequest.SetExtendedProtocolConfigurationOptionsContents(pcoContents)
 
-	m.GsmMessage.PDUSessionEstablishmentRequest = pduSessionEstablishmentRequest
+	m.PDUSessionEstablishmentRequest = pduSessionEstablishmentRequest
 
 	data := new(bytes.Buffer)
 	err := m.GsmMessageEncode(data)
@@ -127,173 +125,44 @@ func GetUlNasTransport_PduSessionEstablishmentRequest(pduSessionId uint8, reques
 	m.GmmHeader.SetMessageType(nas.MsgTypeULNASTransport)
 
 	ulNasTransport := nasMessage.NewULNASTransport(0)
-	ulNasTransport.SpareHalfOctetAndSecurityHeaderType.SetSecurityHeaderType(nas.SecurityHeaderTypePlainNas)
+	ulNasTransport.SetSecurityHeaderType(nas.SecurityHeaderTypePlainNas)
 	ulNasTransport.SetMessageType(nas.MsgTypeULNASTransport)
-	ulNasTransport.ExtendedProtocolDiscriminator.SetExtendedProtocolDiscriminator(
+	ulNasTransport.SetExtendedProtocolDiscriminator(
 		nasMessage.Epd5GSMobilityManagementMessage)
 	ulNasTransport.PduSessionID2Value = new(nasType.PduSessionID2Value)
 	ulNasTransport.PduSessionID2Value.SetIei(nasMessage.ULNASTransportPduSessionID2ValueType)
-	ulNasTransport.PduSessionID2Value.SetPduSessionID2Value(pduSessionId)
+	ulNasTransport.SetPduSessionID2Value(pduSessionId)
 	ulNasTransport.RequestType = new(nasType.RequestType)
 	ulNasTransport.RequestType.SetIei(nasMessage.ULNASTransportRequestTypeType)
-	ulNasTransport.RequestType.SetRequestTypeValue(requestType)
+	ulNasTransport.SetRequestTypeValue(requestType)
 	if dnnString != "" {
 		dnn := []byte(dnnString)
 		ulNasTransport.DNN = new(nasType.DNN)
 		ulNasTransport.DNN.SetIei(nasMessage.ULNASTransportDNNType)
 		ulNasTransport.DNN.SetLen(uint8(len(dnn)))
-		ulNasTransport.DNN.SetDNN(dnn)
+		ulNasTransport.SetDNN(dnn)
 	}
 	if sNssai != nil {
 		var sdTemp [3]uint8
-		sd, err := hex.DecodeString(sNssai.Sd)
+		sd, err := hex.DecodeString(sNssai.GetSd())
 		if err != nil {
 			logger.NasMsgLog.Errorf("sNssai decode error: %+v", err)
 		}
 		copy(sdTemp[:], sd)
 		ulNasTransport.SNSSAI = nasType.NewSNSSAI(nasMessage.ULNASTransportSNSSAIType)
 		ulNasTransport.SNSSAI.SetLen(4)
-		ulNasTransport.SNSSAI.SetSST(uint8(sNssai.Sst))
-		ulNasTransport.SNSSAI.SetSD(sdTemp)
+		ulNasTransport.SetSST(uint8(sNssai.Sst))
+		ulNasTransport.SetSD(sdTemp)
 	}
 
-	ulNasTransport.SpareHalfOctetAndPayloadContainerType.SetPayloadContainerType(nasMessage.PayloadContainerTypeN1SMInfo)
+	ulNasTransport.SetPayloadContainerType(nasMessage.PayloadContainerTypeN1SMInfo)
 	ulNasTransport.PayloadContainer.SetLen(uint16(len(pduSessionEstablishmentRequest)))
-	ulNasTransport.PayloadContainer.SetPayloadContainerContents(pduSessionEstablishmentRequest)
+	ulNasTransport.SetPayloadContainerContents(pduSessionEstablishmentRequest)
 
-	m.GmmMessage.ULNASTransport = ulNasTransport
-
-	data := new(bytes.Buffer)
-	err := m.GmmMessageEncode(data)
-	if err != nil {
-		logger.NasMsgLog.Errorln(err.Error())
-	}
-
-	return data.Bytes()
-}
-
-func GetUlNasTransport_PduSessionModificationRequest(pduSessionId uint8, requestType uint8, dnnString string,
-	sNssai *models.Snssai,
-) []byte {
-	pduSessionModificationRequest := GetPduSessionModificationRequest(pduSessionId)
-
-	m := nas.NewMessage()
-	m.GmmMessage = nas.NewGmmMessage()
-	m.GmmHeader.SetMessageType(nas.MsgTypeULNASTransport)
-
-	ulNasTransport := nasMessage.NewULNASTransport(0)
-	ulNasTransport.SpareHalfOctetAndSecurityHeaderType.SetSecurityHeaderType(nas.SecurityHeaderTypePlainNas)
-	ulNasTransport.SetMessageType(nas.MsgTypeULNASTransport)
-	ulNasTransport.ExtendedProtocolDiscriminator.SetExtendedProtocolDiscriminator(
-		nasMessage.Epd5GSMobilityManagementMessage)
-	ulNasTransport.PduSessionID2Value = new(nasType.PduSessionID2Value)
-	ulNasTransport.PduSessionID2Value.SetIei(nasMessage.ULNASTransportPduSessionID2ValueType)
-	ulNasTransport.PduSessionID2Value.SetPduSessionID2Value(pduSessionId)
-	ulNasTransport.RequestType = new(nasType.RequestType)
-	ulNasTransport.RequestType.SetIei(nasMessage.ULNASTransportRequestTypeType)
-	ulNasTransport.RequestType.SetRequestTypeValue(requestType)
-	if dnnString != "" {
-		dnn := []byte(dnnString)
-		ulNasTransport.DNN = new(nasType.DNN)
-		ulNasTransport.DNN.SetIei(nasMessage.ULNASTransportDNNType)
-		ulNasTransport.DNN.SetLen(uint8(len(dnn)))
-		ulNasTransport.DNN.SetDNN(dnn)
-	}
-	if sNssai != nil {
-		var sdTemp [3]uint8
-		sd, err := hex.DecodeString(sNssai.Sd)
-		if err != nil {
-			logger.NasMsgLog.Errorf("sNssai SD decode error: %+v", err)
-		}
-		copy(sdTemp[:], sd)
-		ulNasTransport.SNSSAI = nasType.NewSNSSAI(nasMessage.ULNASTransportSNSSAIType)
-		ulNasTransport.SNSSAI.SetLen(4)
-		ulNasTransport.SNSSAI.SetSST(uint8(sNssai.Sst))
-		ulNasTransport.SNSSAI.SetSD(sdTemp)
-	}
-
-	ulNasTransport.SpareHalfOctetAndPayloadContainerType.SetPayloadContainerType(nasMessage.PayloadContainerTypeN1SMInfo)
-	ulNasTransport.PayloadContainer.SetLen(uint16(len(pduSessionModificationRequest)))
-	ulNasTransport.PayloadContainer.SetPayloadContainerContents(pduSessionModificationRequest)
-
-	m.GmmMessage.ULNASTransport = ulNasTransport
+	m.ULNASTransport = ulNasTransport
 
 	data := new(bytes.Buffer)
 	err := m.GmmMessageEncode(data)
-	if err != nil {
-		logger.NasMsgLog.Errorln(err.Error())
-	}
-
-	return data.Bytes()
-}
-
-func GetPduSessionModificationRequest(pduSessionId uint8) []byte {
-	m := nas.NewMessage()
-	m.GsmMessage = nas.NewGsmMessage()
-	m.GsmHeader.SetMessageType(nas.MsgTypePDUSessionModificationRequest)
-
-	pduSessionModificationRequest := nasMessage.NewPDUSessionModificationRequest(0)
-	pduSessionModificationRequest.ExtendedProtocolDiscriminator.SetExtendedProtocolDiscriminator(
-		nasMessage.Epd5GSSessionManagementMessage)
-	pduSessionModificationRequest.SetMessageType(nas.MsgTypePDUSessionModificationRequest)
-	pduSessionModificationRequest.PDUSessionID.SetPDUSessionID(pduSessionId)
-	pduSessionModificationRequest.PTI.SetPTI(0x01)
-	// pduSessionModificationRequest.RequestedQosFlowDescriptions = nasType.NewRequestedQosFlowDescriptions(nasMessage.
-	// PDUSessionModificationRequestRequestedQosFlowDescriptionsType)
-	// pduSessionModificationRequest.RequestedQosFlowDescriptions.SetLen(6)
-	// pduSessionModificationRequest.RequestedQosFlowDescriptions.SetQoSFlowDescriptions([]uint8{0x09, 0x20, 0x41, 0x01,
-	// 0x01, 0x09})
-
-	m.GsmMessage.PDUSessionModificationRequest = pduSessionModificationRequest
-
-	data := new(bytes.Buffer)
-	err := m.GsmMessageEncode(data)
-	if err != nil {
-		logger.NasMsgLog.Errorln(err.Error())
-	}
-
-	return data.Bytes()
-}
-
-func GetPduSessionModificationComplete(pduSessionId uint8) []byte {
-	m := nas.NewMessage()
-	m.GsmMessage = nas.NewGsmMessage()
-	m.GsmHeader.SetMessageType(nas.MsgTypePDUSessionModificationComplete)
-
-	pduSessionModificationComplete := nasMessage.NewPDUSessionModificationComplete(0)
-	pduSessionModificationComplete.ExtendedProtocolDiscriminator.SetExtendedProtocolDiscriminator(
-		nasMessage.Epd5GSSessionManagementMessage)
-	pduSessionModificationComplete.SetMessageType(nas.MsgTypePDUSessionModificationComplete)
-	pduSessionModificationComplete.PDUSessionID.SetPDUSessionID(pduSessionId)
-	pduSessionModificationComplete.PTI.SetPTI(0x01)
-
-	m.GsmMessage.PDUSessionModificationComplete = pduSessionModificationComplete
-
-	data := new(bytes.Buffer)
-	err := m.GsmMessageEncode(data)
-	if err != nil {
-		logger.NasMsgLog.Errorln(err.Error())
-	}
-
-	return data.Bytes()
-}
-
-func GetPduSessionModificationCommandReject(pduSessionId uint8) []byte {
-	m := nas.NewMessage()
-	m.GsmMessage = nas.NewGsmMessage()
-	m.GsmHeader.SetMessageType(nas.MsgTypePDUSessionModificationCommandReject)
-
-	pduSessionModificationCommandReject := nasMessage.NewPDUSessionModificationCommandReject(0)
-	pduSessionModificationCommandReject.ExtendedProtocolDiscriminator.SetExtendedProtocolDiscriminator(
-		nasMessage.Epd5GSSessionManagementMessage)
-	pduSessionModificationCommandReject.SetMessageType(nas.MsgTypePDUSessionModificationCommandReject)
-	pduSessionModificationCommandReject.PDUSessionID.SetPDUSessionID(pduSessionId)
-	pduSessionModificationCommandReject.PTI.SetPTI(0x01)
-
-	m.GsmMessage.PDUSessionModificationCommandReject = pduSessionModificationCommandReject
-
-	data := new(bytes.Buffer)
-	err := m.GsmMessageEncode(data)
 	if err != nil {
 		logger.NasMsgLog.Errorln(err.Error())
 	}
@@ -307,13 +176,13 @@ func GetPduSessionReleaseRequest(pduSessionId uint8) []byte {
 	m.GsmHeader.SetMessageType(nas.MsgTypePDUSessionReleaseRequest)
 
 	pduSessionReleaseRequest := nasMessage.NewPDUSessionReleaseRequest(0)
-	pduSessionReleaseRequest.ExtendedProtocolDiscriminator.SetExtendedProtocolDiscriminator(
+	pduSessionReleaseRequest.SetExtendedProtocolDiscriminator(
 		nasMessage.Epd5GSSessionManagementMessage)
 	pduSessionReleaseRequest.SetMessageType(nas.MsgTypePDUSessionReleaseRequest)
-	pduSessionReleaseRequest.PDUSessionID.SetPDUSessionID(pduSessionId)
-	pduSessionReleaseRequest.PTI.SetPTI(0x01)
+	pduSessionReleaseRequest.SetPDUSessionID(pduSessionId)
+	pduSessionReleaseRequest.SetPTI(0x01)
 
-	m.GsmMessage.PDUSessionReleaseRequest = pduSessionReleaseRequest
+	m.PDUSessionReleaseRequest = pduSessionReleaseRequest
 
 	data := new(bytes.Buffer)
 	err := m.GsmMessageEncode(data)
@@ -330,222 +199,16 @@ func GetPduSessionReleaseComplete(pduSessionId uint8) []byte {
 	m.GsmHeader.SetMessageType(nas.MsgTypePDUSessionReleaseComplete)
 
 	pduSessionReleaseComplete := nasMessage.NewPDUSessionReleaseComplete(0)
-	pduSessionReleaseComplete.ExtendedProtocolDiscriminator.SetExtendedProtocolDiscriminator(
+	pduSessionReleaseComplete.SetExtendedProtocolDiscriminator(
 		nasMessage.Epd5GSSessionManagementMessage)
 	pduSessionReleaseComplete.SetMessageType(nas.MsgTypePDUSessionReleaseComplete)
-	pduSessionReleaseComplete.PDUSessionID.SetPDUSessionID(pduSessionId)
-	pduSessionReleaseComplete.PTI.SetPTI(0x01)
+	pduSessionReleaseComplete.SetPDUSessionID(pduSessionId)
+	pduSessionReleaseComplete.SetPTI(0x01)
 
-	m.GsmMessage.PDUSessionReleaseComplete = pduSessionReleaseComplete
-
-	data := new(bytes.Buffer)
-	err := m.GsmMessageEncode(data)
-	if err != nil {
-		logger.NasMsgLog.Errorln(err.Error())
-	}
-
-	return data.Bytes()
-}
-
-func GetPduSessionReleaseReject(pduSessionId uint8) []byte {
-	m := nas.NewMessage()
-	m.GsmMessage = nas.NewGsmMessage()
-	m.GsmHeader.SetMessageType(nas.MsgTypePDUSessionReleaseReject)
-
-	pduSessionReleaseReject := nasMessage.NewPDUSessionReleaseReject(0)
-	pduSessionReleaseReject.ExtendedProtocolDiscriminator.SetExtendedProtocolDiscriminator(
-		nasMessage.Epd5GSSessionManagementMessage)
-	pduSessionReleaseReject.SetMessageType(nas.MsgTypePDUSessionReleaseReject)
-	pduSessionReleaseReject.PDUSessionID.SetPDUSessionID(pduSessionId)
-	pduSessionReleaseReject.PTI.SetPTI(0x01)
-
-	m.GsmMessage.PDUSessionReleaseReject = pduSessionReleaseReject
+	m.PDUSessionReleaseComplete = pduSessionReleaseComplete
 
 	data := new(bytes.Buffer)
 	err := m.GsmMessageEncode(data)
-	if err != nil {
-		logger.NasMsgLog.Errorln(err.Error())
-	}
-
-	return data.Bytes()
-}
-
-func GetPduSessionAuthenticationComplete(pduSessionId uint8) []byte {
-	m := nas.NewMessage()
-	m.GsmMessage = nas.NewGsmMessage()
-	m.GsmHeader.SetMessageType(nas.MsgTypePDUSessionAuthenticationComplete)
-
-	pduSessionAuthenticaitonComplete := nasMessage.NewPDUSessionAuthenticationComplete(0)
-	pduSessionAuthenticaitonComplete.ExtendedProtocolDiscriminator.SetExtendedProtocolDiscriminator(
-		nasMessage.Epd5GSSessionManagementMessage)
-	pduSessionAuthenticaitonComplete.SetMessageType(nas.MsgTypePDUSessionAuthenticationComplete)
-	pduSessionAuthenticaitonComplete.PDUSessionID.SetPDUSessionID(pduSessionId)
-	pduSessionAuthenticaitonComplete.PTI.SetPTI(0x01)
-	pduSessionAuthenticaitonComplete.EAPMessage.SetLen(6)
-	pduSessionAuthenticaitonComplete.EAPMessage.SetEAPMessage([]byte{0x00, 0x11, 0x22, 0x33, 0x44, 0x55})
-
-	m.GsmMessage.PDUSessionAuthenticationComplete = pduSessionAuthenticaitonComplete
-
-	data := new(bytes.Buffer)
-	err := m.GsmMessageEncode(data)
-	if err != nil {
-		logger.NasMsgLog.Errorln(err.Error())
-	}
-
-	return data.Bytes()
-}
-
-func GetUlNasTransport_PduSessionCommonData(pduSessionId uint8, types string) []byte {
-	var payload []byte
-	switch types {
-	case PDUSesModiReq:
-		payload = GetPduSessionModificationRequest(pduSessionId)
-	case PDUSesModiCmp:
-		payload = GetPduSessionModificationComplete(pduSessionId)
-	case PDUSesModiCmdRej:
-		payload = GetPduSessionModificationCommandReject(pduSessionId)
-	case PDUSesRelReq:
-		payload = GetPduSessionReleaseRequest(pduSessionId)
-	case PDUSesRelCmp:
-		payload = GetPduSessionReleaseComplete(pduSessionId)
-	case PDUSesRelRej:
-		payload = GetPduSessionReleaseReject(pduSessionId)
-	case PDUSesAuthCmp:
-		payload = GetPduSessionAuthenticationComplete(pduSessionId)
-	}
-
-	m := nas.NewMessage()
-	m.GmmMessage = nas.NewGmmMessage()
-	m.GmmHeader.SetMessageType(nas.MsgTypeULNASTransport)
-
-	ulNasTransport := nasMessage.NewULNASTransport(0)
-	ulNasTransport.SpareHalfOctetAndSecurityHeaderType.SetSecurityHeaderType(nas.SecurityHeaderTypePlainNas)
-	ulNasTransport.SetMessageType(nas.MsgTypeULNASTransport)
-	ulNasTransport.ExtendedProtocolDiscriminator.SetExtendedProtocolDiscriminator(
-		nasMessage.Epd5GSMobilityManagementMessage)
-	ulNasTransport.PduSessionID2Value = new(nasType.PduSessionID2Value)
-	ulNasTransport.PduSessionID2Value.SetIei(nasMessage.ULNASTransportPduSessionID2ValueType)
-	ulNasTransport.PduSessionID2Value.SetPduSessionID2Value(pduSessionId)
-
-	ulNasTransport.SpareHalfOctetAndPayloadContainerType.SetPayloadContainerType(nasMessage.PayloadContainerTypeN1SMInfo)
-	ulNasTransport.PayloadContainer.SetLen(uint16(len(payload)))
-	ulNasTransport.PayloadContainer.SetPayloadContainerContents(payload)
-
-	m.GmmMessage.ULNASTransport = ulNasTransport
-
-	data := new(bytes.Buffer)
-	err := m.GmmMessageEncode(data)
-	if err != nil {
-		logger.NasMsgLog.Errorln(err.Error())
-	}
-
-	return data.Bytes()
-}
-
-func GetIdentityResponse(mobileIdentity nasType.MobileIdentity) []byte {
-	m := nas.NewMessage()
-	m.GmmMessage = nas.NewGmmMessage()
-	m.GmmHeader.SetMessageType(nas.MsgTypeIdentityResponse)
-
-	identityResponse := nasMessage.NewIdentityResponse(0)
-	identityResponse.ExtendedProtocolDiscriminator.SetExtendedProtocolDiscriminator(
-		nasMessage.Epd5GSMobilityManagementMessage)
-	identityResponse.IdentityResponseMessageIdentity.SetMessageType(nas.MsgTypeIdentityResponse)
-	identityResponse.SpareHalfOctetAndSecurityHeaderType.SetSecurityHeaderType(nas.SecurityHeaderTypePlainNas)
-	identityResponse.SpareHalfOctetAndSecurityHeaderType.SetSpareHalfOctet(0)
-	identityResponse.MobileIdentity = mobileIdentity
-
-	m.GmmMessage.IdentityResponse = identityResponse
-
-	data := new(bytes.Buffer)
-	err := m.GmmMessageEncode(data)
-	if err != nil {
-		logger.NasMsgLog.Errorln(err.Error())
-	}
-
-	return data.Bytes()
-}
-
-func GetNotificationResponse(pDUSessionStatus []uint8) []byte {
-	m := nas.NewMessage()
-	m.GmmMessage = nas.NewGmmMessage()
-	m.GmmHeader.SetMessageType(nas.MsgTypeNotificationResponse)
-
-	notificationResponse := nasMessage.NewNotificationResponse(0)
-	notificationResponse.ExtendedProtocolDiscriminator.SetExtendedProtocolDiscriminator(
-		nasMessage.Epd5GSMobilityManagementMessage)
-	notificationResponse.SetMessageType(nas.MsgTypeNotificationResponse)
-	notificationResponse.SetSecurityHeaderType(nas.SecurityHeaderTypePlainNas)
-	notificationResponse.PDUSessionStatus = new(nasType.PDUSessionStatus)
-	notificationResponse.PDUSessionStatus.SetIei(nasMessage.NotificationResponsePDUSessionStatusType)
-	notificationResponse.PDUSessionStatus.Buffer = pDUSessionStatus
-
-	m.GmmMessage.NotificationResponse = notificationResponse
-
-	data := new(bytes.Buffer)
-	err := m.GmmMessageEncode(data)
-	if err != nil {
-		logger.NasMsgLog.Errorln(err.Error())
-	}
-
-	return data.Bytes()
-}
-
-func GetConfigurationUpdateComplete() []byte {
-	m := nas.NewMessage()
-	m.GmmMessage = nas.NewGmmMessage()
-	m.GmmHeader.SetMessageType(nas.MsgTypeConfigurationUpdateComplete)
-
-	configurationUpdateComplete := nasMessage.NewConfigurationUpdateComplete(0)
-	configurationUpdateComplete.SetExtendedProtocolDiscriminator(nasMessage.Epd5GSMobilityManagementMessage)
-	configurationUpdateComplete.SetSecurityHeaderType(0x00)
-	configurationUpdateComplete.SetSpareHalfOctet(0x00)
-	configurationUpdateComplete.SetMessageType(nas.MsgTypeConfigurationUpdateComplete)
-
-	m.GmmMessage.ConfigurationUpdateComplete = configurationUpdateComplete
-
-	data := new(bytes.Buffer)
-	err := m.GmmMessageEncode(data)
-	if err != nil {
-		logger.NasMsgLog.Errorln(err.Error())
-	}
-
-	return data.Bytes()
-}
-
-func GetServiceRequest(serviceType uint8) []byte {
-	m := nas.NewMessage()
-	m.GmmMessage = nas.NewGmmMessage()
-	m.GmmHeader.SetMessageType(nas.MsgTypeServiceRequest)
-
-	serviceRequest := nasMessage.NewServiceRequest(0)
-	serviceRequest.SetExtendedProtocolDiscriminator(nasMessage.Epd5GSMobilityManagementMessage)
-	serviceRequest.SetSecurityHeaderType(nas.SecurityHeaderTypePlainNas)
-	serviceRequest.SetMessageType(nas.MsgTypeServiceRequest)
-	serviceRequest.SetServiceTypeValue(serviceType)
-	serviceRequest.SetNasKeySetIdentifiler(0x01)
-	serviceRequest.SetAMFSetID(uint16(0xFE) << 2)
-	serviceRequest.SetAMFPointer(0)
-	serviceRequest.SetTMSI5G([4]uint8{0, 0, 0, 1})
-	serviceRequest.TMSI5GS.SetLen(7)
-	switch serviceType {
-	case nasMessage.ServiceTypeMobileTerminatedServices:
-		serviceRequest.AllowedPDUSessionStatus = new(nasType.AllowedPDUSessionStatus)
-		serviceRequest.AllowedPDUSessionStatus.SetIei(nasMessage.ServiceRequestAllowedPDUSessionStatusType)
-		serviceRequest.AllowedPDUSessionStatus.SetLen(2)
-		serviceRequest.AllowedPDUSessionStatus.Buffer = []uint8{0x00, 0x08}
-	case nasMessage.ServiceTypeData:
-		serviceRequest.UplinkDataStatus = new(nasType.UplinkDataStatus)
-		serviceRequest.UplinkDataStatus.SetIei(nasMessage.ServiceRequestUplinkDataStatusType)
-		serviceRequest.UplinkDataStatus.SetLen(2)
-		serviceRequest.UplinkDataStatus.Buffer = []uint8{0x00, 0x04}
-	case nasMessage.ServiceTypeSignalling:
-	}
-
-	m.GmmMessage.ServiceRequest = serviceRequest
-
-	data := new(bytes.Buffer)
-	err := m.GmmMessageEncode(data)
 	if err != nil {
 		logger.NasMsgLog.Errorln(err.Error())
 	}
@@ -559,11 +222,11 @@ func GetAuthenticationResponse(authenticationResponseParam []uint8, eapMsg strin
 	m.GmmHeader.SetMessageType(nas.MsgTypeAuthenticationResponse)
 
 	authenticationResponse := nasMessage.NewAuthenticationResponse(0)
-	authenticationResponse.ExtendedProtocolDiscriminator.SetExtendedProtocolDiscriminator(
+	authenticationResponse.SetExtendedProtocolDiscriminator(
 		nasMessage.Epd5GSMobilityManagementMessage)
-	authenticationResponse.SpareHalfOctetAndSecurityHeaderType.SetSecurityHeaderType(nas.SecurityHeaderTypePlainNas)
-	authenticationResponse.SpareHalfOctetAndSecurityHeaderType.SetSpareHalfOctet(0)
-	authenticationResponse.AuthenticationResponseMessageIdentity.SetMessageType(nas.MsgTypeAuthenticationResponse)
+	authenticationResponse.SetSecurityHeaderType(nas.SecurityHeaderTypePlainNas)
+	authenticationResponse.SetSpareHalfOctet(0)
+	authenticationResponse.SetMessageType(nas.MsgTypeAuthenticationResponse)
 
 	if len(authenticationResponseParam) > 0 {
 		authenticationResponse.AuthenticationResponseParameter = nasType.NewAuthenticationResponseParameter(
@@ -577,41 +240,10 @@ func GetAuthenticationResponse(authenticationResponseParam []uint8, eapMsg strin
 		}
 		authenticationResponse.EAPMessage = nasType.NewEAPMessage(nasMessage.AuthenticationResponseEAPMessageType)
 		authenticationResponse.EAPMessage.SetLen(uint16(len(rawEapMsg)))
-		authenticationResponse.EAPMessage.SetEAPMessage(rawEapMsg)
+		authenticationResponse.SetEAPMessage(rawEapMsg)
 	}
 
-	m.GmmMessage.AuthenticationResponse = authenticationResponse
-
-	data := new(bytes.Buffer)
-	err := m.GmmMessageEncode(data)
-	if err != nil {
-		logger.NasMsgLog.Errorln(err.Error())
-	}
-
-	return data.Bytes()
-}
-
-func GetAuthenticationFailure(cause5GMM uint8, authenticationFailureParam []uint8) []byte {
-	m := nas.NewMessage()
-	m.GmmMessage = nas.NewGmmMessage()
-	m.GmmHeader.SetMessageType(nas.MsgTypeAuthenticationFailure)
-
-	authenticationFailure := nasMessage.NewAuthenticationFailure(0)
-	authenticationFailure.ExtendedProtocolDiscriminator.SetExtendedProtocolDiscriminator(
-		nasMessage.Epd5GSMobilityManagementMessage)
-	authenticationFailure.SpareHalfOctetAndSecurityHeaderType.SetSecurityHeaderType(nas.SecurityHeaderTypePlainNas)
-	authenticationFailure.SpareHalfOctetAndSecurityHeaderType.SetSpareHalfOctet(0)
-	authenticationFailure.AuthenticationFailureMessageIdentity.SetMessageType(nas.MsgTypeAuthenticationFailure)
-	authenticationFailure.Cause5GMM.SetCauseValue(cause5GMM)
-
-	if cause5GMM == nasMessage.Cause5GMMSynchFailure {
-		authenticationFailure.AuthenticationFailureParameter = nasType.NewAuthenticationFailureParameter(
-			nasMessage.AuthenticationFailureAuthenticationFailureParameterType)
-		authenticationFailure.AuthenticationFailureParameter.SetLen(uint8(len(authenticationFailureParam)))
-		copy(authenticationFailure.AuthenticationFailureParameter.Octet[:], authenticationFailureParam)
-	}
-
-	m.GmmMessage.AuthenticationFailure = authenticationFailure
+	m.AuthenticationResponse = authenticationResponse
 
 	data := new(bytes.Buffer)
 	err := m.GmmMessageEncode(data)
@@ -628,20 +260,20 @@ func GetRegistrationComplete(sorTransparentContainer []uint8) []byte {
 	m.GmmHeader.SetMessageType(nas.MsgTypeRegistrationComplete)
 
 	registrationComplete := nasMessage.NewRegistrationComplete(0)
-	registrationComplete.ExtendedProtocolDiscriminator.SetExtendedProtocolDiscriminator(
+	registrationComplete.SetExtendedProtocolDiscriminator(
 		nasMessage.Epd5GSMobilityManagementMessage)
-	registrationComplete.SpareHalfOctetAndSecurityHeaderType.SetSecurityHeaderType(nas.SecurityHeaderTypePlainNas)
-	registrationComplete.SpareHalfOctetAndSecurityHeaderType.SetSpareHalfOctet(0)
-	registrationComplete.RegistrationCompleteMessageIdentity.SetMessageType(nas.MsgTypeRegistrationComplete)
+	registrationComplete.SetSecurityHeaderType(nas.SecurityHeaderTypePlainNas)
+	registrationComplete.SetSpareHalfOctet(0)
+	registrationComplete.SetMessageType(nas.MsgTypeRegistrationComplete)
 
 	if sorTransparentContainer != nil {
 		registrationComplete.SORTransparentContainer = nasType.NewSORTransparentContainer(
 			nasMessage.RegistrationCompleteSORTransparentContainerType)
-		registrationComplete.SORTransparentContainer.SetLen(uint16(len(sorTransparentContainer)))
-		registrationComplete.SORTransparentContainer.SetSORContent(sorTransparentContainer)
+		registrationComplete.SetLen(uint16(len(sorTransparentContainer)))
+		registrationComplete.SetSORContent(sorTransparentContainer)
 	}
 
-	m.GmmMessage.RegistrationComplete = registrationComplete
+	m.RegistrationComplete = registrationComplete
 
 	data := new(bytes.Buffer)
 	err := m.GmmMessageEncode(data)
@@ -659,12 +291,12 @@ func GetSecurityModeComplete(nasMessageContainer []uint8) []byte {
 	m.GmmHeader.SetMessageType(nas.MsgTypeSecurityModeComplete)
 
 	securityModeComplete := nasMessage.NewSecurityModeComplete(0)
-	securityModeComplete.ExtendedProtocolDiscriminator.SetExtendedProtocolDiscriminator(
+	securityModeComplete.SetExtendedProtocolDiscriminator(
 		nasMessage.Epd5GSMobilityManagementMessage)
 	// TODO: modify security header type if need security protected
-	securityModeComplete.SpareHalfOctetAndSecurityHeaderType.SetSecurityHeaderType(nas.SecurityHeaderTypePlainNas)
-	securityModeComplete.SpareHalfOctetAndSecurityHeaderType.SetSpareHalfOctet(0)
-	securityModeComplete.SecurityModeCompleteMessageIdentity.SetMessageType(nas.MsgTypeSecurityModeComplete)
+	securityModeComplete.SetSecurityHeaderType(nas.SecurityHeaderTypePlainNas)
+	securityModeComplete.SetSpareHalfOctet(0)
+	securityModeComplete.SetMessageType(nas.MsgTypeSecurityModeComplete)
 
 	securityModeComplete.IMEISV = nasType.NewIMEISV(nasMessage.SecurityModeCompleteIMEISVType)
 	securityModeComplete.IMEISV.SetLen(9)
@@ -673,40 +305,16 @@ func GetSecurityModeComplete(nasMessageContainer []uint8) []byte {
 	securityModeComplete.SetIdentityDigit1(1)
 	securityModeComplete.SetIdentityDigitP_1(1)
 	securityModeComplete.SetIdentityDigitP(1)
+	securityModeComplete.SetIdentityDigitP_15(15)
 
 	if nasMessageContainer != nil {
 		securityModeComplete.NASMessageContainer = nasType.NewNASMessageContainer(
 			nasMessage.SecurityModeCompleteNASMessageContainerType)
 		securityModeComplete.NASMessageContainer.SetLen(uint16(len(nasMessageContainer)))
-		securityModeComplete.NASMessageContainer.SetNASMessageContainerContents(nasMessageContainer)
+		securityModeComplete.SetNASMessageContainerContents(nasMessageContainer)
 	}
 
-	m.GmmMessage.SecurityModeComplete = securityModeComplete
-
-	data := new(bytes.Buffer)
-	err := m.GmmMessageEncode(data)
-	if err != nil {
-		logger.NasMsgLog.Errorln(err.Error())
-	}
-
-	return data.Bytes()
-}
-
-func GetSecurityModeReject(cause5GMM uint8) []byte {
-	m := nas.NewMessage()
-	m.GmmMessage = nas.NewGmmMessage()
-	m.GmmHeader.SetMessageType(nas.MsgTypeSecurityModeReject)
-
-	securityModeReject := nasMessage.NewSecurityModeReject(0)
-	securityModeReject.ExtendedProtocolDiscriminator.SetExtendedProtocolDiscriminator(
-		nasMessage.Epd5GSMobilityManagementMessage)
-	securityModeReject.SpareHalfOctetAndSecurityHeaderType.SetSecurityHeaderType(nas.SecurityHeaderTypePlainNas)
-	securityModeReject.SpareHalfOctetAndSecurityHeaderType.SetSpareHalfOctet(0)
-	securityModeReject.SecurityModeRejectMessageIdentity.SetMessageType(nas.MsgTypeSecurityModeReject)
-
-	securityModeReject.Cause5GMM.SetCauseValue(cause5GMM)
-
-	m.GmmMessage.SecurityModeReject = securityModeReject
+	m.SecurityModeComplete = securityModeComplete
 
 	data := new(bytes.Buffer)
 	err := m.GmmMessageEncode(data)
@@ -725,22 +333,22 @@ func GetDeregistrationRequest(accessType uint8, switchOff uint8, ngKsi uint8,
 	m.GmmHeader.SetMessageType(nas.MsgTypeDeregistrationRequestUEOriginatingDeregistration)
 
 	deregistrationRequest := nasMessage.NewDeregistrationRequestUEOriginatingDeregistration(0)
-	deregistrationRequest.ExtendedProtocolDiscriminator.SetExtendedProtocolDiscriminator(
+	deregistrationRequest.SetExtendedProtocolDiscriminator(
 		nasMessage.Epd5GSMobilityManagementMessage)
-	deregistrationRequest.SpareHalfOctetAndSecurityHeaderType.SetSecurityHeaderType(nas.SecurityHeaderTypePlainNas)
-	deregistrationRequest.SpareHalfOctetAndSecurityHeaderType.SetSpareHalfOctet(0)
-	deregistrationRequest.DeregistrationRequestMessageIdentity.SetMessageType(
+	deregistrationRequest.SetSecurityHeaderType(nas.SecurityHeaderTypePlainNas)
+	deregistrationRequest.SetSpareHalfOctet(0)
+	deregistrationRequest.SetMessageType(
 		nas.MsgTypeDeregistrationRequestUEOriginatingDeregistration)
 
-	deregistrationRequest.NgksiAndDeregistrationType.SetAccessType(accessType)
-	deregistrationRequest.NgksiAndDeregistrationType.SetSwitchOff(switchOff)
-	deregistrationRequest.NgksiAndDeregistrationType.SetReRegistrationRequired(0)
-	deregistrationRequest.NgksiAndDeregistrationType.SetTSC(ngKsi)
-	deregistrationRequest.NgksiAndDeregistrationType.SetNasKeySetIdentifiler(ngKsi)
+	deregistrationRequest.SetAccessType(accessType)
+	deregistrationRequest.SetSwitchOff(switchOff)
+	deregistrationRequest.SetReRegistrationRequired(0)
+	deregistrationRequest.SetTSC(ngKsi)
+	deregistrationRequest.SetNasKeySetIdentifiler(ngKsi)
 	deregistrationRequest.MobileIdentity5GS.SetLen(mobileIdentity5GS.GetLen())
-	deregistrationRequest.MobileIdentity5GS.SetMobileIdentity5GSContents(mobileIdentity5GS.GetMobileIdentity5GSContents())
+	deregistrationRequest.SetMobileIdentity5GSContents(mobileIdentity5GS.GetMobileIdentity5GSContents())
 
-	m.GmmMessage.DeregistrationRequestUEOriginatingDeregistration = deregistrationRequest
+	m.DeregistrationRequestUEOriginatingDeregistration = deregistrationRequest
 
 	data := new(bytes.Buffer)
 	err := m.GmmMessageEncode(data)
@@ -757,91 +365,14 @@ func GetDeregistrationAccept() []byte {
 	m.GmmHeader.SetMessageType(nas.MsgTypeDeregistrationAcceptUETerminatedDeregistration)
 
 	deregistrationAccept := nasMessage.NewDeregistrationAcceptUETerminatedDeregistration(0)
-	deregistrationAccept.ExtendedProtocolDiscriminator.SetExtendedProtocolDiscriminator(
+	deregistrationAccept.SetExtendedProtocolDiscriminator(
 		nasMessage.Epd5GSMobilityManagementMessage)
-	deregistrationAccept.SpareHalfOctetAndSecurityHeaderType.SetSecurityHeaderType(nas.SecurityHeaderTypePlainNas)
-	deregistrationAccept.SpareHalfOctetAndSecurityHeaderType.SetSpareHalfOctet(0)
-	deregistrationAccept.DeregistrationAcceptMessageIdentity.SetMessageType(
+	deregistrationAccept.SetSecurityHeaderType(nas.SecurityHeaderTypePlainNas)
+	deregistrationAccept.SetSpareHalfOctet(0)
+	deregistrationAccept.SetMessageType(
 		nas.MsgTypeDeregistrationAcceptUETerminatedDeregistration)
 
-	m.GmmMessage.DeregistrationAcceptUETerminatedDeregistration = deregistrationAccept
-
-	data := new(bytes.Buffer)
-	err := m.GmmMessageEncode(data)
-	if err != nil {
-		logger.NasMsgLog.Errorln(err.Error())
-	}
-
-	return data.Bytes()
-}
-
-func GetStatus5GMM(cause uint8) []byte {
-	m := nas.NewMessage()
-	m.GmmMessage = nas.NewGmmMessage()
-	m.GmmHeader.SetMessageType(nas.MsgTypeStatus5GMM)
-
-	status5GMM := nasMessage.NewStatus5GMM(0)
-	status5GMM.ExtendedProtocolDiscriminator.SetExtendedProtocolDiscriminator(nasMessage.Epd5GSMobilityManagementMessage)
-	status5GMM.SpareHalfOctetAndSecurityHeaderType.SetSecurityHeaderType(nas.SecurityHeaderTypePlainNas)
-	status5GMM.SpareHalfOctetAndSecurityHeaderType.SetSpareHalfOctet(0)
-	status5GMM.STATUSMessageIdentity5GMM.SetMessageType(nas.MsgTypeStatus5GMM)
-	status5GMM.Cause5GMM.SetCauseValue(cause)
-
-	m.GmmMessage.Status5GMM = status5GMM
-
-	data := new(bytes.Buffer)
-	err := m.GmmMessageEncode(data)
-	if err != nil {
-		logger.NasMsgLog.Errorln(err.Error())
-	}
-
-	return data.Bytes()
-}
-
-func GetStatus5GSM(pduSessionId uint8, cause uint8) []byte {
-	m := nas.NewMessage()
-	m.GsmMessage = nas.NewGsmMessage()
-	m.GsmHeader.SetMessageType(nas.MsgTypeStatus5GSM)
-
-	status5GSM := nasMessage.NewStatus5GSM(0)
-	status5GSM.ExtendedProtocolDiscriminator.SetExtendedProtocolDiscriminator(nasMessage.Epd5GSSessionManagementMessage)
-	status5GSM.STATUSMessageIdentity5GSM.SetMessageType(nas.MsgTypeStatus5GSM)
-	status5GSM.PDUSessionID.SetPDUSessionID(pduSessionId)
-	status5GSM.PTI.SetPTI(0x01)
-	status5GSM.Cause5GSM.SetCauseValue(cause)
-
-	m.GsmMessage.Status5GSM = status5GSM
-
-	data := new(bytes.Buffer)
-	err := m.GsmMessageEncode(data)
-	if err != nil {
-		logger.NasMsgLog.Errorln(err.Error())
-	}
-
-	return data.Bytes()
-}
-
-func GetUlNasTransport_Status5GSM(pduSessionId uint8, cause uint8) []byte {
-	payload := GetStatus5GSM(pduSessionId, cause)
-
-	m := nas.NewMessage()
-	m.GmmMessage = nas.NewGmmMessage()
-	m.GmmHeader.SetMessageType(nas.MsgTypeULNASTransport)
-
-	ulNasTransport := nasMessage.NewULNASTransport(0)
-	ulNasTransport.SpareHalfOctetAndSecurityHeaderType.SetSecurityHeaderType(nas.SecurityHeaderTypePlainNas)
-	ulNasTransport.SetMessageType(nas.MsgTypeULNASTransport)
-	ulNasTransport.ExtendedProtocolDiscriminator.SetExtendedProtocolDiscriminator(
-		nasMessage.Epd5GSMobilityManagementMessage)
-	ulNasTransport.PduSessionID2Value = new(nasType.PduSessionID2Value)
-	ulNasTransport.PduSessionID2Value.SetIei(nasMessage.ULNASTransportPduSessionID2ValueType)
-	ulNasTransport.PduSessionID2Value.SetPduSessionID2Value(pduSessionId)
-
-	ulNasTransport.SpareHalfOctetAndPayloadContainerType.SetPayloadContainerType(nasMessage.PayloadContainerTypeN1SMInfo)
-	ulNasTransport.PayloadContainer.SetLen(uint16(len(payload)))
-	ulNasTransport.PayloadContainer.SetPayloadContainerContents(payload)
-
-	m.GmmMessage.ULNASTransport = ulNasTransport
+	m.DeregistrationAcceptUETerminatedDeregistration = deregistrationAccept
 
 	data := new(bytes.Buffer)
 	err := m.GmmMessageEncode(data)
@@ -860,19 +391,19 @@ func GetUlNasTransport_PduSessionReleaseRequest(pduSessionId uint8) []byte {
 	m.GmmHeader.SetMessageType(nas.MsgTypeULNASTransport)
 
 	ulNasTransport := nasMessage.NewULNASTransport(0)
-	ulNasTransport.SpareHalfOctetAndSecurityHeaderType.SetSecurityHeaderType(nas.SecurityHeaderTypePlainNas)
+	ulNasTransport.SetSecurityHeaderType(nas.SecurityHeaderTypePlainNas)
 	ulNasTransport.SetMessageType(nas.MsgTypeULNASTransport)
-	ulNasTransport.ExtendedProtocolDiscriminator.SetExtendedProtocolDiscriminator(
+	ulNasTransport.SetExtendedProtocolDiscriminator(
 		nasMessage.Epd5GSMobilityManagementMessage)
 	ulNasTransport.PduSessionID2Value = new(nasType.PduSessionID2Value)
 	ulNasTransport.PduSessionID2Value.SetIei(nasMessage.ULNASTransportPduSessionID2ValueType)
-	ulNasTransport.PduSessionID2Value.SetPduSessionID2Value(pduSessionId)
+	ulNasTransport.SetPduSessionID2Value(pduSessionId)
 
-	ulNasTransport.SpareHalfOctetAndPayloadContainerType.SetPayloadContainerType(nasMessage.PayloadContainerTypeN1SMInfo)
+	ulNasTransport.SetPayloadContainerType(nasMessage.PayloadContainerTypeN1SMInfo)
 	ulNasTransport.PayloadContainer.SetLen(uint16(len(pduSessionReleaseRequest)))
-	ulNasTransport.PayloadContainer.SetPayloadContainerContents(pduSessionReleaseRequest)
+	ulNasTransport.SetPayloadContainerContents(pduSessionReleaseRequest)
 
-	m.GmmMessage.ULNASTransport = ulNasTransport
+	m.ULNASTransport = ulNasTransport
 
 	data := new(bytes.Buffer)
 	err := m.GmmMessageEncode(data)
@@ -893,41 +424,41 @@ func GetUlNasTransport_PduSessionReleaseComplete(pduSessionId uint8, requestType
 	m.GmmHeader.SetMessageType(nas.MsgTypeULNASTransport)
 
 	ulNasTransport := nasMessage.NewULNASTransport(0)
-	ulNasTransport.SpareHalfOctetAndSecurityHeaderType.SetSecurityHeaderType(nas.SecurityHeaderTypePlainNas)
+	ulNasTransport.SetSecurityHeaderType(nas.SecurityHeaderTypePlainNas)
 	ulNasTransport.SetMessageType(nas.MsgTypeULNASTransport)
-	ulNasTransport.ExtendedProtocolDiscriminator.SetExtendedProtocolDiscriminator(
+	ulNasTransport.SetExtendedProtocolDiscriminator(
 		nasMessage.Epd5GSMobilityManagementMessage)
 	ulNasTransport.PduSessionID2Value = new(nasType.PduSessionID2Value)
 	ulNasTransport.PduSessionID2Value.SetIei(nasMessage.ULNASTransportPduSessionID2ValueType)
-	ulNasTransport.PduSessionID2Value.SetPduSessionID2Value(pduSessionId)
+	ulNasTransport.SetPduSessionID2Value(pduSessionId)
 	ulNasTransport.RequestType = new(nasType.RequestType)
 	ulNasTransport.RequestType.SetIei(nasMessage.ULNASTransportRequestTypeType)
-	ulNasTransport.RequestType.SetRequestTypeValue(requestType)
+	ulNasTransport.SetRequestTypeValue(requestType)
 	if dnnString != "" {
 		dnn := []byte(dnnString)
 		ulNasTransport.DNN = new(nasType.DNN)
 		ulNasTransport.DNN.SetIei(nasMessage.ULNASTransportDNNType)
 		ulNasTransport.DNN.SetLen(uint8(len(dnn)))
-		ulNasTransport.DNN.SetDNN(dnn)
+		ulNasTransport.SetDNN(dnn)
 	}
 	if sNssai != nil {
 		var sdTemp [3]uint8
-		sd, err := hex.DecodeString(sNssai.Sd)
+		sd, err := hex.DecodeString(sNssai.GetSd())
 		if err != nil {
 			logger.NasMsgLog.Warnf("sNssai SD decode error: %+v", err)
 		}
 		copy(sdTemp[:], sd)
 		ulNasTransport.SNSSAI = nasType.NewSNSSAI(nasMessage.ULNASTransportSNSSAIType)
 		ulNasTransport.SNSSAI.SetLen(4)
-		ulNasTransport.SNSSAI.SetSST(uint8(sNssai.Sst))
-		ulNasTransport.SNSSAI.SetSD(sdTemp)
+		ulNasTransport.SetSST(uint8(sNssai.Sst))
+		ulNasTransport.SetSD(sdTemp)
 	}
 
-	ulNasTransport.SpareHalfOctetAndPayloadContainerType.SetPayloadContainerType(nasMessage.PayloadContainerTypeN1SMInfo)
+	ulNasTransport.SetPayloadContainerType(nasMessage.PayloadContainerTypeN1SMInfo)
 	ulNasTransport.PayloadContainer.SetLen(uint16(len(pduSessionReleaseRequest)))
-	ulNasTransport.PayloadContainer.SetPayloadContainerContents(pduSessionReleaseRequest)
+	ulNasTransport.SetPayloadContainerContents(pduSessionReleaseRequest)
 
-	m.GmmMessage.ULNASTransport = ulNasTransport
+	m.ULNASTransport = ulNasTransport
 
 	data := new(bytes.Buffer)
 	err := m.GmmMessageEncode(data)

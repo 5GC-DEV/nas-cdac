@@ -21,7 +21,7 @@ func NewSMSIndication(iei uint8) (sMSIndication *SMSIndication) {
 // SMSIndication 9.10.3.50A
 // Iei Row, sBit, len = [0, 0], 8 , 4
 func (a *SMSIndication) GetIei() (iei uint8) {
-	return a.Octet & GetBitMask(8, 4) >> (4)
+	return a.Octet & GetBitMask(8, 4) >> 4
 }
 
 // SMSIndication 9.10.3.50A

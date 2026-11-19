@@ -22,7 +22,7 @@ func NewNgksiAndRegistrationType5GS() (ngksiAndRegistrationType5GS *NgksiAndRegi
 // NgksiAndRegistrationType5GS 9.11.3.7 9.11.3.32
 // TSC Row, sBit, len = [0, 0], 8 , 1
 func (a *NgksiAndRegistrationType5GS) GetTSC() (tSC uint8) {
-	return a.Octet & GetBitMask(8, 7) >> (7)
+	return a.Octet & GetBitMask(8, 7) >> 7
 }
 
 // NgksiAndRegistrationType5GS 9.11.3.7 9.11.3.32
@@ -34,7 +34,7 @@ func (a *NgksiAndRegistrationType5GS) SetTSC(tSC uint8) {
 // NgksiAndRegistrationType5GS 9.11.3.7 9.11.3.32
 // NasKeySetIdentifiler Row, sBit, len = [0, 0], 7 , 3
 func (a *NgksiAndRegistrationType5GS) GetNasKeySetIdentifiler() (nasKeySetIdentifiler uint8) {
-	return a.Octet & GetBitMask(7, 4) >> (4)
+	return a.Octet & GetBitMask(7, 4) >> 4
 }
 
 // NgksiAndRegistrationType5GS 9.11.3.7 9.11.3.32
@@ -46,7 +46,7 @@ func (a *NgksiAndRegistrationType5GS) SetNasKeySetIdentifiler(nasKeySetIdentifil
 // NgksiAndRegistrationType5GS 9.11.3.7 9.11.3.32
 // FOR Row, sBit, len = [0, 0], 4 , 1
 func (a *NgksiAndRegistrationType5GS) GetFOR() (fOR uint8) {
-	return a.Octet & GetBitMask(4, 3) >> (3)
+	return a.Octet & GetBitMask(4, 3) >> 3
 }
 
 // NgksiAndRegistrationType5GS 9.11.3.7 9.11.3.32

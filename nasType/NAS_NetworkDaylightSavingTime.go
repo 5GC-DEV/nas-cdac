@@ -33,14 +33,14 @@ func (a *NetworkDaylightSavingTime) SetIei(iei uint8) {
 
 // NetworkDaylightSavingTime 9.11.3.19
 // Len Row, sBit, len = [], 8, 8
-func (a *NetworkDaylightSavingTime) GetLen() (len uint8) {
+func (a *NetworkDaylightSavingTime) GetLen() (length uint8) {
 	return a.Len
 }
 
 // NetworkDaylightSavingTime 9.11.3.19
 // Len Row, sBit, len = [], 8, 8
-func (a *NetworkDaylightSavingTime) SetLen(len uint8) {
-	a.Len = len
+func (a *NetworkDaylightSavingTime) SetLen(length uint8) {
+	a.Len = length
 }
 
 // NetworkDaylightSavingTime 9.11.3.19

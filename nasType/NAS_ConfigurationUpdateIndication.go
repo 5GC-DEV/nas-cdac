@@ -22,7 +22,7 @@ func NewConfigurationUpdateIndication(iei uint8) (configurationUpdateIndication 
 // ConfigurationUpdateIndication 9.11.3.18
 // Iei Row, sBit, len = [0, 0], 8 , 4
 func (a *ConfigurationUpdateIndication) GetIei() (iei uint8) {
-	return a.Octet & GetBitMask(8, 4) >> (4)
+	return a.Octet & GetBitMask(8, 4) >> 4
 }
 
 // ConfigurationUpdateIndication 9.11.3.18
@@ -34,7 +34,7 @@ func (a *ConfigurationUpdateIndication) SetIei(iei uint8) {
 // ConfigurationUpdateIndication 9.11.3.18
 // RED Row, sBit, len = [0, 0], 2 , 1
 func (a *ConfigurationUpdateIndication) GetRED() (rED uint8) {
-	return a.Octet & GetBitMask(2, 1) >> (1)
+	return a.Octet & GetBitMask(2, 1) >> 1
 }
 
 // ConfigurationUpdateIndication 9.11.3.18

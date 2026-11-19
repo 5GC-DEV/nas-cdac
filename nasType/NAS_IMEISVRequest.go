@@ -21,7 +21,7 @@ func NewIMEISVRequest(iei uint8) (iMEISVRequest *IMEISVRequest) {
 // IMEISVRequest 9.11.3.28
 // Iei Row, sBit, len = [0, 0], 8 , 4
 func (a *IMEISVRequest) GetIei() (iei uint8) {
-	return a.Octet & GetBitMask(8, 4) >> (4)
+	return a.Octet & GetBitMask(8, 4) >> 4
 }
 
 // IMEISVRequest 9.11.3.28

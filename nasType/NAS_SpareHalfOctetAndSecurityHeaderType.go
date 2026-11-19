@@ -20,7 +20,7 @@ func NewSpareHalfOctetAndSecurityHeaderType() (spareHalfOctetAndSecurityHeaderTy
 // SpareHalfOctetAndSecurityHeaderType 9.3 9.5
 // SpareHalfOctet Row, sBit, len = [0, 0], 8 , 4
 func (a *SpareHalfOctetAndSecurityHeaderType) GetSpareHalfOctet() (spareHalfOctet uint8) {
-	return a.Octet & GetBitMask(8, 4) >> (4)
+	return a.Octet & GetBitMask(8, 4) >> 4
 }
 
 // SpareHalfOctetAndSecurityHeaderType 9.3 9.5

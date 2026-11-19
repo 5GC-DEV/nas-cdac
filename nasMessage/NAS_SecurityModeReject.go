@@ -9,7 +9,7 @@ import (
 	"bytes"
 	"encoding/binary"
 
-	"github.com/5GC-DEV/nas-cdac/nasType"
+	"github.com/5GC-DEV/nas-cdac/v2/nasType"
 )
 
 type SecurityModeReject struct {
@@ -25,22 +25,40 @@ func NewSecurityModeReject(iei uint8) (securityModeReject *SecurityModeReject) {
 }
 
 func (a *SecurityModeReject) EncodeSecurityModeReject(buffer *bytes.Buffer) {
-	binary.Write(buffer, binary.BigEndian, &a.ExtendedProtocolDiscriminator.Octet)
-	binary.Write(buffer, binary.BigEndian, &a.SpareHalfOctetAndSecurityHeaderType.Octet)
-	binary.Write(buffer, binary.BigEndian, &a.SecurityModeRejectMessageIdentity.Octet)
-	binary.Write(buffer, binary.BigEndian, &a.Cause5GMM.Octet)
+	if err := binary.Write(buffer, binary.BigEndian, &a.ExtendedProtocolDiscriminator.Octet); err != nil {
+		return
+	}
+	if err := binary.Write(buffer, binary.BigEndian, &a.SpareHalfOctetAndSecurityHeaderType.Octet); err != nil {
+		return
+	}
+	if err := binary.Write(buffer, binary.BigEndian, &a.SecurityModeRejectMessageIdentity.Octet); err != nil {
+		return
+	}
+	if err := binary.Write(buffer, binary.BigEndian, &a.Cause5GMM.Octet); err != nil {
+		return
+	}
 }
 
 func (a *SecurityModeReject) DecodeSecurityModeReject(byteArray *[]byte) {
 	buffer := bytes.NewBuffer(*byteArray)
-	binary.Read(buffer, binary.BigEndian, &a.ExtendedProtocolDiscriminator.Octet)
-	binary.Read(buffer, binary.BigEndian, &a.SpareHalfOctetAndSecurityHeaderType.Octet)
-	binary.Read(buffer, binary.BigEndian, &a.SecurityModeRejectMessageIdentity.Octet)
-	binary.Read(buffer, binary.BigEndian, &a.Cause5GMM.Octet)
+	if err := binary.Read(buffer, binary.BigEndian, &a.ExtendedProtocolDiscriminator.Octet); err != nil {
+		return
+	}
+	if err := binary.Read(buffer, binary.BigEndian, &a.SpareHalfOctetAndSecurityHeaderType.Octet); err != nil {
+		return
+	}
+	if err := binary.Read(buffer, binary.BigEndian, &a.SecurityModeRejectMessageIdentity.Octet); err != nil {
+		return
+	}
+	if err := binary.Read(buffer, binary.BigEndian, &a.Cause5GMM.Octet); err != nil {
+		return
+	}
 	for buffer.Len() > 0 {
 		var ieiN uint8
 		var tmpIeiN uint8
-		binary.Read(buffer, binary.BigEndian, &ieiN)
+		if err := binary.Read(buffer, binary.BigEndian, &ieiN); err != nil {
+			return
+		}
 		if ieiN >= 0x80 {
 			tmpIeiN = (ieiN & 0xf0) >> 4
 		} else {

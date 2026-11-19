@@ -6,15 +6,17 @@
 package nasType_test
 
 import (
+	"reflect"
 	"testing"
 
-	"github.com/5GC-DEV/nas-cdac/nasType"
-	"github.com/stretchr/testify/assert"
+	"github.com/5GC-DEV/nas-cdac/v2/nasType"
 )
 
 func TestNasTypeNewServiceRejectMessageIdentity(t *testing.T) {
 	a := nasType.NewServiceRejectMessageIdentity()
-	assert.NotNil(t, a)
+	if a == nil {
+		t.Fatal("Expected value not to be nil")
+	}
 }
 
 type nasTypeServiceRejectMessageIdentity struct {
@@ -30,7 +32,9 @@ func TestNasTypeServiceRejectMessageIdentityGetSetMessageType(t *testing.T) {
 	a := nasType.NewServiceRejectMessageIdentity()
 	for _, table := range nasTypeServiceRejectMessageIdentityTable {
 		a.SetMessageType(table.in)
-		assert.Equal(t, table.out, a.GetMessageType())
+		if !reflect.DeepEqual(table.out, a.GetMessageType()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out, a.GetMessageType())
+		}
 	}
 }
 
@@ -53,10 +57,11 @@ var ServiceRejectMessageIdentityTable = []ServiceRejectMessageIdentityTestDataTe
 
 func TestNasTypeServiceRejectMessageIdentity(t *testing.T) {
 	for _, table := range ServiceRejectMessageIdentityTable {
-
 		a := nasType.NewServiceRejectMessageIdentity()
 
 		a.SetMessageType(table.in.GetMessageType())
-		assert.Equal(t, table.out.GetMessageType(), a.GetMessageType())
+		if !reflect.DeepEqual(table.out.GetMessageType(), a.GetMessageType()) {
+			t.Errorf("Not equal: expected %v, got %v", table.out.GetMessageType(), a.GetMessageType())
+		}
 	}
 }

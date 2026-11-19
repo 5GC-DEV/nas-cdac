@@ -10,10 +10,9 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/5GC-DEV/nas-cdac/logger"
-	"github.com/5GC-DEV/nas-cdac/nasMessage"
-	"github.com/5GC-DEV/nas-cdac/nasType"
-	"github.com/stretchr/testify/assert"
+	"github.com/5GC-DEV/nas-cdac/v2/logger"
+	"github.com/5GC-DEV/nas-cdac/v2/nasMessage"
+	"github.com/5GC-DEV/nas-cdac/v2/nasType"
 )
 
 type nasMessageSecurityProtected5GSNASMessageData struct {
@@ -42,7 +41,9 @@ var nasMessageSecurityProtected5GSNASMessageTable = []nasMessageSecurityProtecte
 
 func TestNasTypeNewSecurityProtected5GSNASMessage(t *testing.T) {
 	a := nasMessage.NewSecurityProtected5GSNASMessage(0)
-	assert.NotNil(t, a)
+	if a == nil {
+		t.Fatal("Expected value not to be nil")
+	}
 }
 
 func TestNasTypeNewSecurityProtected5GSNASMessageMessage(t *testing.T) {
@@ -50,12 +51,16 @@ func TestNasTypeNewSecurityProtected5GSNASMessageMessage(t *testing.T) {
 		t.Logf("Test Cnt:%d", i)
 		a := nasMessage.NewSecurityProtected5GSNASMessage(0)
 		b := nasMessage.NewSecurityProtected5GSNASMessage(0)
-		assert.NotNil(t, a)
-		assert.NotNil(t, b)
+		if a == nil {
+			t.Fatal("Expected value not to be nil")
+		}
+		if b == nil {
+			t.Fatal("Expected value not to be nil")
+		}
 
-		a.ExtendedProtocolDiscriminator.SetExtendedProtocolDiscriminator(table.inExtendedProtocolDiscriminator)
-		a.SpareHalfOctetAndSecurityHeaderType.SetSecurityHeaderType(table.inSecurityHeader)
-		a.SpareHalfOctetAndSecurityHeaderType.SetSpareHalfOctet(table.inSpareHalfOctet)
+		a.SetExtendedProtocolDiscriminator(table.inExtendedProtocolDiscriminator)
+		a.SetSecurityHeaderType(table.inSecurityHeader)
+		a.SetSpareHalfOctet(table.inSpareHalfOctet)
 
 		a.MessageAuthenticationCode = table.inMessageAuthenticationCode
 		a.SequenceNumber = table.inSequenceNumber
@@ -66,7 +71,9 @@ func TestNasTypeNewSecurityProtected5GSNASMessageMessage(t *testing.T) {
 		logger.NasMsgLog.Debugln("Encode: ", a)
 
 		data := make([]byte, buff.Len())
-		buff.Read(data)
+		if _, err := buff.Read(data); err != nil {
+			t.Fatal(err)
+		}
 		logger.NasMsgLog.Debugln(data)
 		b.DecodeSecurityProtected5GSNASMessage(&data)
 		logger.NasMsgLog.Debugln("Decode: ", b)

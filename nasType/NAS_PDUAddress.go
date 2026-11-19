@@ -34,14 +34,14 @@ func (a *PDUAddress) SetIei(iei uint8) {
 
 // PDUAddress 9.11.4.10
 // Len Row, sBit, len = [], 8, 8
-func (a *PDUAddress) GetLen() (len uint8) {
+func (a *PDUAddress) GetLen() (length uint8) {
 	return a.Len
 }
 
 // PDUAddress 9.11.4.10
 // Len Row, sBit, len = [], 8, 8
-func (a *PDUAddress) SetLen(len uint8) {
-	a.Len = len
+func (a *PDUAddress) SetLen(length uint8) {
+	a.Len = length
 }
 
 // PDUAddress 9.11.4.10

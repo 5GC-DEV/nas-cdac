@@ -22,7 +22,7 @@ func NewNoncurrentNativeNASKeySetIdentifier(iei uint8) (noncurrentNativeNASKeySe
 // NoncurrentNativeNASKeySetIdentifier 9.11.3.32
 // Iei Row, sBit, len = [0, 0], 8 , 4
 func (a *NoncurrentNativeNASKeySetIdentifier) GetIei() (iei uint8) {
-	return a.Octet & GetBitMask(8, 4) >> (4)
+	return a.Octet & GetBitMask(8, 4) >> 4
 }
 
 // NoncurrentNativeNASKeySetIdentifier 9.11.3.32
@@ -34,7 +34,7 @@ func (a *NoncurrentNativeNASKeySetIdentifier) SetIei(iei uint8) {
 // NoncurrentNativeNASKeySetIdentifier 9.11.3.32
 // Tsc Row, sBit, len = [0, 0], 4 , 1
 func (a *NoncurrentNativeNASKeySetIdentifier) GetTsc() (tsc uint8) {
-	return a.Octet & GetBitMask(4, 3) >> (3)
+	return a.Octet & GetBitMask(4, 3) >> 3
 }
 
 // NoncurrentNativeNASKeySetIdentifier 9.11.3.32

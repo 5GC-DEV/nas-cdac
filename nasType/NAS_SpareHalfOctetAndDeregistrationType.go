@@ -21,7 +21,7 @@ func NewSpareHalfOctetAndDeregistrationType() (spareHalfOctetAndDeregistrationTy
 // SpareHalfOctetAndDeregistrationType 9.11.3.20 9.5
 // SwitchOff Row, sBit, len = [0, 0], 4 , 1
 func (a *SpareHalfOctetAndDeregistrationType) GetSwitchOff() (switchOff uint8) {
-	return a.Octet & GetBitMask(4, 3) >> (3)
+	return a.Octet & GetBitMask(4, 3) >> 3
 }
 
 // SpareHalfOctetAndDeregistrationType 9.11.3.20 9.5
@@ -33,7 +33,7 @@ func (a *SpareHalfOctetAndDeregistrationType) SetSwitchOff(switchOff uint8) {
 // SpareHalfOctetAndDeregistrationType 9.11.3.20 9.5
 // ReRegistrationRequired Row, sBit, len = [0, 0], 3 , 1
 func (a *SpareHalfOctetAndDeregistrationType) GetReRegistrationRequired() (reRegistrationRequired uint8) {
-	return a.Octet & GetBitMask(3, 2) >> (2)
+	return a.Octet & GetBitMask(3, 2) >> 2
 }
 
 // SpareHalfOctetAndDeregistrationType 9.11.3.20 9.5

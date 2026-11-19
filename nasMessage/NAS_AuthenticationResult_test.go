@@ -10,11 +10,10 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/5GC-DEV/nas-cdac"
-	"github.com/5GC-DEV/nas-cdac/logger"
-	"github.com/5GC-DEV/nas-cdac/nasMessage"
-	"github.com/5GC-DEV/nas-cdac/nasType"
-	"github.com/stretchr/testify/assert"
+	"github.com/5GC-DEV/nas-cdac/v2"
+	"github.com/5GC-DEV/nas-cdac/v2/logger"
+	"github.com/5GC-DEV/nas-cdac/v2/nasMessage"
+	"github.com/5GC-DEV/nas-cdac/v2/nasType"
 )
 
 type nasMessageAuthenticationResultData struct {
@@ -56,7 +55,9 @@ var nasMessageAuthenticationResultTable = []nasMessageAuthenticationResultData{
 
 func TestNasTypeNewAuthenticationResult(t *testing.T) {
 	a := nasMessage.NewAuthenticationResult(0)
-	assert.NotNil(t, a)
+	if a == nil {
+		t.Fatal("Expected value not to be nil")
+	}
 }
 
 func TestNasTypeNewAuthenticationResultMessage(t *testing.T) {
@@ -64,16 +65,20 @@ func TestNasTypeNewAuthenticationResultMessage(t *testing.T) {
 		logger.NasMsgLog.Infoln("Test Cnt:", i)
 		a := nasMessage.NewAuthenticationResult(0)
 		b := nasMessage.NewAuthenticationResult(0)
-		assert.NotNil(t, a)
-		assert.NotNil(t, b)
+		if a == nil {
+			t.Fatal("Expected value not to be nil")
+		}
+		if b == nil {
+			t.Fatal("Expected value not to be nil")
+		}
 
-		a.ExtendedProtocolDiscriminator.SetExtendedProtocolDiscriminator(table.inExtendedProtocolDiscriminator)
-		a.SpareHalfOctetAndSecurityHeaderType.SetSecurityHeaderType(table.inSecurityHeaderType)
-		a.AuthenticationResultMessageIdentity.SetMessageType(table.inMessageType)
-		a.SpareHalfOctetAndNgksi.SetTSC(table.inTsc)
-		a.SpareHalfOctetAndNgksi.SetNasKeySetIdentifiler(table.inNASKeySetIdentifier)
+		a.SetExtendedProtocolDiscriminator(table.inExtendedProtocolDiscriminator)
+		a.SetSecurityHeaderType(table.inSecurityHeaderType)
+		a.SetMessageType(table.inMessageType)
+		a.SetTSC(table.inTsc)
+		a.SetNasKeySetIdentifiler(table.inNASKeySetIdentifier)
 		a.EAPMessage.SetLen(table.inEAPLen)
-		a.EAPMessage.SetEAPMessage(table.inEAPMessage)
+		a.SetEAPMessage(table.inEAPMessage)
 
 		a.ABBA = nasType.NewABBA(nasMessage.AuthenticationResultABBAType)
 		a.ABBA = &table.inABBA
@@ -83,7 +88,9 @@ func TestNasTypeNewAuthenticationResultMessage(t *testing.T) {
 		logger.NasMsgLog.Debugln(buff)
 
 		data := make([]byte, buff.Len())
-		buff.Read(data)
+		if _, err := buff.Read(data); err != nil {
+			t.Fatal(err)
+		}
 		b.DecodeAuthenticationResult(&data)
 		logger.NasMsgLog.Debugln(data)
 		logger.NasMsgLog.Debugln("Decode: ", b)

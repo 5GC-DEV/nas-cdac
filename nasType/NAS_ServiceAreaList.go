@@ -33,14 +33,14 @@ func (a *ServiceAreaList) SetIei(iei uint8) {
 
 // ServiceAreaList 9.11.3.49
 // Len Row, sBit, len = [], 8, 8
-func (a *ServiceAreaList) GetLen() (len uint8) {
+func (a *ServiceAreaList) GetLen() (length uint8) {
 	return a.Len
 }
 
 // ServiceAreaList 9.11.3.49
 // Len Row, sBit, len = [], 8, 8
-func (a *ServiceAreaList) SetLen(len uint8) {
-	a.Len = len
+func (a *ServiceAreaList) SetLen(length uint8) {
+	a.Len = length
 	a.Buffer = make([]uint8, a.Len)
 }
 

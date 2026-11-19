@@ -1,7 +1,6 @@
+// Copyright (C) 2026 Intel Corporation
 // Copyright 2019 free5GC.org
-//
 // SPDX-License-Identifier: Apache-2.0
-//
 
 package nasMessage
 
@@ -27,15 +26,22 @@ const (
 )
 
 const (
+	Cause5GSMOperatorDeterminedBarring                                   uint8 = 0x08
 	Cause5GSMInsufficientResources                                       uint8 = 0x1a
 	Cause5GSMMissingOrUnknownDNN                                         uint8 = 0x1b
 	Cause5GSMUnknownPDUSessionType                                       uint8 = 0x1c
 	Cause5GSMUserAuthenticationOrAuthorizationFailed                     uint8 = 0x1d
 	Cause5GSMRequestRejectedUnspecified                                  uint8 = 0x1f
+	Cause5GSMServiceOptionNotSupported                                   uint8 = 0x20
+	Cause5GSMRequestedServiceOptionNotSubscribed                         uint8 = 0x21
 	Cause5GSMServiceOptionTemporarilyOutOfOrder                          uint8 = 0x22
 	Cause5GSMPTIAlreadyInUse                                             uint8 = 0x23
 	Cause5GSMRegularDeactivation                                         uint8 = 0x24
+	Cause5GSM5GSQoSNotAccepted                                           uint8 = 0x25
+	Cause5GSMNetworkFailure                                              uint8 = 0x26
 	Cause5GSMReactivationRequested                                       uint8 = 0x27
+	Cause5GSMSemanticErrorInTheTFTOperation                              uint8 = 0x29
+	Cause5GSMSyntacticalErrorInTheTFTOperation                           uint8 = 0x2a
 	Cause5GSMInvalidPDUSessionIdentity                                   uint8 = 0x2b
 	Cause5GSMSemanticErrorsInPacketFilter                                uint8 = 0x2c
 	Cause5GSMSyntacticalErrorInPacketFilter                              uint8 = 0x2d
@@ -44,6 +50,10 @@ const (
 	Cause5GSMPDUSessionTypeIPv4OnlyAllowed                               uint8 = 0x32
 	Cause5GSMPDUSessionTypeIPv6OnlyAllowed                               uint8 = 0x33
 	Cause5GSMPDUSessionDoesNotExist                                      uint8 = 0x36
+	Cause5GSMPDUSessionTypeIPv4v6OnlyAllowed                             uint8 = 0x39
+	Cause5GSMPDUSessionTypeUnstructuredOnlyAllowed                       uint8 = 0x3a
+	Cause5GSMUnsupported5QIValue                                         uint8 = 0x3b
+	Cause5GSMPDUSessionTypeEthernetOnlyAllowed                           uint8 = 0x3d
 	Cause5GSMInsufficientResourcesForSpecificSliceAndDNN                 uint8 = 0x43
 	Cause5GSMNotSupportedSSCMode                                         uint8 = 0x44
 	Cause5GSMInsufficientResourcesForSpecificSlice                       uint8 = 0x45
@@ -53,6 +63,7 @@ const (
 	Cause5GSMSemanticErrorInTheQoSOperation                              uint8 = 0x53
 	Cause5GSMSyntacticalErrorInTheQoSOperation                           uint8 = 0x54
 	Cause5GSMInvalidMappedEPSBearerIdentity                              uint8 = 0x55
+	Cause5GSMUASServicesNotAllowed                                       uint8 = 0x56
 	Cause5GSMSemanticallyIncorrectMessage                                uint8 = 0x5f
 	Cause5GSMInvalidMandatoryInformation                                 uint8 = 0x60
 	Cause5GSMMessageTypeNonExistentOrNotImplemented                      uint8 = 0x61
@@ -432,3 +443,121 @@ func Cause5GMMToString(cause uint8) string {
 		return ""
 	}
 }
+
+// Cause5GSMToString renders a 5GSM cause value as its TS 24.501 clause 9.11.4.2 description
+// followed by the value itself. It returns an empty string for a value the specification does
+// not define, which is also how Cause5GMMToString reports an unknown 5GMM cause.
+//
+// 5GSM and 5GMM causes are separate registers that share numeric values - 69 is "insufficient
+// resources for specific slice" in both, while 91 is a 5GMM cause with no 5GSM counterpart - so
+// they need separate functions. A cause from the wrong register written into the 5GSM cause IE
+// is decoded by the UE as 31 "request rejected, unspecified" per clause 9.11.4.2, which makes it
+// silent; keeping the two apart is what lets a caller check the register it actually means.
+func Cause5GSMToString(cause uint8) string {
+	switch cause {
+	case Cause5GSMOperatorDeterminedBarring:
+		return fmt.Sprintf("Operator determined barring (%d)", Cause5GSMOperatorDeterminedBarring)
+	case Cause5GSMInsufficientResources:
+		return fmt.Sprintf("Insufficient resources (%d)", Cause5GSMInsufficientResources)
+	case Cause5GSMMissingOrUnknownDNN:
+		return fmt.Sprintf("Missing or unknown DNN (%d)", Cause5GSMMissingOrUnknownDNN)
+	case Cause5GSMUnknownPDUSessionType:
+		return fmt.Sprintf("Unknown PDU session type (%d)", Cause5GSMUnknownPDUSessionType)
+	case Cause5GSMUserAuthenticationOrAuthorizationFailed:
+		return fmt.Sprintf("User authentication or authorization failed (%d)", Cause5GSMUserAuthenticationOrAuthorizationFailed)
+	case Cause5GSMRequestRejectedUnspecified:
+		return fmt.Sprintf("Request rejected, unspecified (%d)", Cause5GSMRequestRejectedUnspecified)
+	case Cause5GSMServiceOptionNotSupported:
+		return fmt.Sprintf("Service option not supported (%d)", Cause5GSMServiceOptionNotSupported)
+	case Cause5GSMRequestedServiceOptionNotSubscribed:
+		return fmt.Sprintf("Requested service option not subscribed (%d)", Cause5GSMRequestedServiceOptionNotSubscribed)
+	case Cause5GSMPTIAlreadyInUse:
+		return fmt.Sprintf("PTI already in use (%d)", Cause5GSMPTIAlreadyInUse)
+	case Cause5GSMRegularDeactivation:
+		return fmt.Sprintf("Regular deactivation (%d)", Cause5GSMRegularDeactivation)
+	case Cause5GSM5GSQoSNotAccepted:
+		return fmt.Sprintf("5GS QoS not accepted (%d)", Cause5GSM5GSQoSNotAccepted)
+	case Cause5GSMNetworkFailure:
+		return fmt.Sprintf("Network failure (%d)", Cause5GSMNetworkFailure)
+	case Cause5GSMReactivationRequested:
+		return fmt.Sprintf("Reactivation requested (%d)", Cause5GSMReactivationRequested)
+	case Cause5GSMSemanticErrorInTheTFTOperation:
+		return fmt.Sprintf("Semantic error in the TFT operation (%d)", Cause5GSMSemanticErrorInTheTFTOperation)
+	case Cause5GSMSyntacticalErrorInTheTFTOperation:
+		return fmt.Sprintf("Syntactical error in the TFT operation (%d)", Cause5GSMSyntacticalErrorInTheTFTOperation)
+	case Cause5GSMInvalidPDUSessionIdentity:
+		return fmt.Sprintf("Invalid PDU session identity (%d)", Cause5GSMInvalidPDUSessionIdentity)
+	case Cause5GSMSemanticErrorsInPacketFilter:
+		return fmt.Sprintf("Semantic errors in packet filter(s) (%d)", Cause5GSMSemanticErrorsInPacketFilter)
+	case Cause5GSMSyntacticalErrorInPacketFilter:
+		return fmt.Sprintf("Syntactical error in packet filter(s) (%d)", Cause5GSMSyntacticalErrorInPacketFilter)
+	case Cause5GSMOutOfLADNServiceArea:
+		return fmt.Sprintf("Out of LADN service area (%d)", Cause5GSMOutOfLADNServiceArea)
+	case Cause5GSMPTIMismatch:
+		return fmt.Sprintf("PTI mismatch (%d)", Cause5GSMPTIMismatch)
+	case Cause5GSMPDUSessionTypeIPv4OnlyAllowed:
+		return fmt.Sprintf("PDU session type IPv4 only allowed (%d)", Cause5GSMPDUSessionTypeIPv4OnlyAllowed)
+	case Cause5GSMPDUSessionTypeIPv6OnlyAllowed:
+		return fmt.Sprintf("PDU session type IPv6 only allowed (%d)", Cause5GSMPDUSessionTypeIPv6OnlyAllowed)
+	case Cause5GSMPDUSessionDoesNotExist:
+		return fmt.Sprintf("PDU session does not exist (%d)", Cause5GSMPDUSessionDoesNotExist)
+	case Cause5GSMPDUSessionTypeIPv4v6OnlyAllowed:
+		return fmt.Sprintf("PDU session type IPv4v6 only allowed (%d)", Cause5GSMPDUSessionTypeIPv4v6OnlyAllowed)
+	case Cause5GSMPDUSessionTypeUnstructuredOnlyAllowed:
+		return fmt.Sprintf("PDU session type Unstructured only allowed (%d)", Cause5GSMPDUSessionTypeUnstructuredOnlyAllowed)
+	case Cause5GSMUnsupported5QIValue:
+		return fmt.Sprintf("Unsupported 5QI value (%d)", Cause5GSMUnsupported5QIValue)
+	case Cause5GSMPDUSessionTypeEthernetOnlyAllowed:
+		return fmt.Sprintf("PDU session type Ethernet only allowed (%d)", Cause5GSMPDUSessionTypeEthernetOnlyAllowed)
+	case Cause5GSMInsufficientResourcesForSpecificSliceAndDNN:
+		return fmt.Sprintf("Insufficient resources for specific slice and DNN (%d)", Cause5GSMInsufficientResourcesForSpecificSliceAndDNN)
+	case Cause5GSMNotSupportedSSCMode:
+		return fmt.Sprintf("Not supported SSC mode (%d)", Cause5GSMNotSupportedSSCMode)
+	case Cause5GSMInsufficientResourcesForSpecificSlice:
+		return fmt.Sprintf("Insufficient resources for specific slice (%d)", Cause5GSMInsufficientResourcesForSpecificSlice)
+	case Cause5GSMMissingOrUnknownDNNInASlice:
+		return fmt.Sprintf("Missing or unknown DNN in a slice (%d)", Cause5GSMMissingOrUnknownDNNInASlice)
+	case Cause5GSMInvalidPTIValue:
+		return fmt.Sprintf("Invalid PTI value (%d)", Cause5GSMInvalidPTIValue)
+	case Cause5GSMMaximumDataRatePerUEForUserPlaneIntegrityProtectionIsTooLow:
+		return fmt.Sprintf("Maximum data rate per UE for user-plane integrity protection is too low (%d)", Cause5GSMMaximumDataRatePerUEForUserPlaneIntegrityProtectionIsTooLow)
+	case Cause5GSMSemanticErrorInTheQoSOperation:
+		return fmt.Sprintf("Semantic error in the QoS operation (%d)", Cause5GSMSemanticErrorInTheQoSOperation)
+	case Cause5GSMSyntacticalErrorInTheQoSOperation:
+		return fmt.Sprintf("Syntactical error in the QoS operation (%d)", Cause5GSMSyntacticalErrorInTheQoSOperation)
+	case Cause5GSMInvalidMappedEPSBearerIdentity:
+		return fmt.Sprintf("Invalid mapped EPS bearer identity (%d)", Cause5GSMInvalidMappedEPSBearerIdentity)
+	case Cause5GSMUASServicesNotAllowed:
+		return fmt.Sprintf("UAS services not allowed (%d)", Cause5GSMUASServicesNotAllowed)
+	case Cause5GSMSemanticallyIncorrectMessage:
+		return fmt.Sprintf("Semantically incorrect message (%d)", Cause5GSMSemanticallyIncorrectMessage)
+	case Cause5GSMInvalidMandatoryInformation:
+		return fmt.Sprintf("Invalid mandatory information (%d)", Cause5GSMInvalidMandatoryInformation)
+	case Cause5GSMMessageTypeNonExistentOrNotImplemented:
+		return fmt.Sprintf("Message type non-existent or not implemented (%d)", Cause5GSMMessageTypeNonExistentOrNotImplemented)
+	case Cause5GSMMessageTypeNotCompatibleWithTheProtocolState:
+		return fmt.Sprintf("Message type not compatible with the protocol state (%d)", Cause5GSMMessageTypeNotCompatibleWithTheProtocolState)
+	case Cause5GSMInformationElementNonExistentOrNotImplemented:
+		return fmt.Sprintf("Information element non-existent or not implemented (%d)", Cause5GSMInformationElementNonExistentOrNotImplemented)
+	case Cause5GSMConditionalIEError:
+		return fmt.Sprintf("Conditional IE error (%d)", Cause5GSMConditionalIEError)
+	case Cause5GSMMessageNotCompatibleWithTheProtocolState:
+		return fmt.Sprintf("Message not compatible with the protocol state (%d)", Cause5GSMMessageNotCompatibleWithTheProtocolState)
+	case Cause5GSMProtocolErrorUnspecified:
+		return fmt.Sprintf("Protocol error, unspecified (%d)", Cause5GSMProtocolErrorUnspecified)
+	default:
+		// Cause5GSMServiceOptionTemporarilyOutOfOrder (34) reaches this arm deliberately. The
+		// constant is kept for compatibility, but neither table 9.11.4.2.1 nor annex B of
+		// TS 24.501 V18.13.0 defines 34 for 5GSM, and a UE decodes an undefined cause as 31.
+		// Rendering it would report a value that must not be sent as though it were sendable.
+		return ""
+	}
+}
+
+// TS 24.501 9.11.3.18D
+const (
+	ControlPlaneServiceTypeMobileOriginatingRequest  uint8 = 0x00
+	ControlPlaneServiceTypeMobileTerminatingRequest  uint8 = 0x01
+	ControlPlaneServiceTypeEmergencyServices         uint8 = 0x02
+	ControlPlaneServiceTypeEmergencyServicesFallback uint8 = 0x03
+)

@@ -10,10 +10,9 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/5GC-DEV/nas-cdac/logger"
-	"github.com/5GC-DEV/nas-cdac/nasMessage"
-	"github.com/5GC-DEV/nas-cdac/nasType"
-	"github.com/stretchr/testify/assert"
+	"github.com/5GC-DEV/nas-cdac/v2/logger"
+	"github.com/5GC-DEV/nas-cdac/v2/nasMessage"
+	"github.com/5GC-DEV/nas-cdac/v2/nasType"
 )
 
 type nasMessageNotificationResponseData struct {
@@ -40,7 +39,9 @@ var nasMessageNotificationResponseTable = []nasMessageNotificationResponseData{
 
 func TestNasTypeNewNotificationResponse(t *testing.T) {
 	a := nasMessage.NewNotificationResponse(0)
-	assert.NotNil(t, a)
+	if a == nil {
+		t.Fatal("Expected value not to be nil")
+	}
 }
 
 func TestNasTypeNewNotificationResponseMessage(t *testing.T) {
@@ -48,13 +49,17 @@ func TestNasTypeNewNotificationResponseMessage(t *testing.T) {
 		t.Logf("Test Cnt:%d", i)
 		a := nasMessage.NewNotificationResponse(0)
 		b := nasMessage.NewNotificationResponse(0)
-		assert.NotNil(t, a)
-		assert.NotNil(t, b)
+		if a == nil {
+			t.Fatal("Expected value not to be nil")
+		}
+		if b == nil {
+			t.Fatal("Expected value not to be nil")
+		}
 
-		a.ExtendedProtocolDiscriminator.SetExtendedProtocolDiscriminator(table.inExtendedProtocolDiscriminator)
-		a.SpareHalfOctetAndSecurityHeaderType.SetSecurityHeaderType(table.inSecurityHeader)
-		a.SpareHalfOctetAndSecurityHeaderType.SetSpareHalfOctet(table.inSpareHalfOctet)
-		a.NotificationResponseMessageIdentity.SetMessageType(table.inNotificationResponseMessageIdentity)
+		a.SetExtendedProtocolDiscriminator(table.inExtendedProtocolDiscriminator)
+		a.SetSecurityHeaderType(table.inSecurityHeader)
+		a.SetSpareHalfOctet(table.inSpareHalfOctet)
+		a.SetMessageType(table.inNotificationResponseMessageIdentity)
 
 		a.PDUSessionStatus = nasType.NewPDUSessionStatus(nasMessage.NotificationResponsePDUSessionStatusType)
 		a.PDUSessionStatus = &table.inPDUSessionStatus
@@ -64,7 +69,9 @@ func TestNasTypeNewNotificationResponseMessage(t *testing.T) {
 		logger.NasMsgLog.Debugln("Encode: ", a)
 
 		data := make([]byte, buff.Len())
-		buff.Read(data)
+		if _, err := buff.Read(data); err != nil {
+			t.Fatal(err)
+		}
 		b.DecodeNotificationResponse(&data)
 		logger.NasMsgLog.Debugln(data)
 		logger.NasMsgLog.Debugln("Decode: ", b)
@@ -72,6 +79,5 @@ func TestNasTypeNewNotificationResponseMessage(t *testing.T) {
 		if reflect.DeepEqual(a, b) != true {
 			t.Errorf("Not correct")
 		}
-
 	}
 }

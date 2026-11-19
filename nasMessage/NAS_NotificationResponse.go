@@ -9,7 +9,7 @@ import (
 	"bytes"
 	"encoding/binary"
 
-	"github.com/5GC-DEV/nas-cdac/nasType"
+	"github.com/5GC-DEV/nas-cdac/v2/nasType"
 )
 
 type NotificationResponse struct {
@@ -29,25 +29,45 @@ const (
 )
 
 func (a *NotificationResponse) EncodeNotificationResponse(buffer *bytes.Buffer) {
-	binary.Write(buffer, binary.BigEndian, &a.ExtendedProtocolDiscriminator.Octet)
-	binary.Write(buffer, binary.BigEndian, &a.SpareHalfOctetAndSecurityHeaderType.Octet)
-	binary.Write(buffer, binary.BigEndian, &a.NotificationResponseMessageIdentity.Octet)
+	if err := binary.Write(buffer, binary.BigEndian, &a.ExtendedProtocolDiscriminator.Octet); err != nil {
+		return
+	}
+	if err := binary.Write(buffer, binary.BigEndian, &a.SpareHalfOctetAndSecurityHeaderType.Octet); err != nil {
+		return
+	}
+	if err := binary.Write(buffer, binary.BigEndian, &a.NotificationResponseMessageIdentity.Octet); err != nil {
+		return
+	}
 	if a.PDUSessionStatus != nil {
-		binary.Write(buffer, binary.BigEndian, a.PDUSessionStatus.GetIei())
-		binary.Write(buffer, binary.BigEndian, a.PDUSessionStatus.GetLen())
-		binary.Write(buffer, binary.BigEndian, &a.PDUSessionStatus.Buffer)
+		if err := binary.Write(buffer, binary.BigEndian, a.GetIei()); err != nil {
+			return
+		}
+		if err := binary.Write(buffer, binary.BigEndian, a.GetLen()); err != nil {
+			return
+		}
+		if err := binary.Write(buffer, binary.BigEndian, &a.Buffer); err != nil {
+			return
+		}
 	}
 }
 
 func (a *NotificationResponse) DecodeNotificationResponse(byteArray *[]byte) {
 	buffer := bytes.NewBuffer(*byteArray)
-	binary.Read(buffer, binary.BigEndian, &a.ExtendedProtocolDiscriminator.Octet)
-	binary.Read(buffer, binary.BigEndian, &a.SpareHalfOctetAndSecurityHeaderType.Octet)
-	binary.Read(buffer, binary.BigEndian, &a.NotificationResponseMessageIdentity.Octet)
+	if err := binary.Read(buffer, binary.BigEndian, &a.ExtendedProtocolDiscriminator.Octet); err != nil {
+		return
+	}
+	if err := binary.Read(buffer, binary.BigEndian, &a.SpareHalfOctetAndSecurityHeaderType.Octet); err != nil {
+		return
+	}
+	if err := binary.Read(buffer, binary.BigEndian, &a.NotificationResponseMessageIdentity.Octet); err != nil {
+		return
+	}
 	for buffer.Len() > 0 {
 		var ieiN uint8
 		var tmpIeiN uint8
-		binary.Read(buffer, binary.BigEndian, &ieiN)
+		if err := binary.Read(buffer, binary.BigEndian, &ieiN); err != nil {
+			return
+		}
 		if ieiN >= 0x80 {
 			tmpIeiN = (ieiN & 0xf0) >> 4
 		} else {
@@ -56,9 +76,13 @@ func (a *NotificationResponse) DecodeNotificationResponse(byteArray *[]byte) {
 		switch tmpIeiN {
 		case NotificationResponsePDUSessionStatusType:
 			a.PDUSessionStatus = nasType.NewPDUSessionStatus(ieiN)
-			binary.Read(buffer, binary.BigEndian, &a.PDUSessionStatus.Len)
-			a.PDUSessionStatus.SetLen(a.PDUSessionStatus.GetLen())
-			binary.Read(buffer, binary.BigEndian, a.PDUSessionStatus.Buffer[:a.PDUSessionStatus.GetLen()])
+			if err := binary.Read(buffer, binary.BigEndian, &a.Len); err != nil {
+				return
+			}
+			a.SetLen(a.GetLen())
+			if err := binary.Read(buffer, binary.BigEndian, a.Buffer[:a.GetLen()]); err != nil {
+				return
+			}
 		default:
 		}
 	}

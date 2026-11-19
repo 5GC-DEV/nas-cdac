@@ -10,10 +10,9 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/5GC-DEV/nas-cdac/logger"
-	"github.com/5GC-DEV/nas-cdac/nasMessage"
-	"github.com/5GC-DEV/nas-cdac/nasType"
-	"github.com/stretchr/testify/assert"
+	"github.com/5GC-DEV/nas-cdac/v2/logger"
+	"github.com/5GC-DEV/nas-cdac/v2/nasMessage"
+	"github.com/5GC-DEV/nas-cdac/v2/nasType"
 )
 
 type nasMessageDeregistrationRequestUEOriginatingDeregistrationData struct {
@@ -44,7 +43,9 @@ var nasMessageDeregistrationRequestUEOriginatingDeregistrationTable = []nasMessa
 
 func TestNasTypeNewDeregistrationRequestUEOriginatingDeregistration(t *testing.T) {
 	a := nasMessage.NewDeregistrationRequestUEOriginatingDeregistration(0)
-	assert.NotNil(t, a)
+	if a == nil {
+		t.Fatal("Expected value not to be nil")
+	}
 }
 
 func TestNasTypeNewDeregistrationRequestUEOriginatingDeregistrationMessage(t *testing.T) {
@@ -52,13 +53,17 @@ func TestNasTypeNewDeregistrationRequestUEOriginatingDeregistrationMessage(t *te
 		logger.NasMsgLog.Infoln("Test Cnt:", i)
 		a := nasMessage.NewDeregistrationRequestUEOriginatingDeregistration(0)
 		b := nasMessage.NewDeregistrationRequestUEOriginatingDeregistration(0)
-		assert.NotNil(t, a)
-		assert.NotNil(t, b)
+		if a == nil {
+			t.Fatal("Expected value not to be nil")
+		}
+		if b == nil {
+			t.Fatal("Expected value not to be nil")
+		}
 
-		a.ExtendedProtocolDiscriminator.SetExtendedProtocolDiscriminator(table.inExtendedProtocolDiscriminator)
-		a.SpareHalfOctetAndSecurityHeaderType.SetSecurityHeaderType(table.inSecurityHeaderType)
-		a.SpareHalfOctetAndSecurityHeaderType.SetSpareHalfOctet(table.inSpareHalfOctet)
-		a.DeregistrationRequestMessageIdentity.SetMessageType(table.inDeregistrationRequestMessageIdentity)
+		a.SetExtendedProtocolDiscriminator(table.inExtendedProtocolDiscriminator)
+		a.SetSecurityHeaderType(table.inSecurityHeaderType)
+		a.SetSpareHalfOctet(table.inSpareHalfOctet)
+		a.SetMessageType(table.inDeregistrationRequestMessageIdentity)
 
 		a.NgksiAndDeregistrationType = table.inNgksiAndDeregistrationType
 
@@ -69,7 +74,9 @@ func TestNasTypeNewDeregistrationRequestUEOriginatingDeregistrationMessage(t *te
 		logger.NasMsgLog.Debugln("Encode: ", a)
 
 		data := make([]byte, buff.Len())
-		buff.Read(data)
+		if _, err := buff.Read(data); err != nil {
+			t.Fatal(err)
+		}
 		logger.NasMsgLog.Debugln(data)
 		b.DecodeDeregistrationRequestUEOriginatingDeregistration(&data)
 		logger.NasMsgLog.Debugln("Decode: ", b)
@@ -77,6 +84,5 @@ func TestNasTypeNewDeregistrationRequestUEOriginatingDeregistrationMessage(t *te
 		if reflect.DeepEqual(a, b) != true {
 			t.Errorf("Not correct")
 		}
-
 	}
 }

@@ -33,14 +33,14 @@ func (a *LADNInformation) SetIei(iei uint8) {
 
 // LADNInformation 9.11.3.30
 // Len Row, sBit, len = [], 8, 16
-func (a *LADNInformation) GetLen() (len uint16) {
+func (a *LADNInformation) GetLen() (length uint16) {
 	return a.Len
 }
 
 // LADNInformation 9.11.3.30
 // Len Row, sBit, len = [], 8, 16
-func (a *LADNInformation) SetLen(len uint16) {
-	a.Len = len
+func (a *LADNInformation) SetLen(length uint16) {
+	a.Len = length
 	a.Buffer = make([]uint8, a.Len)
 }
 

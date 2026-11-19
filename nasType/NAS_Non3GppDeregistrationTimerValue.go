@@ -33,14 +33,14 @@ func (a *Non3GppDeregistrationTimerValue) SetIei(iei uint8) {
 
 // Non3GppDeregistrationTimerValue 9.11.2.4
 // Len Row, sBit, len = [], 8, 8
-func (a *Non3GppDeregistrationTimerValue) GetLen() (len uint8) {
+func (a *Non3GppDeregistrationTimerValue) GetLen() (length uint8) {
 	return a.Len
 }
 
 // Non3GppDeregistrationTimerValue 9.11.2.4
 // Len Row, sBit, len = [], 8, 8
-func (a *Non3GppDeregistrationTimerValue) SetLen(len uint8) {
-	a.Len = len
+func (a *Non3GppDeregistrationTimerValue) SetLen(length uint8) {
+	a.Len = length
 }
 
 // Non3GppDeregistrationTimerValue 9.11.2.4

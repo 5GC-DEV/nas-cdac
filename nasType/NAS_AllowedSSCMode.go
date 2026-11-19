@@ -23,7 +23,7 @@ func NewAllowedSSCMode(iei uint8) (allowedSSCMode *AllowedSSCMode) {
 // AllowedSSCMode 9.11.4.5
 // Iei Row, sBit, len = [0, 0], 8 , 4
 func (a *AllowedSSCMode) GetIei() (iei uint8) {
-	return a.Octet & GetBitMask(8, 4) >> (4)
+	return a.Octet & GetBitMask(8, 4) >> 4
 }
 
 // AllowedSSCMode 9.11.4.5
@@ -35,7 +35,7 @@ func (a *AllowedSSCMode) SetIei(iei uint8) {
 // AllowedSSCMode 9.11.4.5
 // SSC3 Row, sBit, len = [0, 0], 3 , 1
 func (a *AllowedSSCMode) GetSSC3() (sSC3 uint8) {
-	return a.Octet & GetBitMask(3, 2) >> (2)
+	return a.Octet & GetBitMask(3, 2) >> 2
 }
 
 // AllowedSSCMode 9.11.4.5
@@ -47,7 +47,7 @@ func (a *AllowedSSCMode) SetSSC3(sSC3 uint8) {
 // AllowedSSCMode 9.11.4.5
 // SSC2 Row, sBit, len = [0, 0], 2 , 1
 func (a *AllowedSSCMode) GetSSC2() (sSC2 uint8) {
-	return a.Octet & GetBitMask(2, 1) >> (1)
+	return a.Octet & GetBitMask(2, 1) >> 1
 }
 
 // AllowedSSCMode 9.11.4.5

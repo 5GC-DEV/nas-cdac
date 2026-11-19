@@ -36,20 +36,20 @@ func (a *Capability5GMM) SetIei(iei uint8) {
 
 // Capability5GMM 9.11.3.1
 // Len Row, sBit, len = [], 8, 8
-func (a *Capability5GMM) GetLen() (len uint8) {
+func (a *Capability5GMM) GetLen() (length uint8) {
 	return a.Len
 }
 
 // Capability5GMM 9.11.3.1
 // Len Row, sBit, len = [], 8, 8
-func (a *Capability5GMM) SetLen(len uint8) {
-	a.Len = len
+func (a *Capability5GMM) SetLen(length uint8) {
+	a.Len = length
 }
 
 // Capability5GMM 9.11.3.1
 // LPP Row, sBit, len = [0, 0], 3 , 1
 func (a *Capability5GMM) GetLPP() (lPP uint8) {
-	return a.Octet[0] & GetBitMask(3, 2) >> (2)
+	return a.Octet[0] & GetBitMask(3, 2) >> 2
 }
 
 // Capability5GMM 9.11.3.1
@@ -61,7 +61,7 @@ func (a *Capability5GMM) SetLPP(lPP uint8) {
 // Capability5GMM 9.11.3.1
 // HOAttach Row, sBit, len = [0, 0], 2 , 1
 func (a *Capability5GMM) GetHOAttach() (hOAttach uint8) {
-	return a.Octet[0] & GetBitMask(2, 1) >> (1)
+	return a.Octet[0] & GetBitMask(2, 1) >> 1
 }
 
 // Capability5GMM 9.11.3.1

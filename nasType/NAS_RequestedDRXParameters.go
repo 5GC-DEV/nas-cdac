@@ -33,14 +33,14 @@ func (a *RequestedDRXParameters) SetIei(iei uint8) {
 
 // RequestedDRXParameters 9.11.3.2A
 // Len Row, sBit, len = [], 8, 8
-func (a *RequestedDRXParameters) GetLen() (len uint8) {
+func (a *RequestedDRXParameters) GetLen() (length uint8) {
 	return a.Len
 }
 
 // RequestedDRXParameters 9.11.3.2A
 // Len Row, sBit, len = [], 8, 8
-func (a *RequestedDRXParameters) SetLen(len uint8) {
-	a.Len = len
+func (a *RequestedDRXParameters) SetLen(length uint8) {
+	a.Len = length
 }
 
 // RequestedDRXParameters 9.11.3.2A

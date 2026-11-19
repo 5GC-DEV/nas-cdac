@@ -33,14 +33,14 @@ func (a *AllowedNSSAI) SetIei(iei uint8) {
 
 // AllowedNSSAI 9.11.3.37
 // Len Row, sBit, len = [], 8, 8
-func (a *AllowedNSSAI) GetLen() (len uint8) {
+func (a *AllowedNSSAI) GetLen() (length uint8) {
 	return a.Len
 }
 
 // AllowedNSSAI 9.11.3.37
 // Len Row, sBit, len = [], 8, 8
-func (a *AllowedNSSAI) SetLen(len uint8) {
-	a.Len = len
+func (a *AllowedNSSAI) SetLen(length uint8) {
+	a.Len = length
 	a.Buffer = make([]uint8, a.Len)
 }
 

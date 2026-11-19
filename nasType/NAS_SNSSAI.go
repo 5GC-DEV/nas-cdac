@@ -36,14 +36,14 @@ func (a *SNSSAI) SetIei(iei uint8) {
 
 // SNSSAI 9.11.2.8
 // Len Row, sBit, len = [], 8, 8
-func (a *SNSSAI) GetLen() (len uint8) {
+func (a *SNSSAI) GetLen() (length uint8) {
 	return a.Len
 }
 
 // SNSSAI 9.11.2.8
 // Len Row, sBit, len = [], 8, 8
-func (a *SNSSAI) SetLen(len uint8) {
-	a.Len = len
+func (a *SNSSAI) SetLen(length uint8) {
+	a.Len = length
 }
 
 // SNSSAI 9.11.2.8

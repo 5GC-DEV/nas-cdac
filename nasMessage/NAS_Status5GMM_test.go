@@ -10,11 +10,10 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/5GC-DEV/nas-cdac"
-	"github.com/5GC-DEV/nas-cdac/logger"
-	"github.com/5GC-DEV/nas-cdac/nasMessage"
-	"github.com/5GC-DEV/nas-cdac/nasType"
-	"github.com/stretchr/testify/assert"
+	"github.com/5GC-DEV/nas-cdac/v2"
+	"github.com/5GC-DEV/nas-cdac/v2/logger"
+	"github.com/5GC-DEV/nas-cdac/v2/nasMessage"
+	"github.com/5GC-DEV/nas-cdac/v2/nasType"
 )
 
 type nasMessageStatus5GMMData struct {
@@ -39,7 +38,9 @@ var nasMessageStatus5GMMTable = []nasMessageStatus5GMMData{
 
 func TestNasTypeNewStatus5GMM(t *testing.T) {
 	a := nasMessage.NewStatus5GMM(0)
-	assert.NotNil(t, a)
+	if a == nil {
+		t.Fatal("Expected value not to be nil")
+	}
 }
 
 func TestNasTypeNewStatus5GMMMessage(t *testing.T) {
@@ -47,14 +48,18 @@ func TestNasTypeNewStatus5GMMMessage(t *testing.T) {
 		t.Logf("Test Cnt:%d", i)
 		a := nasMessage.NewStatus5GMM(0)
 		b := nasMessage.NewStatus5GMM(0)
-		assert.NotNil(t, a)
-		assert.NotNil(t, b)
+		if a == nil {
+			t.Fatal("Expected value not to be nil")
+		}
+		if b == nil {
+			t.Fatal("Expected value not to be nil")
+		}
 
-		a.ExtendedProtocolDiscriminator.SetExtendedProtocolDiscriminator(table.inExtendedProtocolDiscriminator)
-		a.SpareHalfOctetAndSecurityHeaderType.SetSecurityHeaderType(table.inSecurityHeader)
-		a.SpareHalfOctetAndSecurityHeaderType.SetSpareHalfOctet(table.inSpareHalfOctet)
+		a.SetExtendedProtocolDiscriminator(table.inExtendedProtocolDiscriminator)
+		a.SetSecurityHeaderType(table.inSecurityHeader)
+		a.SetSpareHalfOctet(table.inSpareHalfOctet)
 
-		a.STATUSMessageIdentity5GMM.SetMessageType(table.inStatus5GMMMessageIdentity)
+		a.SetMessageType(table.inStatus5GMMMessageIdentity)
 
 		a.Cause5GMM = table.inCause5GMM
 
@@ -63,7 +68,9 @@ func TestNasTypeNewStatus5GMMMessage(t *testing.T) {
 		logger.NasMsgLog.Debugln("Encode: ", a)
 
 		data := make([]byte, buff.Len())
-		buff.Read(data)
+		if _, err := buff.Read(data); err != nil {
+			t.Fatal(err)
+		}
 		logger.NasMsgLog.Debugln(data)
 		b.DecodeStatus5GMM(&data)
 		logger.NasMsgLog.Debugln("Decode: ", b)

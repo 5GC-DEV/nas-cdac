@@ -21,7 +21,7 @@ func NewAlwaysonPDUSessionIndication(iei uint8) (alwaysonPDUSessionIndication *A
 // AlwaysonPDUSessionIndication 9.11.4.3
 // Iei Row, sBit, len = [0, 0], 8 , 4
 func (a *AlwaysonPDUSessionIndication) GetIei() (iei uint8) {
-	return a.Octet & GetBitMask(8, 4) >> (4)
+	return a.Octet & GetBitMask(8, 4) >> 4
 }
 
 // AlwaysonPDUSessionIndication 9.11.4.3

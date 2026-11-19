@@ -21,7 +21,7 @@ func NewNSSAIInclusionMode(iei uint8) (nSSAIInclusionMode *NSSAIInclusionMode) {
 // NSSAIInclusionMode 9.11.3.37A
 // Iei Row, sBit, len = [0, 0], 8 , 4
 func (a *NSSAIInclusionMode) GetIei() (iei uint8) {
-	return a.Octet & GetBitMask(8, 4) >> (4)
+	return a.Octet & GetBitMask(8, 4) >> 4
 }
 
 // NSSAIInclusionMode 9.11.3.37A

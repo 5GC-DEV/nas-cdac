@@ -10,10 +10,9 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/5GC-DEV/nas-cdac/logger"
-	"github.com/5GC-DEV/nas-cdac/nasMessage"
-	"github.com/5GC-DEV/nas-cdac/nasType"
-	"github.com/stretchr/testify/assert"
+	"github.com/5GC-DEV/nas-cdac/v2/logger"
+	"github.com/5GC-DEV/nas-cdac/v2/nasMessage"
+	"github.com/5GC-DEV/nas-cdac/v2/nasType"
 )
 
 type nasMessageAuthenticationRequestData struct {
@@ -48,7 +47,9 @@ var nasMessageAuthenticationRequestTable = []nasMessageAuthenticationRequestData
 
 func TestNasTypeNewAuthenticationRequest(t *testing.T) {
 	a := nasMessage.NewAuthenticationRequest(0)
-	assert.NotNil(t, a)
+	if a == nil {
+		t.Fatal("Expected value not to be nil")
+	}
 }
 
 func TestNasTypeNewAuthenticationRequestMessage(t *testing.T) {
@@ -57,13 +58,17 @@ func TestNasTypeNewAuthenticationRequestMessage(t *testing.T) {
 		t.Logf("Test Cnt:%d", i)
 		a := nasMessage.NewAuthenticationRequest(0)
 		b := nasMessage.NewAuthenticationRequest(0)
-		assert.NotNil(t, a)
-		assert.NotNil(t, b)
+		if a == nil {
+			t.Fatal("Expected value not to be nil")
+		}
+		if b == nil {
+			t.Fatal("Expected value not to be nil")
+		}
 
-		a.ExtendedProtocolDiscriminator.SetExtendedProtocolDiscriminator(table.inExtendedProtocolDiscriminator)
-		a.SpareHalfOctetAndSecurityHeaderType.SetSecurityHeaderType(table.inSecurityHeader)
+		a.SetExtendedProtocolDiscriminator(table.inExtendedProtocolDiscriminator)
+		a.SetSecurityHeaderType(table.inSecurityHeader)
 		a.SpareHalfOctetAndSecurityHeaderType.SetSpareHalfOctet(table.inSpareHalfOctet1)
-		a.AuthenticationRequestMessageIdentity.SetMessageType(table.inAuthenticationRequestMessageIdentity)
+		a.SetMessageType(table.inAuthenticationRequestMessageIdentity)
 
 		a.ABBA = table.inABBA
 
@@ -81,7 +86,9 @@ func TestNasTypeNewAuthenticationRequestMessage(t *testing.T) {
 		logger.NasMsgLog.Debugln("encode:", a)
 
 		data := make([]byte, buff.Len())
-		buff.Read(data)
+		if _, err := buff.Read(data); err != nil {
+			t.Fatal(err)
+		}
 		b.DecodeAuthenticationRequest(&data)
 		logger.NasMsgLog.Debugln("decode:", b)
 

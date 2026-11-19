@@ -22,7 +22,7 @@ func NewPDUSessionType(iei uint8) (pDUSessionType *PDUSessionType) {
 // PDUSessionType 9.11.4.11
 // Iei Row, sBit, len = [0, 0], 8 , 4
 func (a *PDUSessionType) GetIei() (iei uint8) {
-	return a.Octet & GetBitMask(8, 4) >> (4)
+	return a.Octet & GetBitMask(8, 4) >> 4
 }
 
 // PDUSessionType 9.11.4.11
@@ -34,7 +34,7 @@ func (a *PDUSessionType) SetIei(iei uint8) {
 // PDUSessionType 9.11.4.11
 // Spare Row, sBit, len = [0, 0], 4 , 1
 func (a *PDUSessionType) GetSpare() (spare uint8) {
-	return a.Octet & GetBitMask(4, 3) >> (3)
+	return a.Octet & GetBitMask(4, 3) >> 3
 }
 
 // PDUSessionType 9.11.4.11

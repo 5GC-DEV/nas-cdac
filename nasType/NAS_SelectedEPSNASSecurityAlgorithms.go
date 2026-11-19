@@ -34,7 +34,7 @@ func (a *SelectedEPSNASSecurityAlgorithms) SetIei(iei uint8) {
 // SelectedEPSNASSecurityAlgorithms 9.11.3.25
 // TypeOfCipheringAlgorithm Row, sBit, len = [0, 0], 7 , 3
 func (a *SelectedEPSNASSecurityAlgorithms) GetTypeOfCipheringAlgorithm() (typeOfCipheringAlgorithm uint8) {
-	return a.Octet & GetBitMask(7, 4) >> (4)
+	return a.Octet & GetBitMask(7, 4) >> 4
 }
 
 // SelectedEPSNASSecurityAlgorithms 9.11.3.25

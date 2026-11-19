@@ -34,20 +34,20 @@ func (a *UpdateType5GS) SetIei(iei uint8) {
 
 // UpdateType5GS 9.11.3.9A
 // Len Row, sBit, len = [], 8, 8
-func (a *UpdateType5GS) GetLen() (len uint8) {
+func (a *UpdateType5GS) GetLen() (length uint8) {
 	return a.Len
 }
 
 // UpdateType5GS 9.11.3.9A
 // Len Row, sBit, len = [], 8, 8
-func (a *UpdateType5GS) SetLen(len uint8) {
-	a.Len = len
+func (a *UpdateType5GS) SetLen(length uint8) {
+	a.Len = length
 }
 
 // UpdateType5GS 9.11.3.9A
 // NGRanRcu Row, sBit, len = [0, 0], 2 , 1
 func (a *UpdateType5GS) GetNGRanRcu() (nGRanRcu uint8) {
-	return a.Octet & GetBitMask(2, 1) >> (1)
+	return a.Octet & GetBitMask(2, 1) >> 1
 }
 
 // UpdateType5GS 9.11.3.9A

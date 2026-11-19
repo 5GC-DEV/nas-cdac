@@ -9,7 +9,7 @@ import (
 	"bytes"
 	"encoding/binary"
 
-	"github.com/5GC-DEV/nas-cdac/nasType"
+	"github.com/5GC-DEV/nas-cdac/v2/nasType"
 )
 
 type PDUSessionAuthenticationCommand struct {
@@ -31,32 +31,64 @@ const (
 )
 
 func (a *PDUSessionAuthenticationCommand) EncodePDUSessionAuthenticationCommand(buffer *bytes.Buffer) {
-	binary.Write(buffer, binary.BigEndian, &a.ExtendedProtocolDiscriminator.Octet)
-	binary.Write(buffer, binary.BigEndian, &a.PDUSessionID.Octet)
-	binary.Write(buffer, binary.BigEndian, &a.PTI.Octet)
-	binary.Write(buffer, binary.BigEndian, &a.PDUSESSIONAUTHENTICATIONCOMMANDMessageIdentity.Octet)
-	binary.Write(buffer, binary.BigEndian, a.EAPMessage.GetLen())
-	binary.Write(buffer, binary.BigEndian, &a.EAPMessage.Buffer)
+	if err := binary.Write(buffer, binary.BigEndian, &a.ExtendedProtocolDiscriminator.Octet); err != nil {
+		return
+	}
+	if err := binary.Write(buffer, binary.BigEndian, &a.PDUSessionID.Octet); err != nil {
+		return
+	}
+	if err := binary.Write(buffer, binary.BigEndian, &a.PTI.Octet); err != nil {
+		return
+	}
+	if err := binary.Write(buffer, binary.BigEndian, &a.PDUSESSIONAUTHENTICATIONCOMMANDMessageIdentity.Octet); err != nil {
+		return
+	}
+	if err := binary.Write(buffer, binary.BigEndian, a.EAPMessage.GetLen()); err != nil {
+		return
+	}
+	if err := binary.Write(buffer, binary.BigEndian, &a.EAPMessage.Buffer); err != nil {
+		return
+	}
 	if a.ExtendedProtocolConfigurationOptions != nil {
-		binary.Write(buffer, binary.BigEndian, a.ExtendedProtocolConfigurationOptions.GetIei())
-		binary.Write(buffer, binary.BigEndian, a.ExtendedProtocolConfigurationOptions.GetLen())
-		binary.Write(buffer, binary.BigEndian, &a.ExtendedProtocolConfigurationOptions.Buffer)
+		if err := binary.Write(buffer, binary.BigEndian, a.ExtendedProtocolConfigurationOptions.GetIei()); err != nil {
+			return
+		}
+		if err := binary.Write(buffer, binary.BigEndian, a.ExtendedProtocolConfigurationOptions.GetLen()); err != nil {
+			return
+		}
+		if err := binary.Write(buffer, binary.BigEndian, &a.ExtendedProtocolConfigurationOptions.Buffer); err != nil {
+			return
+		}
 	}
 }
 
 func (a *PDUSessionAuthenticationCommand) DecodePDUSessionAuthenticationCommand(byteArray *[]byte) {
 	buffer := bytes.NewBuffer(*byteArray)
-	binary.Read(buffer, binary.BigEndian, &a.ExtendedProtocolDiscriminator.Octet)
-	binary.Read(buffer, binary.BigEndian, &a.PDUSessionID.Octet)
-	binary.Read(buffer, binary.BigEndian, &a.PTI.Octet)
-	binary.Read(buffer, binary.BigEndian, &a.PDUSESSIONAUTHENTICATIONCOMMANDMessageIdentity.Octet)
-	binary.Read(buffer, binary.BigEndian, &a.EAPMessage.Len)
+	if err := binary.Read(buffer, binary.BigEndian, &a.ExtendedProtocolDiscriminator.Octet); err != nil {
+		return
+	}
+	if err := binary.Read(buffer, binary.BigEndian, &a.PDUSessionID.Octet); err != nil {
+		return
+	}
+	if err := binary.Read(buffer, binary.BigEndian, &a.PTI.Octet); err != nil {
+		return
+	}
+	if err := binary.Read(buffer, binary.BigEndian, &a.PDUSESSIONAUTHENTICATIONCOMMANDMessageIdentity.Octet); err != nil {
+		return
+	}
+	if err := binary.Read(buffer, binary.BigEndian, &a.EAPMessage.Len); err != nil {
+		return
+	}
 	a.EAPMessage.SetLen(a.EAPMessage.GetLen())
-	binary.Read(buffer, binary.BigEndian, &a.EAPMessage.Buffer)
+	if err := binary.Read(buffer, binary.BigEndian, &a.EAPMessage.Buffer); err != nil {
+		return
+	}
 	for buffer.Len() > 0 {
 		var ieiN uint8
 		var tmpIeiN uint8
-		binary.Read(buffer, binary.BigEndian, &ieiN)
+		if err := binary.Read(buffer, binary.BigEndian, &ieiN); err != nil {
+			return
+		}
 		if ieiN >= 0x80 {
 			tmpIeiN = (ieiN & 0xf0) >> 4
 		} else {
@@ -65,9 +97,13 @@ func (a *PDUSessionAuthenticationCommand) DecodePDUSessionAuthenticationCommand(
 		switch tmpIeiN {
 		case PDUSessionAuthenticationCommandExtendedProtocolConfigurationOptionsType:
 			a.ExtendedProtocolConfigurationOptions = nasType.NewExtendedProtocolConfigurationOptions(ieiN)
-			binary.Read(buffer, binary.BigEndian, &a.ExtendedProtocolConfigurationOptions.Len)
+			if err := binary.Read(buffer, binary.BigEndian, &a.ExtendedProtocolConfigurationOptions.Len); err != nil {
+				return
+			}
 			a.ExtendedProtocolConfigurationOptions.SetLen(a.ExtendedProtocolConfigurationOptions.GetLen())
-			binary.Read(buffer, binary.BigEndian, a.ExtendedProtocolConfigurationOptions.Buffer[:a.ExtendedProtocolConfigurationOptions.GetLen()])
+			if err := binary.Read(buffer, binary.BigEndian, a.ExtendedProtocolConfigurationOptions.Buffer[:a.ExtendedProtocolConfigurationOptions.GetLen()]); err != nil {
+				return
+			}
 		default:
 		}
 	}

@@ -21,7 +21,7 @@ func NewAlwaysonPDUSessionRequested(iei uint8) (alwaysonPDUSessionRequested *Alw
 // AlwaysonPDUSessionRequested 9.11.4.4
 // Iei Row, sBit, len = [0, 0], 8 , 4
 func (a *AlwaysonPDUSessionRequested) GetIei() (iei uint8) {
-	return a.Octet & GetBitMask(8, 4) >> (4)
+	return a.Octet & GetBitMask(8, 4) >> 4
 }
 
 // AlwaysonPDUSessionRequested 9.11.4.4

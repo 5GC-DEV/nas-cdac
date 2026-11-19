@@ -10,10 +10,9 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/5GC-DEV/nas-cdac/logger"
-	"github.com/5GC-DEV/nas-cdac/nasMessage"
-	"github.com/5GC-DEV/nas-cdac/nasType"
-	"github.com/stretchr/testify/assert"
+	"github.com/5GC-DEV/nas-cdac/v2/logger"
+	"github.com/5GC-DEV/nas-cdac/v2/nasMessage"
+	"github.com/5GC-DEV/nas-cdac/v2/nasType"
 )
 
 type nasMessagePDUSessionReleaseCommandData struct {
@@ -57,7 +56,9 @@ var nasMessagePDUSessionReleaseCommandTable = []nasMessagePDUSessionReleaseComma
 
 func TestNasTypeNewPDUSessionReleaseCommand(t *testing.T) {
 	a := nasMessage.NewPDUSessionReleaseCommand(0)
-	assert.NotNil(t, a)
+	if a == nil {
+		t.Fatal("Expected value not to be nil")
+	}
 }
 
 func TestNasTypeNewPDUSessionReleaseCommandMessage(t *testing.T) {
@@ -65,13 +66,17 @@ func TestNasTypeNewPDUSessionReleaseCommandMessage(t *testing.T) {
 		t.Logf("Test Cnt:%d", i)
 		a := nasMessage.NewPDUSessionReleaseCommand(0)
 		b := nasMessage.NewPDUSessionReleaseCommand(0)
-		assert.NotNil(t, a)
-		assert.NotNil(t, b)
+		if a == nil {
+			t.Fatal("Expected value not to be nil")
+		}
+		if b == nil {
+			t.Fatal("Expected value not to be nil")
+		}
 
-		a.ExtendedProtocolDiscriminator.SetExtendedProtocolDiscriminator(table.inExtendedProtocolDiscriminator)
-		a.PDUSessionID.SetPDUSessionID(table.inPDUSessionID)
-		a.PTI.SetPTI(table.inPTI)
-		a.PDUSESSIONRELEASECOMMANDMessageIdentity.SetMessageType(table.inPDUSessionReleaseCommandMessageIdentity)
+		a.SetExtendedProtocolDiscriminator(table.inExtendedProtocolDiscriminator)
+		a.SetPDUSessionID(table.inPDUSessionID)
+		a.SetPTI(table.inPTI)
+		a.SetMessageType(table.inPDUSessionReleaseCommandMessageIdentity)
 
 		a.Cause5GSM = table.inCause5GSM
 
@@ -89,7 +94,9 @@ func TestNasTypeNewPDUSessionReleaseCommandMessage(t *testing.T) {
 		logger.NasMsgLog.Debugln("Encode: ", a)
 
 		data := make([]byte, buff.Len())
-		buff.Read(data)
+		if _, err := buff.Read(data); err != nil {
+			t.Fatal(err)
+		}
 		logger.NasMsgLog.Debugln(data)
 		b.DecodePDUSessionReleaseCommand(&data)
 		logger.NasMsgLog.Debugln("Decode: ", b)
@@ -98,6 +105,5 @@ func TestNasTypeNewPDUSessionReleaseCommandMessage(t *testing.T) {
 		if reflect.DeepEqual(a, b) != true {
 			t.Errorf("Not correct")
 		}
-
 	}
 }

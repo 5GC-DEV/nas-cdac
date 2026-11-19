@@ -9,7 +9,7 @@ import (
 	"bytes"
 	"encoding/binary"
 
-	"github.com/5GC-DEV/nas-cdac/nasType"
+	"github.com/5GC-DEV/nas-cdac/v2/nasType"
 )
 
 type Status5GSM struct {
@@ -26,24 +26,46 @@ func NewStatus5GSM(iei uint8) (status5GSM *Status5GSM) {
 }
 
 func (a *Status5GSM) EncodeStatus5GSM(buffer *bytes.Buffer) {
-	binary.Write(buffer, binary.BigEndian, &a.ExtendedProtocolDiscriminator.Octet)
-	binary.Write(buffer, binary.BigEndian, &a.PDUSessionID.Octet)
-	binary.Write(buffer, binary.BigEndian, &a.PTI.Octet)
-	binary.Write(buffer, binary.BigEndian, &a.STATUSMessageIdentity5GSM.Octet)
-	binary.Write(buffer, binary.BigEndian, &a.Cause5GSM.Octet)
+	if err := binary.Write(buffer, binary.BigEndian, &a.ExtendedProtocolDiscriminator.Octet); err != nil {
+		return
+	}
+	if err := binary.Write(buffer, binary.BigEndian, &a.PDUSessionID.Octet); err != nil {
+		return
+	}
+	if err := binary.Write(buffer, binary.BigEndian, &a.PTI.Octet); err != nil {
+		return
+	}
+	if err := binary.Write(buffer, binary.BigEndian, &a.STATUSMessageIdentity5GSM.Octet); err != nil {
+		return
+	}
+	if err := binary.Write(buffer, binary.BigEndian, &a.Cause5GSM.Octet); err != nil {
+		return
+	}
 }
 
 func (a *Status5GSM) DecodeStatus5GSM(byteArray *[]byte) {
 	buffer := bytes.NewBuffer(*byteArray)
-	binary.Read(buffer, binary.BigEndian, &a.ExtendedProtocolDiscriminator.Octet)
-	binary.Read(buffer, binary.BigEndian, &a.PDUSessionID.Octet)
-	binary.Read(buffer, binary.BigEndian, &a.PTI.Octet)
-	binary.Read(buffer, binary.BigEndian, &a.STATUSMessageIdentity5GSM.Octet)
-	binary.Read(buffer, binary.BigEndian, &a.Cause5GSM.Octet)
+	if err := binary.Read(buffer, binary.BigEndian, &a.ExtendedProtocolDiscriminator.Octet); err != nil {
+		return
+	}
+	if err := binary.Read(buffer, binary.BigEndian, &a.PDUSessionID.Octet); err != nil {
+		return
+	}
+	if err := binary.Read(buffer, binary.BigEndian, &a.PTI.Octet); err != nil {
+		return
+	}
+	if err := binary.Read(buffer, binary.BigEndian, &a.STATUSMessageIdentity5GSM.Octet); err != nil {
+		return
+	}
+	if err := binary.Read(buffer, binary.BigEndian, &a.Cause5GSM.Octet); err != nil {
+		return
+	}
 	for buffer.Len() > 0 {
 		var ieiN uint8
 		var tmpIeiN uint8
-		binary.Read(buffer, binary.BigEndian, &ieiN)
+		if err := binary.Read(buffer, binary.BigEndian, &ieiN); err != nil {
+			return
+		}
 		if ieiN >= 0x80 {
 			tmpIeiN = (ieiN & 0xf0) >> 4
 		} else {

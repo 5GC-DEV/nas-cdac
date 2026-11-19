@@ -33,14 +33,14 @@ func (a *TAIList) SetIei(iei uint8) {
 
 // TAIList 9.11.3.9
 // Len Row, sBit, len = [], 8, 8
-func (a *TAIList) GetLen() (len uint8) {
+func (a *TAIList) GetLen() (length uint8) {
 	return a.Len
 }
 
 // TAIList 9.11.3.9
 // Len Row, sBit, len = [], 8, 8
-func (a *TAIList) SetLen(len uint8) {
-	a.Len = len
+func (a *TAIList) SetLen(length uint8) {
+	a.Len = length
 	a.Buffer = make([]uint8, a.Len)
 }
 

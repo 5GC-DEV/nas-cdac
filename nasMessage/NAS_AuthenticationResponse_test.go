@@ -10,10 +10,9 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/5GC-DEV/nas-cdac/logger"
-	"github.com/5GC-DEV/nas-cdac/nasMessage"
-	"github.com/5GC-DEV/nas-cdac/nasType"
-	"github.com/stretchr/testify/assert"
+	"github.com/5GC-DEV/nas-cdac/v2/logger"
+	"github.com/5GC-DEV/nas-cdac/v2/nasMessage"
+	"github.com/5GC-DEV/nas-cdac/v2/nasType"
 )
 
 type nasMessageAuthenticationResponseData struct {
@@ -38,7 +37,9 @@ var nasMessageAuthenticationResponseTable = []nasMessageAuthenticationResponseDa
 
 func TestNasTypeNewAuthenticationResponse(t *testing.T) {
 	a := nasMessage.NewAuthenticationResponse(0)
-	assert.NotNil(t, a)
+	if a == nil {
+		t.Fatal("Expected value not to be nil")
+	}
 }
 
 func TestNasTypeNewAuthenticationResponseMessage(t *testing.T) {
@@ -47,13 +48,17 @@ func TestNasTypeNewAuthenticationResponseMessage(t *testing.T) {
 		logger.NasMsgLog.Infoln("Test Cnt:", i)
 		a := nasMessage.NewAuthenticationResponse(0)
 		b := nasMessage.NewAuthenticationResponse(0)
-		assert.NotNil(t, a)
-		assert.NotNil(t, b)
+		if a == nil {
+			t.Fatal("Expected value not to be nil")
+		}
+		if b == nil {
+			t.Fatal("Expected value not to be nil")
+		}
 
-		a.ExtendedProtocolDiscriminator.SetExtendedProtocolDiscriminator(table.inExtendedProtocolDiscriminator)
-		a.SpareHalfOctetAndSecurityHeaderType.SetSecurityHeaderType(table.inSecurityHeader)
-		a.SpareHalfOctetAndSecurityHeaderType.SetSpareHalfOctet(table.inSpareHalfOctet)
-		a.AuthenticationResponseMessageIdentity.SetMessageType(table.inAuthenticationResponseMessageIdentity)
+		a.SetExtendedProtocolDiscriminator(table.inExtendedProtocolDiscriminator)
+		a.SetSecurityHeaderType(table.inSecurityHeader)
+		a.SetSpareHalfOctet(table.inSpareHalfOctet)
+		a.SetMessageType(table.inAuthenticationResponseMessageIdentity)
 
 		a.AuthenticationResponseParameter = nasType.NewAuthenticationResponseParameter(nasMessage.AuthenticationResponseAuthenticationResponseParameterType)
 		a.AuthenticationResponseParameter = &table.inAuthenticationResponseParameter
@@ -66,7 +71,9 @@ func TestNasTypeNewAuthenticationResponseMessage(t *testing.T) {
 		logger.NasMsgLog.Debugln("Encode: ", a)
 
 		data := make([]byte, buff.Len())
-		buff.Read(data)
+		if _, err := buff.Read(data); err != nil {
+			t.Fatal(err)
+		}
 		b.DecodeAuthenticationResponse(&data)
 		logger.NasMsgLog.Debugln(data)
 		logger.NasMsgLog.Debugln("Decode: ", b)
@@ -74,6 +81,5 @@ func TestNasTypeNewAuthenticationResponseMessage(t *testing.T) {
 		if reflect.DeepEqual(a, b) != true {
 			t.Errorf("Not correct")
 		}
-
 	}
 }

@@ -33,14 +33,14 @@ func (a *MobileIdentity5GS) SetIei(iei uint8) {
 
 // MobileIdentity5GS 9.11.3.4
 // Len Row, sBit, len = [], 8, 16
-func (a *MobileIdentity5GS) GetLen() (len uint16) {
+func (a *MobileIdentity5GS) GetLen() (length uint16) {
 	return a.Len
 }
 
 // MobileIdentity5GS 9.11.3.4
 // Len Row, sBit, len = [], 8, 16
-func (a *MobileIdentity5GS) SetLen(len uint16) {
-	a.Len = len
+func (a *MobileIdentity5GS) SetLen(length uint16) {
+	a.Len = length
 	a.Buffer = make([]uint8, a.Len)
 }
 

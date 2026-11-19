@@ -33,14 +33,14 @@ func (a *AuthorizedQosRules) SetIei(iei uint8) {
 
 // AuthorizedQosRules 9.11.4.13
 // Len Row, sBit, len = [], 8, 16
-func (a *AuthorizedQosRules) GetLen() (len uint16) {
+func (a *AuthorizedQosRules) GetLen() (length uint16) {
 	return a.Len
 }
 
 // AuthorizedQosRules 9.11.4.13
 // Len Row, sBit, len = [], 8, 16
-func (a *AuthorizedQosRules) SetLen(len uint16) {
-	a.Len = len
+func (a *AuthorizedQosRules) SetLen(length uint16) {
+	a.Len = length
 	a.Buffer = make([]uint8, a.Len)
 }
 

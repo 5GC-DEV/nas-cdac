@@ -33,14 +33,14 @@ func (a *SMPDUDNRequestContainer) SetIei(iei uint8) {
 
 // SMPDUDNRequestContainer 9.11.4.15
 // Len Row, sBit, len = [], 8, 8
-func (a *SMPDUDNRequestContainer) GetLen() (len uint8) {
+func (a *SMPDUDNRequestContainer) GetLen() (length uint8) {
 	return a.Len
 }
 
 // SMPDUDNRequestContainer 9.11.4.15
 // Len Row, sBit, len = [], 8, 8
-func (a *SMPDUDNRequestContainer) SetLen(len uint8) {
-	a.Len = len
+func (a *SMPDUDNRequestContainer) SetLen(length uint8) {
+	a.Len = length
 	a.Buffer = make([]uint8, a.Len)
 }
 

@@ -1,25 +1,11 @@
-module github.com/5GC-DEV/nas-cdac
+module github.com/5GC-DEV/nas-cdac/v2
 
-go 1.24.0
+go 1.26.0
 
-require (
-	github.com/5GC-DEV/openapi-cdac v0.4.3
-	github.com/5GC-DEV/util-cdac v0.5.1
-	github.com/aead/cmac v0.0.0-20160719120800-7af84192f0b1
-	github.com/smartystreets/goconvey v1.8.1
-	github.com/stretchr/testify v1.10.0
-	go.uber.org/zap v1.27.0
-)
+require go.uber.org/zap v1.28.0
 
 require (
-	github.com/davecgh/go-spew v1.1.1 // indirect
-	github.com/golang-jwt/jwt/v5 v5.3.0 // indirect
-	github.com/gopherjs/gopherjs v1.17.2 // indirect
-	github.com/jtolds/gls v4.20.0+incompatible // indirect
-	github.com/kr/pretty v0.3.1 // indirect
-	github.com/pmezard/go-difflib v1.0.0 // indirect
-	github.com/smarty/assertions v1.16.0 // indirect
+	github.com/5GC-DEV/openapi-cdac/v2 v2.0.0-20261117092522-fb0f12de7ef9 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
-	gopkg.in/check.v1 v1.0.0-20201130134442-10cb98267c6c // indirect
-	gopkg.in/yaml.v3 v3.0.1 // indirect
+	gopkg.in/validator.v2 v2.0.1 // indirect
 )

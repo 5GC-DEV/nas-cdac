@@ -3,13 +3,10 @@
 // SPDX-License-Identifier: Apache-2.0
 //
 
-package security_test
+package security
 
 import (
 	"testing"
-
-	"github.com/5GC-DEV/nas-cdac/security"
-	"github.com/stretchr/testify/assert"
 )
 
 func TestSetterGetter(t *testing.T) {
@@ -23,24 +20,32 @@ func TestSetterGetter(t *testing.T) {
 		{65535, 255},
 	}
 
-	count := security.Count{}
+	count := Count{}
 
 	for _, testCase := range testCases {
 		count.Set(testCase.overflow, testCase.sqn)
 		expected := (uint32(testCase.overflow) << 8) + uint32(testCase.sqn)
-		assert.Equal(t, expected, count.Get(), "Get() Failed")
-		assert.Equal(t, testCase.overflow, count.Overflow(), "Overflow() Failed")
-		assert.Equal(t, testCase.sqn, count.SQN(), "SQN() Failed")
+		if count.Get() != expected {
+			t.Errorf("Get() Failed: expected %v, got %v", expected, count.Get())
+		}
+		if count.Overflow() != testCase.overflow {
+			t.Errorf("Overflow() Failed: expected %v, got %v", testCase.overflow, count.Overflow())
+		}
+		if count.SQN() != testCase.sqn {
+			t.Errorf("SQN() Failed: expected %v, got %v", testCase.sqn, count.SQN())
+		}
 	}
 }
 
 func TestAddOne(t *testing.T) {
-	count := security.Count{}
+	count := Count{}
 
 	count.Set(0, 0)
 
-	for i := uint32(0); i < 4567; i++ {
+	for i := range 4567 {
 		count.AddOne()
-		assert.Equal(t, i+1, count.Get(), "AddOne() Test Failed")
+		if count.Get() != uint32(i+1) {
+			t.Errorf("AddOne() Test Failed: expected %v, got %v", uint32(i+1), count.Get())
+		}
 	}
 }

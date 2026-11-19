@@ -51,20 +51,20 @@ func (a *IMEISV) SetIei(iei uint8) {
 
 // IMEISV 9.11.3.4
 // Len Row, sBit, len = [], 8, 16
-func (a *IMEISV) GetLen() (len uint16) {
+func (a *IMEISV) GetLen() (length uint16) {
 	return a.Len
 }
 
 // IMEISV 9.11.3.4
 // Len Row, sBit, len = [], 8, 16
-func (a *IMEISV) SetLen(len uint16) {
-	a.Len = len
+func (a *IMEISV) SetLen(length uint16) {
+	a.Len = length
 }
 
 // IMEISV 9.11.3.4
 // IdentityDigit1 Row, sBit, len = [0, 0], 8 , 4
 func (a *IMEISV) GetIdentityDigit1() (identityDigit1 uint8) {
-	return a.Octet[0] & GetBitMask(8, 4) >> (4)
+	return a.Octet[0] & GetBitMask(8, 4) >> 4
 }
 
 // IMEISV 9.11.3.4
@@ -76,7 +76,7 @@ func (a *IMEISV) SetIdentityDigit1(identityDigit1 uint8) {
 // IMEISV 9.11.3.4
 // OddEvenIdic Row, sBit, len = [0, 0], 4 , 1
 func (a *IMEISV) GetOddEvenIdic() (oddEvenIdic uint8) {
-	return a.Octet[0] & GetBitMask(4, 3) >> (3)
+	return a.Octet[0] & GetBitMask(4, 3) >> 3
 }
 
 // IMEISV 9.11.3.4
@@ -100,7 +100,7 @@ func (a *IMEISV) SetTypeOfIdentity(typeOfIdentity uint8) {
 // IMEISV 9.11.3.4
 // IdentityDigitP_1 Row, sBit, len = [1, 1], 8 , 4
 func (a *IMEISV) GetIdentityDigitP_1() (identityDigitP_1 uint8) {
-	return a.Octet[1] & GetBitMask(8, 4) >> (4)
+	return a.Octet[1] & GetBitMask(8, 4) >> 4
 }
 
 // IMEISV 9.11.3.4
@@ -124,7 +124,7 @@ func (a *IMEISV) SetIdentityDigitP(identityDigitP uint8) {
 // IMEISV 9.11.3.4
 // IdentityDigitP_3 Row, sBit, len = [2, 2], 8 , 4
 func (a *IMEISV) GetIdentityDigitP_3() (identityDigitP_3 uint8) {
-	return a.Octet[2] & GetBitMask(8, 4) >> (4)
+	return a.Octet[2] & GetBitMask(8, 4) >> 4
 }
 
 // IMEISV 9.11.3.4
@@ -148,7 +148,7 @@ func (a *IMEISV) SetIdentityDigitP_2(identityDigitP_2 uint8) {
 // IMEISV 9.11.3.4
 // IdentityDigitP_5 Row, sBit, len = [3, 3], 8 , 4
 func (a *IMEISV) GetIdentityDigitP_5() (identityDigitP_5 uint8) {
-	return a.Octet[3] & GetBitMask(8, 4) >> (4)
+	return a.Octet[3] & GetBitMask(8, 4) >> 4
 }
 
 // IMEISV 9.11.3.4
@@ -172,7 +172,7 @@ func (a *IMEISV) SetIdentityDigitP_4(identityDigitP_4 uint8) {
 // IMEISV 9.11.3.4
 // IdentityDigitP_7 Row, sBit, len = [4, 4], 8 , 4
 func (a *IMEISV) GetIdentityDigitP_7() (identityDigitP_7 uint8) {
-	return a.Octet[4] & GetBitMask(8, 4) >> (4)
+	return a.Octet[4] & GetBitMask(8, 4) >> 4
 }
 
 // IMEISV 9.11.3.4
@@ -196,7 +196,7 @@ func (a *IMEISV) SetIdentityDigitP_6(identityDigitP_6 uint8) {
 // IMEISV 9.11.3.4
 // IdentityDigitP_9 Row, sBit, len = [5, 5], 8 , 4
 func (a *IMEISV) GetIdentityDigitP_9() (identityDigitP_9 uint8) {
-	return a.Octet[5] & GetBitMask(8, 4) >> (4)
+	return a.Octet[5] & GetBitMask(8, 4) >> 4
 }
 
 // IMEISV 9.11.3.4
@@ -220,7 +220,7 @@ func (a *IMEISV) SetIdentityDigitP_8(identityDigitP_8 uint8) {
 // IMEISV 9.11.3.4
 // IdentityDigitP_11 Row, sBit, len = [6, 6], 8 , 4
 func (a *IMEISV) GetIdentityDigitP_11() (identityDigitP_11 uint8) {
-	return a.Octet[6] & GetBitMask(8, 4) >> (4)
+	return a.Octet[6] & GetBitMask(8, 4) >> 4
 }
 
 // IMEISV 9.11.3.4
@@ -244,7 +244,7 @@ func (a *IMEISV) SetIdentityDigitP_10(identityDigitP_10 uint8) {
 // IMEISV 9.11.3.4
 // IdentityDigitP_13 Row, sBit, len = [7, 7], 8 , 4
 func (a *IMEISV) GetIdentityDigitP_13() (identityDigitP_13 uint8) {
-	return a.Octet[7] & GetBitMask(8, 4) >> (4)
+	return a.Octet[7] & GetBitMask(8, 4) >> 4
 }
 
 // IMEISV 9.11.3.4
@@ -268,7 +268,7 @@ func (a *IMEISV) SetIdentityDigitP_12(identityDigitP_12 uint8) {
 // IMEISV 9.11.3.4
 // IdentityDigitP_15 Row, sBit, len = [8, 8], 8 , 4
 func (a *IMEISV) GetIdentityDigitP_15() (identityDigitP_15 uint8) {
-	return a.Octet[8] & GetBitMask(8, 4) >> (4)
+	return a.Octet[8] & GetBitMask(8, 4) >> 4
 }
 
 // IMEISV 9.11.3.4

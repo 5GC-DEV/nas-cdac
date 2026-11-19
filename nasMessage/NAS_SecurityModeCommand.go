@@ -9,7 +9,7 @@ import (
 	"bytes"
 	"encoding/binary"
 
-	"github.com/5GC-DEV/nas-cdac/nasType"
+	"github.com/5GC-DEV/nas-cdac/v2/nasType"
 )
 
 type SecurityModeCommand struct {
@@ -25,6 +25,7 @@ type SecurityModeCommand struct {
 	*nasType.EAPMessage
 	*nasType.ABBA
 	*nasType.ReplayedS1UESecurityCapabilities
+	*nasType.MasterSessionKey
 }
 
 func NewSecurityModeCommand(iei uint8) (securityModeCommand *SecurityModeCommand) {
@@ -39,59 +40,131 @@ const (
 	SecurityModeCommandEAPMessageType                       uint8 = 0x78
 	SecurityModeCommandABBAType                             uint8 = 0x38
 	SecurityModeCommandReplayedS1UESecurityCapabilitiesType uint8 = 0x19
+	SecurityModeCommandMasterSessionKeyType                 uint8 = 0x55
 )
 
 func (a *SecurityModeCommand) EncodeSecurityModeCommand(buffer *bytes.Buffer) {
-	binary.Write(buffer, binary.BigEndian, &a.ExtendedProtocolDiscriminator.Octet)
-	binary.Write(buffer, binary.BigEndian, &a.SpareHalfOctetAndSecurityHeaderType.Octet)
-	binary.Write(buffer, binary.BigEndian, &a.SecurityModeCommandMessageIdentity.Octet)
-	binary.Write(buffer, binary.BigEndian, &a.SelectedNASSecurityAlgorithms.Octet)
-	binary.Write(buffer, binary.BigEndian, &a.SpareHalfOctetAndNgksi.Octet)
-	binary.Write(buffer, binary.BigEndian, a.ReplayedUESecurityCapabilities.GetLen())
-	binary.Write(buffer, binary.BigEndian, &a.ReplayedUESecurityCapabilities.Buffer)
+	if err := binary.Write(buffer, binary.BigEndian, &a.ExtendedProtocolDiscriminator.Octet); err != nil {
+		return
+	}
+	if err := binary.Write(buffer, binary.BigEndian, &a.SpareHalfOctetAndSecurityHeaderType.Octet); err != nil {
+		return
+	}
+	if err := binary.Write(buffer, binary.BigEndian, &a.SecurityModeCommandMessageIdentity.Octet); err != nil {
+		return
+	}
+	if err := binary.Write(buffer, binary.BigEndian, &a.SelectedNASSecurityAlgorithms.Octet); err != nil {
+		return
+	}
+	if err := binary.Write(buffer, binary.BigEndian, &a.SpareHalfOctetAndNgksi.Octet); err != nil {
+		return
+	}
+	if err := binary.Write(buffer, binary.BigEndian, a.ReplayedUESecurityCapabilities.GetLen()); err != nil {
+		return
+	}
+	if err := binary.Write(buffer, binary.BigEndian, &a.ReplayedUESecurityCapabilities.Buffer); err != nil {
+		return
+	}
 	if a.IMEISVRequest != nil {
-		binary.Write(buffer, binary.BigEndian, &a.IMEISVRequest.Octet)
+		if err := binary.Write(buffer, binary.BigEndian, &a.IMEISVRequest.Octet); err != nil {
+			return
+		}
 	}
 	if a.SelectedEPSNASSecurityAlgorithms != nil {
-		binary.Write(buffer, binary.BigEndian, a.SelectedEPSNASSecurityAlgorithms.GetIei())
-		binary.Write(buffer, binary.BigEndian, &a.SelectedEPSNASSecurityAlgorithms.Octet)
+		if err := binary.Write(buffer, binary.BigEndian, a.SelectedEPSNASSecurityAlgorithms.GetIei()); err != nil {
+			return
+		}
+		if err := binary.Write(buffer, binary.BigEndian, &a.SelectedEPSNASSecurityAlgorithms.Octet); err != nil {
+			return
+		}
 	}
 	if a.Additional5GSecurityInformation != nil {
-		binary.Write(buffer, binary.BigEndian, a.Additional5GSecurityInformation.GetIei())
-		binary.Write(buffer, binary.BigEndian, a.Additional5GSecurityInformation.GetLen())
-		binary.Write(buffer, binary.BigEndian, &a.Additional5GSecurityInformation.Octet)
+		if err := binary.Write(buffer, binary.BigEndian, a.Additional5GSecurityInformation.GetIei()); err != nil {
+			return
+		}
+		if err := binary.Write(buffer, binary.BigEndian, a.Additional5GSecurityInformation.GetLen()); err != nil {
+			return
+		}
+		if err := binary.Write(buffer, binary.BigEndian, &a.Additional5GSecurityInformation.Octet); err != nil {
+			return
+		}
 	}
 	if a.EAPMessage != nil {
-		binary.Write(buffer, binary.BigEndian, a.EAPMessage.GetIei())
-		binary.Write(buffer, binary.BigEndian, a.EAPMessage.GetLen())
-		binary.Write(buffer, binary.BigEndian, &a.EAPMessage.Buffer)
+		if err := binary.Write(buffer, binary.BigEndian, a.EAPMessage.GetIei()); err != nil {
+			return
+		}
+		if err := binary.Write(buffer, binary.BigEndian, a.EAPMessage.GetLen()); err != nil {
+			return
+		}
+		if err := binary.Write(buffer, binary.BigEndian, &a.EAPMessage.Buffer); err != nil {
+			return
+		}
 	}
 	if a.ABBA != nil {
-		binary.Write(buffer, binary.BigEndian, a.ABBA.GetIei())
-		binary.Write(buffer, binary.BigEndian, a.ABBA.GetLen())
-		binary.Write(buffer, binary.BigEndian, &a.ABBA.Buffer)
+		if err := binary.Write(buffer, binary.BigEndian, a.ABBA.GetIei()); err != nil {
+			return
+		}
+		if err := binary.Write(buffer, binary.BigEndian, a.ABBA.GetLen()); err != nil {
+			return
+		}
+		if err := binary.Write(buffer, binary.BigEndian, &a.ABBA.Buffer); err != nil {
+			return
+		}
 	}
 	if a.ReplayedS1UESecurityCapabilities != nil {
-		binary.Write(buffer, binary.BigEndian, a.ReplayedS1UESecurityCapabilities.GetIei())
-		binary.Write(buffer, binary.BigEndian, a.ReplayedS1UESecurityCapabilities.GetLen())
-		binary.Write(buffer, binary.BigEndian, &a.ReplayedS1UESecurityCapabilities.Buffer)
+		if err := binary.Write(buffer, binary.BigEndian, a.ReplayedS1UESecurityCapabilities.GetIei()); err != nil {
+			return
+		}
+		if err := binary.Write(buffer, binary.BigEndian, a.ReplayedS1UESecurityCapabilities.GetLen()); err != nil {
+			return
+		}
+		if err := binary.Write(buffer, binary.BigEndian, &a.ReplayedS1UESecurityCapabilities.Buffer); err != nil {
+			return
+		}
+	}
+	if a.MasterSessionKey != nil {
+		if err := binary.Write(buffer, binary.BigEndian, a.MasterSessionKey.GetIei()); err != nil {
+			return
+		}
+		if err := binary.Write(buffer, binary.BigEndian, a.MasterSessionKey.GetLen()); err != nil {
+			return
+		}
+		if err := binary.Write(buffer, binary.BigEndian, &a.MasterSessionKey.Buffer); err != nil {
+			return
+		}
 	}
 }
 
 func (a *SecurityModeCommand) DecodeSecurityModeCommand(byteArray *[]byte) {
 	buffer := bytes.NewBuffer(*byteArray)
-	binary.Read(buffer, binary.BigEndian, &a.ExtendedProtocolDiscriminator.Octet)
-	binary.Read(buffer, binary.BigEndian, &a.SpareHalfOctetAndSecurityHeaderType.Octet)
-	binary.Read(buffer, binary.BigEndian, &a.SecurityModeCommandMessageIdentity.Octet)
-	binary.Read(buffer, binary.BigEndian, &a.SelectedNASSecurityAlgorithms.Octet)
-	binary.Read(buffer, binary.BigEndian, &a.SpareHalfOctetAndNgksi.Octet)
-	binary.Read(buffer, binary.BigEndian, &a.ReplayedUESecurityCapabilities.Len)
+	if err := binary.Read(buffer, binary.BigEndian, &a.ExtendedProtocolDiscriminator.Octet); err != nil {
+		return
+	}
+	if err := binary.Read(buffer, binary.BigEndian, &a.SpareHalfOctetAndSecurityHeaderType.Octet); err != nil {
+		return
+	}
+	if err := binary.Read(buffer, binary.BigEndian, &a.SecurityModeCommandMessageIdentity.Octet); err != nil {
+		return
+	}
+	if err := binary.Read(buffer, binary.BigEndian, &a.SelectedNASSecurityAlgorithms.Octet); err != nil {
+		return
+	}
+	if err := binary.Read(buffer, binary.BigEndian, &a.SpareHalfOctetAndNgksi.Octet); err != nil {
+		return
+	}
+	if err := binary.Read(buffer, binary.BigEndian, &a.ReplayedUESecurityCapabilities.Len); err != nil {
+		return
+	}
 	a.ReplayedUESecurityCapabilities.SetLen(a.ReplayedUESecurityCapabilities.GetLen())
-	binary.Read(buffer, binary.BigEndian, &a.ReplayedUESecurityCapabilities.Buffer)
+	if err := binary.Read(buffer, binary.BigEndian, &a.ReplayedUESecurityCapabilities.Buffer); err != nil {
+		return
+	}
 	for buffer.Len() > 0 {
 		var ieiN uint8
 		var tmpIeiN uint8
-		binary.Read(buffer, binary.BigEndian, &ieiN)
+		if err := binary.Read(buffer, binary.BigEndian, &ieiN); err != nil {
+			return
+		}
 		if ieiN >= 0x80 {
 			tmpIeiN = (ieiN & 0xf0) >> 4
 		} else {
@@ -103,27 +176,54 @@ func (a *SecurityModeCommand) DecodeSecurityModeCommand(byteArray *[]byte) {
 			a.IMEISVRequest.Octet = ieiN
 		case SecurityModeCommandSelectedEPSNASSecurityAlgorithmsType:
 			a.SelectedEPSNASSecurityAlgorithms = nasType.NewSelectedEPSNASSecurityAlgorithms(ieiN)
-			binary.Read(buffer, binary.BigEndian, &a.SelectedEPSNASSecurityAlgorithms.Octet)
+			if err := binary.Read(buffer, binary.BigEndian, &a.SelectedEPSNASSecurityAlgorithms.Octet); err != nil {
+				return
+			}
 		case SecurityModeCommandAdditional5GSecurityInformationType:
 			a.Additional5GSecurityInformation = nasType.NewAdditional5GSecurityInformation(ieiN)
-			binary.Read(buffer, binary.BigEndian, &a.Additional5GSecurityInformation.Len)
+			if err := binary.Read(buffer, binary.BigEndian, &a.Additional5GSecurityInformation.Len); err != nil {
+				return
+			}
 			a.Additional5GSecurityInformation.SetLen(a.Additional5GSecurityInformation.GetLen())
-			binary.Read(buffer, binary.BigEndian, &a.Additional5GSecurityInformation.Octet)
+			if err := binary.Read(buffer, binary.BigEndian, &a.Additional5GSecurityInformation.Octet); err != nil {
+				return
+			}
 		case SecurityModeCommandEAPMessageType:
 			a.EAPMessage = nasType.NewEAPMessage(ieiN)
-			binary.Read(buffer, binary.BigEndian, &a.EAPMessage.Len)
+			if err := binary.Read(buffer, binary.BigEndian, &a.EAPMessage.Len); err != nil {
+				return
+			}
 			a.EAPMessage.SetLen(a.EAPMessage.GetLen())
-			binary.Read(buffer, binary.BigEndian, a.EAPMessage.Buffer[:a.EAPMessage.GetLen()])
+			if err := binary.Read(buffer, binary.BigEndian, a.EAPMessage.Buffer[:a.EAPMessage.GetLen()]); err != nil {
+				return
+			}
 		case SecurityModeCommandABBAType:
 			a.ABBA = nasType.NewABBA(ieiN)
-			binary.Read(buffer, binary.BigEndian, &a.ABBA.Len)
+			if err := binary.Read(buffer, binary.BigEndian, &a.ABBA.Len); err != nil {
+				return
+			}
 			a.ABBA.SetLen(a.ABBA.GetLen())
-			binary.Read(buffer, binary.BigEndian, a.ABBA.Buffer[:a.ABBA.GetLen()])
+			if err := binary.Read(buffer, binary.BigEndian, a.ABBA.Buffer[:a.ABBA.GetLen()]); err != nil {
+				return
+			}
 		case SecurityModeCommandReplayedS1UESecurityCapabilitiesType:
 			a.ReplayedS1UESecurityCapabilities = nasType.NewReplayedS1UESecurityCapabilities(ieiN)
-			binary.Read(buffer, binary.BigEndian, &a.ReplayedS1UESecurityCapabilities.Len)
+			if err := binary.Read(buffer, binary.BigEndian, &a.ReplayedS1UESecurityCapabilities.Len); err != nil {
+				return
+			}
 			a.ReplayedS1UESecurityCapabilities.SetLen(a.ReplayedS1UESecurityCapabilities.GetLen())
-			binary.Read(buffer, binary.BigEndian, a.ReplayedS1UESecurityCapabilities.Buffer[:a.ReplayedS1UESecurityCapabilities.GetLen()])
+			if err := binary.Read(buffer, binary.BigEndian, a.ReplayedS1UESecurityCapabilities.Buffer[:a.ReplayedS1UESecurityCapabilities.GetLen()]); err != nil {
+				return
+			}
+		case SecurityModeCommandMasterSessionKeyType:
+			a.MasterSessionKey = nasType.NewMasterSessionKey(ieiN)
+			if err := binary.Read(buffer, binary.BigEndian, &a.MasterSessionKey.Len); err != nil {
+				return
+			}
+			a.MasterSessionKey.SetLen(a.MasterSessionKey.GetLen())
+			if err := binary.Read(buffer, binary.BigEndian, a.MasterSessionKey.Buffer[:a.MasterSessionKey.GetLen()]); err != nil {
+				return
+			}
 		default:
 		}
 	}

@@ -33,14 +33,14 @@ func (a *OperatordefinedAccessCategoryDefinitions) SetIei(iei uint8) {
 
 // OperatordefinedAccessCategoryDefinitions 9.11.3.38
 // Len Row, sBit, len = [], 8, 16
-func (a *OperatordefinedAccessCategoryDefinitions) GetLen() (len uint16) {
+func (a *OperatordefinedAccessCategoryDefinitions) GetLen() (length uint16) {
 	return a.Len
 }
 
 // OperatordefinedAccessCategoryDefinitions 9.11.3.38
 // Len Row, sBit, len = [], 8, 16
-func (a *OperatordefinedAccessCategoryDefinitions) SetLen(len uint16) {
-	a.Len = len
+func (a *OperatordefinedAccessCategoryDefinitions) SetLen(length uint16) {
+	a.Len = length
 	a.Buffer = make([]uint8, a.Len)
 }
 

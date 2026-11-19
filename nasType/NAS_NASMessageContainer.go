@@ -33,14 +33,14 @@ func (a *NASMessageContainer) SetIei(iei uint8) {
 
 // NASMessageContainer 9.11.3.33
 // Len Row, sBit, len = [], 8, 16
-func (a *NASMessageContainer) GetLen() (len uint16) {
+func (a *NASMessageContainer) GetLen() (length uint16) {
 	return a.Len
 }
 
 // NASMessageContainer 9.11.3.33
 // Len Row, sBit, len = [], 8, 16
-func (a *NASMessageContainer) SetLen(len uint16) {
-	a.Len = len
+func (a *NASMessageContainer) SetLen(length uint16) {
+	a.Len = length
 	a.Buffer = make([]uint8, a.Len)
 }
 

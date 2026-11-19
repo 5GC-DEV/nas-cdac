@@ -33,14 +33,14 @@ func (a *ExtendedProtocolConfigurationOptions) SetIei(iei uint8) {
 
 // ExtendedProtocolConfigurationOptions 9.11.4.6
 // Len Row, sBit, len = [], 8, 16
-func (a *ExtendedProtocolConfigurationOptions) GetLen() (len uint16) {
+func (a *ExtendedProtocolConfigurationOptions) GetLen() (length uint16) {
 	return a.Len
 }
 
 // ExtendedProtocolConfigurationOptions 9.11.4.6
 // Len Row, sBit, len = [], 8, 16
-func (a *ExtendedProtocolConfigurationOptions) SetLen(len uint16) {
-	a.Len = len
+func (a *ExtendedProtocolConfigurationOptions) SetLen(length uint16) {
+	a.Len = length
 	a.Buffer = make([]uint8, a.Len)
 }
 

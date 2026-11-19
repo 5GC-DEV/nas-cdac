@@ -9,7 +9,7 @@ import (
 	"bytes"
 	"encoding/binary"
 
-	"github.com/5GC-DEV/nas-cdac/nasType"
+	"github.com/5GC-DEV/nas-cdac/v2/nasType"
 )
 
 type AuthenticationFailure struct {
@@ -30,27 +30,51 @@ const (
 )
 
 func (a *AuthenticationFailure) EncodeAuthenticationFailure(buffer *bytes.Buffer) {
-	binary.Write(buffer, binary.BigEndian, &a.ExtendedProtocolDiscriminator.Octet)
-	binary.Write(buffer, binary.BigEndian, &a.SpareHalfOctetAndSecurityHeaderType.Octet)
-	binary.Write(buffer, binary.BigEndian, &a.AuthenticationFailureMessageIdentity.Octet)
-	binary.Write(buffer, binary.BigEndian, &a.Cause5GMM.Octet)
+	if err := binary.Write(buffer, binary.BigEndian, &a.ExtendedProtocolDiscriminator.Octet); err != nil {
+		return
+	}
+	if err := binary.Write(buffer, binary.BigEndian, &a.SpareHalfOctetAndSecurityHeaderType.Octet); err != nil {
+		return
+	}
+	if err := binary.Write(buffer, binary.BigEndian, &a.AuthenticationFailureMessageIdentity.Octet); err != nil {
+		return
+	}
+	if err := binary.Write(buffer, binary.BigEndian, &a.Cause5GMM.Octet); err != nil {
+		return
+	}
 	if a.AuthenticationFailureParameter != nil {
-		binary.Write(buffer, binary.BigEndian, a.AuthenticationFailureParameter.GetIei())
-		binary.Write(buffer, binary.BigEndian, a.AuthenticationFailureParameter.GetLen())
-		binary.Write(buffer, binary.BigEndian, a.AuthenticationFailureParameter.Octet[:a.AuthenticationFailureParameter.GetLen()])
+		if err := binary.Write(buffer, binary.BigEndian, a.AuthenticationFailureParameter.GetIei()); err != nil {
+			return
+		}
+		if err := binary.Write(buffer, binary.BigEndian, a.GetLen()); err != nil {
+			return
+		}
+		if err := binary.Write(buffer, binary.BigEndian, a.AuthenticationFailureParameter.Octet[:a.GetLen()]); err != nil {
+			return
+		}
 	}
 }
 
 func (a *AuthenticationFailure) DecodeAuthenticationFailure(byteArray *[]byte) {
 	buffer := bytes.NewBuffer(*byteArray)
-	binary.Read(buffer, binary.BigEndian, &a.ExtendedProtocolDiscriminator.Octet)
-	binary.Read(buffer, binary.BigEndian, &a.SpareHalfOctetAndSecurityHeaderType.Octet)
-	binary.Read(buffer, binary.BigEndian, &a.AuthenticationFailureMessageIdentity.Octet)
-	binary.Read(buffer, binary.BigEndian, &a.Cause5GMM.Octet)
+	if err := binary.Read(buffer, binary.BigEndian, &a.ExtendedProtocolDiscriminator.Octet); err != nil {
+		return
+	}
+	if err := binary.Read(buffer, binary.BigEndian, &a.SpareHalfOctetAndSecurityHeaderType.Octet); err != nil {
+		return
+	}
+	if err := binary.Read(buffer, binary.BigEndian, &a.AuthenticationFailureMessageIdentity.Octet); err != nil {
+		return
+	}
+	if err := binary.Read(buffer, binary.BigEndian, &a.Cause5GMM.Octet); err != nil {
+		return
+	}
 	for buffer.Len() > 0 {
 		var ieiN uint8
 		var tmpIeiN uint8
-		binary.Read(buffer, binary.BigEndian, &ieiN)
+		if err := binary.Read(buffer, binary.BigEndian, &ieiN); err != nil {
+			return
+		}
 		if ieiN >= 0x80 {
 			tmpIeiN = (ieiN & 0xf0) >> 4
 		} else {
@@ -59,9 +83,13 @@ func (a *AuthenticationFailure) DecodeAuthenticationFailure(byteArray *[]byte) {
 		switch tmpIeiN {
 		case AuthenticationFailureAuthenticationFailureParameterType:
 			a.AuthenticationFailureParameter = nasType.NewAuthenticationFailureParameter(ieiN)
-			binary.Read(buffer, binary.BigEndian, &a.AuthenticationFailureParameter.Len)
-			a.AuthenticationFailureParameter.SetLen(a.AuthenticationFailureParameter.GetLen())
-			binary.Read(buffer, binary.BigEndian, a.AuthenticationFailureParameter.Octet[:a.AuthenticationFailureParameter.GetLen()])
+			if err := binary.Read(buffer, binary.BigEndian, &a.Len); err != nil {
+				return
+			}
+			a.SetLen(a.GetLen())
+			if err := binary.Read(buffer, binary.BigEndian, a.AuthenticationFailureParameter.Octet[:a.GetLen()]); err != nil {
+				return
+			}
 		default:
 		}
 	}

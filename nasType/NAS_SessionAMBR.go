@@ -36,14 +36,14 @@ func (a *SessionAMBR) SetIei(iei uint8) {
 
 // SessionAMBR 9.11.4.14
 // Len Row, sBit, len = [], 8, 8
-func (a *SessionAMBR) GetLen() (len uint8) {
+func (a *SessionAMBR) GetLen() (length uint8) {
 	return a.Len
 }
 
 // SessionAMBR 9.11.4.14
 // Len Row, sBit, len = [], 8, 8
-func (a *SessionAMBR) SetLen(len uint8) {
-	a.Len = len
+func (a *SessionAMBR) SetLen(length uint8) {
+	a.Len = length
 }
 
 // SessionAMBR 9.11.4.14

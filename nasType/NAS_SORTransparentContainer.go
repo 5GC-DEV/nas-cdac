@@ -33,14 +33,14 @@ func (a *SORTransparentContainer) SetIei(iei uint8) {
 
 // SORTransparentContainer 9.11.3.51
 // Len Row, sBit, len = [], 8, 16
-func (a *SORTransparentContainer) GetLen() (len uint16) {
+func (a *SORTransparentContainer) GetLen() (length uint16) {
 	return a.Len
 }
 
 // SORTransparentContainer 9.11.3.51
 // Len Row, sBit, len = [], 8, 16
-func (a *SORTransparentContainer) SetLen(len uint16) {
-	a.Len = len
+func (a *SORTransparentContainer) SetLen(length uint16) {
+	a.Len = length
 	a.Buffer = make([]uint8, a.Len)
 }
 

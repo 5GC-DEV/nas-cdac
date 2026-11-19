@@ -34,7 +34,7 @@ func (a *SelectedNASSecurityAlgorithms) SetIei(iei uint8) {
 // SelectedNASSecurityAlgorithms 9.11.3.34
 // TypeOfCipheringAlgorithm Row, sBit, len = [0, 0], 8 , 4
 func (a *SelectedNASSecurityAlgorithms) GetTypeOfCipheringAlgorithm() (typeOfCipheringAlgorithm uint8) {
-	return a.Octet & GetBitMask(8, 4) >> (4)
+	return a.Octet & GetBitMask(8, 4) >> 4
 }
 
 // SelectedNASSecurityAlgorithms 9.11.3.34

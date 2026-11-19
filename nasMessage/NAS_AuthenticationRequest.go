@@ -9,7 +9,7 @@ import (
 	"bytes"
 	"encoding/binary"
 
-	"github.com/5GC-DEV/nas-cdac/nasType"
+	"github.com/5GC-DEV/nas-cdac/v2/nasType"
 )
 
 type AuthenticationRequest struct {
@@ -35,41 +35,83 @@ const (
 )
 
 func (a *AuthenticationRequest) EncodeAuthenticationRequest(buffer *bytes.Buffer) {
-	binary.Write(buffer, binary.BigEndian, &a.ExtendedProtocolDiscriminator.Octet)
-	binary.Write(buffer, binary.BigEndian, &a.SpareHalfOctetAndSecurityHeaderType.Octet)
-	binary.Write(buffer, binary.BigEndian, &a.AuthenticationRequestMessageIdentity.Octet)
-	binary.Write(buffer, binary.BigEndian, &a.SpareHalfOctetAndNgksi.Octet)
-	binary.Write(buffer, binary.BigEndian, a.ABBA.GetLen())
-	binary.Write(buffer, binary.BigEndian, &a.ABBA.Buffer)
+	if err := binary.Write(buffer, binary.BigEndian, &a.ExtendedProtocolDiscriminator.Octet); err != nil {
+		return
+	}
+	if err := binary.Write(buffer, binary.BigEndian, &a.SpareHalfOctetAndSecurityHeaderType.Octet); err != nil {
+		return
+	}
+	if err := binary.Write(buffer, binary.BigEndian, &a.AuthenticationRequestMessageIdentity.Octet); err != nil {
+		return
+	}
+	if err := binary.Write(buffer, binary.BigEndian, &a.SpareHalfOctetAndNgksi.Octet); err != nil {
+		return
+	}
+	if err := binary.Write(buffer, binary.BigEndian, a.ABBA.GetLen()); err != nil {
+		return
+	}
+	if err := binary.Write(buffer, binary.BigEndian, &a.ABBA.Buffer); err != nil {
+		return
+	}
 	if a.AuthenticationParameterRAND != nil {
-		binary.Write(buffer, binary.BigEndian, a.AuthenticationParameterRAND.GetIei())
-		binary.Write(buffer, binary.BigEndian, &a.AuthenticationParameterRAND.Octet)
+		if err := binary.Write(buffer, binary.BigEndian, a.AuthenticationParameterRAND.GetIei()); err != nil {
+			return
+		}
+		if err := binary.Write(buffer, binary.BigEndian, &a.AuthenticationParameterRAND.Octet); err != nil {
+			return
+		}
 	}
 	if a.AuthenticationParameterAUTN != nil {
-		binary.Write(buffer, binary.BigEndian, a.AuthenticationParameterAUTN.GetIei())
-		binary.Write(buffer, binary.BigEndian, a.AuthenticationParameterAUTN.GetLen())
-		binary.Write(buffer, binary.BigEndian, a.AuthenticationParameterAUTN.Octet[:a.AuthenticationParameterAUTN.GetLen()])
+		if err := binary.Write(buffer, binary.BigEndian, a.AuthenticationParameterAUTN.GetIei()); err != nil {
+			return
+		}
+		if err := binary.Write(buffer, binary.BigEndian, a.AuthenticationParameterAUTN.GetLen()); err != nil {
+			return
+		}
+		if err := binary.Write(buffer, binary.BigEndian, a.AuthenticationParameterAUTN.Octet[:a.AuthenticationParameterAUTN.GetLen()]); err != nil {
+			return
+		}
 	}
 	if a.EAPMessage != nil {
-		binary.Write(buffer, binary.BigEndian, a.EAPMessage.GetIei())
-		binary.Write(buffer, binary.BigEndian, a.EAPMessage.GetLen())
-		binary.Write(buffer, binary.BigEndian, &a.EAPMessage.Buffer)
+		if err := binary.Write(buffer, binary.BigEndian, a.EAPMessage.GetIei()); err != nil {
+			return
+		}
+		if err := binary.Write(buffer, binary.BigEndian, a.EAPMessage.GetLen()); err != nil {
+			return
+		}
+		if err := binary.Write(buffer, binary.BigEndian, &a.EAPMessage.Buffer); err != nil {
+			return
+		}
 	}
 }
 
 func (a *AuthenticationRequest) DecodeAuthenticationRequest(byteArray *[]byte) {
 	buffer := bytes.NewBuffer(*byteArray)
-	binary.Read(buffer, binary.BigEndian, &a.ExtendedProtocolDiscriminator.Octet)
-	binary.Read(buffer, binary.BigEndian, &a.SpareHalfOctetAndSecurityHeaderType.Octet)
-	binary.Read(buffer, binary.BigEndian, &a.AuthenticationRequestMessageIdentity.Octet)
-	binary.Read(buffer, binary.BigEndian, &a.SpareHalfOctetAndNgksi.Octet)
-	binary.Read(buffer, binary.BigEndian, &a.ABBA.Len)
+	if err := binary.Read(buffer, binary.BigEndian, &a.ExtendedProtocolDiscriminator.Octet); err != nil {
+		return
+	}
+	if err := binary.Read(buffer, binary.BigEndian, &a.SpareHalfOctetAndSecurityHeaderType.Octet); err != nil {
+		return
+	}
+	if err := binary.Read(buffer, binary.BigEndian, &a.AuthenticationRequestMessageIdentity.Octet); err != nil {
+		return
+	}
+	if err := binary.Read(buffer, binary.BigEndian, &a.SpareHalfOctetAndNgksi.Octet); err != nil {
+		return
+	}
+	if err := binary.Read(buffer, binary.BigEndian, &a.ABBA.Len); err != nil {
+		return
+	}
 	a.ABBA.SetLen(a.ABBA.GetLen())
-	binary.Read(buffer, binary.BigEndian, &a.ABBA.Buffer)
+	if err := binary.Read(buffer, binary.BigEndian, &a.ABBA.Buffer); err != nil {
+		return
+	}
 	for buffer.Len() > 0 {
 		var ieiN uint8
 		var tmpIeiN uint8
-		binary.Read(buffer, binary.BigEndian, &ieiN)
+		if err := binary.Read(buffer, binary.BigEndian, &ieiN); err != nil {
+			return
+		}
 		if ieiN >= 0x80 {
 			tmpIeiN = (ieiN & 0xf0) >> 4
 		} else {
@@ -78,17 +120,27 @@ func (a *AuthenticationRequest) DecodeAuthenticationRequest(byteArray *[]byte) {
 		switch tmpIeiN {
 		case AuthenticationRequestAuthenticationParameterRANDType:
 			a.AuthenticationParameterRAND = nasType.NewAuthenticationParameterRAND(ieiN)
-			binary.Read(buffer, binary.BigEndian, &a.AuthenticationParameterRAND.Octet)
+			if err := binary.Read(buffer, binary.BigEndian, &a.AuthenticationParameterRAND.Octet); err != nil {
+				return
+			}
 		case AuthenticationRequestAuthenticationParameterAUTNType:
 			a.AuthenticationParameterAUTN = nasType.NewAuthenticationParameterAUTN(ieiN)
-			binary.Read(buffer, binary.BigEndian, &a.AuthenticationParameterAUTN.Len)
+			if err := binary.Read(buffer, binary.BigEndian, &a.AuthenticationParameterAUTN.Len); err != nil {
+				return
+			}
 			a.AuthenticationParameterAUTN.SetLen(a.AuthenticationParameterAUTN.GetLen())
-			binary.Read(buffer, binary.BigEndian, a.AuthenticationParameterAUTN.Octet[:a.AuthenticationParameterAUTN.GetLen()])
+			if err := binary.Read(buffer, binary.BigEndian, a.AuthenticationParameterAUTN.Octet[:a.AuthenticationParameterAUTN.GetLen()]); err != nil {
+				return
+			}
 		case AuthenticationRequestEAPMessageType:
 			a.EAPMessage = nasType.NewEAPMessage(ieiN)
-			binary.Read(buffer, binary.BigEndian, &a.EAPMessage.Len)
+			if err := binary.Read(buffer, binary.BigEndian, &a.EAPMessage.Len); err != nil {
+				return
+			}
 			a.EAPMessage.SetLen(a.EAPMessage.GetLen())
-			binary.Read(buffer, binary.BigEndian, a.EAPMessage.Buffer[:a.EAPMessage.GetLen()])
+			if err := binary.Read(buffer, binary.BigEndian, a.EAPMessage.Buffer[:a.EAPMessage.GetLen()]); err != nil {
+				return
+			}
 		default:
 		}
 	}

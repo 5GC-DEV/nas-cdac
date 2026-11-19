@@ -1,13 +1,10 @@
 // Copyright 2019 free5GC.org
+// SPDX-FileCopyrightText: 2025 Intel Corporation
 //
 // SPDX-License-Identifier: Apache-2.0
 //
 
 package nasType
-
-import (
-	"github.com/5GC-DEV/util-cdac/util_3gpp"
-)
 
 // DNN 9.11.2.1A
 // DNN Row, sBit, len = [0, 0], 8 , INF
@@ -37,24 +34,26 @@ func (a *DNN) SetIei(iei uint8) {
 
 // DNN 9.11.2.1A
 // Len Row, sBit, len = [], 8, 8
-func (a *DNN) GetLen() (len uint8) {
+func (a *DNN) GetLen() (length uint8) {
 	return a.Len
 }
 
 // DNN 9.11.2.1A
 // Len Row, sBit, len = [], 8, 8
-func (a *DNN) SetLen(len uint8) {
-	a.Len = len
+func (a *DNN) SetLen(length uint8) {
+	a.Len = length
 	a.Buffer = make([]uint8, a.Len)
 }
 
 // DNN 9.11.2.1A
 // DNN Row, sBit, len = [0, 0], 8 , INF
 func (a *DNN) GetDNN() (dNN []uint8) {
-	dnn := new(util_3gpp.Dnn)
-	err := dnn.UnmarshalBinary(a.Buffer)
-	if err != nil {
-		return []byte{}
+	if len(a.Buffer) == 0 {
+		return nil
+	}
+	dnn := new(Dnn)
+	if err := dnn.UnmarshalBinary(a.Buffer); err != nil {
+		return nil
 	}
 	return *dnn
 }
@@ -62,8 +61,11 @@ func (a *DNN) GetDNN() (dNN []uint8) {
 // DNN 9.11.2.1A
 // DNN Row, sBit, len = [0, 0], 8 , INF
 func (a *DNN) SetDNN(dNN []uint8) {
-	tmp := (util_3gpp.Dnn)(dNN)
-	dnn, _ := tmp.MarshalBinary()
+	tmp := Dnn(dNN)
+	dnn, err := tmp.MarshalBinary()
+	if err != nil {
+		return
+	}
 	a.Buffer = dnn
 	a.Len = uint8(len(a.Buffer))
 }

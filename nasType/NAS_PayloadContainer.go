@@ -33,14 +33,14 @@ func (a *PayloadContainer) SetIei(iei uint8) {
 
 // PayloadContainer 9.11.3.39
 // Len Row, sBit, len = [], 8, 16
-func (a *PayloadContainer) GetLen() (len uint16) {
+func (a *PayloadContainer) GetLen() (length uint16) {
 	return a.Len
 }
 
 // PayloadContainer 9.11.3.39
 // Len Row, sBit, len = [], 8, 16
-func (a *PayloadContainer) SetLen(len uint16) {
-	a.Len = len
+func (a *PayloadContainer) SetLen(length uint16) {
+	a.Len = length
 	a.Buffer = make([]uint8, a.Len)
 }
 

@@ -21,7 +21,7 @@ func NewServiceTypeAndNgksi() (serviceTypeAndNgksi *ServiceTypeAndNgksi) {
 // ServiceTypeAndNgksi 9.11.3.32 9.11.3.50
 // ServiceTypeValue Row, sBit, len = [0, 0], 8 , 4
 func (a *ServiceTypeAndNgksi) GetServiceTypeValue() (serviceTypeValue uint8) {
-	return a.Octet & GetBitMask(8, 4) >> (4)
+	return a.Octet & GetBitMask(8, 4) >> 4
 }
 
 // ServiceTypeAndNgksi 9.11.3.32 9.11.3.50
@@ -33,7 +33,7 @@ func (a *ServiceTypeAndNgksi) SetServiceTypeValue(serviceTypeValue uint8) {
 // ServiceTypeAndNgksi 9.11.3.32 9.11.3.50
 // TSC Row, sBit, len = [0, 0], 4 , 1
 func (a *ServiceTypeAndNgksi) GetTSC() (tSC uint8) {
-	return a.Octet & GetBitMask(4, 3) >> (3)
+	return a.Octet & GetBitMask(4, 3) >> 3
 }
 
 // ServiceTypeAndNgksi 9.11.3.32 9.11.3.50

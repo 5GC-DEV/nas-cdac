@@ -10,11 +10,10 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/5GC-DEV/nas-cdac"
-	"github.com/5GC-DEV/nas-cdac/logger"
-	"github.com/5GC-DEV/nas-cdac/nasMessage"
-	"github.com/5GC-DEV/nas-cdac/nasType"
-	"github.com/stretchr/testify/assert"
+	"github.com/5GC-DEV/nas-cdac/v2"
+	"github.com/5GC-DEV/nas-cdac/v2/logger"
+	"github.com/5GC-DEV/nas-cdac/v2/nasMessage"
+	"github.com/5GC-DEV/nas-cdac/v2/nasType"
 )
 
 type nasMessageServiceAcceptData struct {
@@ -59,7 +58,9 @@ var nasMessageServiceAcceptTable = []nasMessageServiceAcceptData{
 
 func TestNasTypeNewServiceAccept(t *testing.T) {
 	a := nasMessage.NewServiceAccept(0)
-	assert.NotNil(t, a)
+	if a == nil {
+		t.Fatal("Expected value not to be nil")
+	}
 }
 
 func TestNasTypeNewServiceAcceptMessage(t *testing.T) {
@@ -67,13 +68,17 @@ func TestNasTypeNewServiceAcceptMessage(t *testing.T) {
 		t.Logf("Test Cnt:%d", i)
 		a := nasMessage.NewServiceAccept(0)
 		b := nasMessage.NewServiceAccept(0)
-		assert.NotNil(t, a)
-		assert.NotNil(t, b)
+		if a == nil {
+			t.Fatal("Expected value not to be nil")
+		}
+		if b == nil {
+			t.Fatal("Expected value not to be nil")
+		}
 
-		a.ExtendedProtocolDiscriminator.SetExtendedProtocolDiscriminator(table.inExtendedProtocolDiscriminator)
-		a.SpareHalfOctetAndSecurityHeaderType.SetSecurityHeaderType(table.inSecurityHeader)
-		a.SpareHalfOctetAndSecurityHeaderType.SetSpareHalfOctet(table.inSpareHalfOctet)
-		a.ServiceAcceptMessageIdentity.SetMessageType(table.inServiceAcceptMessageIdentity)
+		a.SetExtendedProtocolDiscriminator(table.inExtendedProtocolDiscriminator)
+		a.SetSecurityHeaderType(table.inSecurityHeader)
+		a.SetSpareHalfOctet(table.inSpareHalfOctet)
+		a.SetMessageType(table.inServiceAcceptMessageIdentity)
 
 		a.PDUSessionStatus = nasType.NewPDUSessionStatus(nasMessage.ServiceAcceptPDUSessionStatusType)
 		a.PDUSessionStatus = &table.inPDUSessionStatus
@@ -92,7 +97,9 @@ func TestNasTypeNewServiceAcceptMessage(t *testing.T) {
 		logger.NasMsgLog.Debugln("encode:", a)
 
 		data := make([]byte, buff.Len())
-		buff.Read(data)
+		if _, err := buff.Read(data); err != nil {
+			t.Fatal(err)
+		}
 		b.DecodeServiceAccept(&data)
 		logger.NasMsgLog.Debugln("decode:", b)
 

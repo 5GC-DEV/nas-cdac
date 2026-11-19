@@ -21,7 +21,7 @@ func NewSpareHalfOctetAndNgksi() (spareHalfOctetAndNgksi *SpareHalfOctetAndNgksi
 // SpareHalfOctetAndNgksi 9.11.3.32 9.5
 // SpareHalfOctet Row, sBit, len = [0, 0], 8 , 4
 func (a *SpareHalfOctetAndNgksi) GetSpareHalfOctet() (spareHalfOctet uint8) {
-	return a.Octet & GetBitMask(8, 4) >> (4)
+	return a.Octet & GetBitMask(8, 4) >> 4
 }
 
 // SpareHalfOctetAndNgksi 9.11.3.32 9.5
@@ -33,7 +33,7 @@ func (a *SpareHalfOctetAndNgksi) SetSpareHalfOctet(spareHalfOctet uint8) {
 // SpareHalfOctetAndNgksi 9.11.3.32 9.5
 // TSC Row, sBit, len = [0, 0], 4 , 1
 func (a *SpareHalfOctetAndNgksi) GetTSC() (tSC uint8) {
-	return a.Octet & GetBitMask(4, 3) >> (3)
+	return a.Octet & GetBitMask(4, 3) >> 3
 }
 
 // SpareHalfOctetAndNgksi 9.11.3.32 9.5

@@ -45,20 +45,20 @@ func (a *GUTI5G) SetIei(iei uint8) {
 
 // GUTI5G 9.11.3.4
 // Len Row, sBit, len = [], 8, 16
-func (a *GUTI5G) GetLen() (len uint16) {
+func (a *GUTI5G) GetLen() (length uint16) {
 	return a.Len
 }
 
 // GUTI5G 9.11.3.4
 // Len Row, sBit, len = [], 8, 16
-func (a *GUTI5G) SetLen(len uint16) {
-	a.Len = len
+func (a *GUTI5G) SetLen(length uint16) {
+	a.Len = length
 }
 
 // GUTI5G 9.11.3.4
 // Spare2 Row, sBit, len = [0, 0], 8 , 4
 func (a *GUTI5G) GetSpare2() (spare uint8) {
-	return a.Octet[0] & GetBitMask(8, 4) >> (4)
+	return a.Octet[0] & GetBitMask(8, 4) >> 4
 }
 
 // GUTI5G 9.11.3.4
@@ -70,7 +70,7 @@ func (a *GUTI5G) SetSpare2(spare uint8) {
 // GUTI5G 9.11.3.4
 // Spare Row, sBit, len = [0, 0], 4 , 1
 func (a *GUTI5G) GetSpare() (spare uint8) {
-	return a.Octet[0] & GetBitMask(4, 3) >> (3)
+	return a.Octet[0] & GetBitMask(4, 3) >> 3
 }
 
 // GUTI5G 9.11.3.4
@@ -94,7 +94,7 @@ func (a *GUTI5G) SetTypeOfIdentity(typeOfIdentity uint8) {
 // GUTI5G 9.11.3.4
 // MCCDigit2 Row, sBit, len = [1, 1], 8 , 4
 func (a *GUTI5G) GetMCCDigit2() (mCCDigit2 uint8) {
-	return a.Octet[1] & GetBitMask(8, 4) >> (4)
+	return a.Octet[1] & GetBitMask(8, 4) >> 4
 }
 
 // GUTI5G 9.11.3.4
@@ -118,7 +118,7 @@ func (a *GUTI5G) SetMCCDigit1(mCCDigit1 uint8) {
 // GUTI5G 9.11.3.4
 // MNCDigit3 Row, sBit, len = [2, 2], 8 , 4
 func (a *GUTI5G) GetMNCDigit3() (mNCDigit3 uint8) {
-	return a.Octet[2] & GetBitMask(8, 4) >> (4)
+	return a.Octet[2] & GetBitMask(8, 4) >> 4
 }
 
 // GUTI5G 9.11.3.4
@@ -142,7 +142,7 @@ func (a *GUTI5G) SetMCCDigit3(mCCDigit3 uint8) {
 // GUTI5G 9.11.3.4
 // MNCDigit2 Row, sBit, len = [3, 3], 8 , 4
 func (a *GUTI5G) GetMNCDigit2() (mNCDigit2 uint8) {
-	return a.Octet[3] & GetBitMask(8, 4) >> (4)
+	return a.Octet[3] & GetBitMask(8, 4) >> 4
 }
 
 // GUTI5G 9.11.3.4
@@ -178,13 +178,13 @@ func (a *GUTI5G) SetAMFRegionID(aMFRegionID uint8) {
 // GUTI5G 9.11.3.4
 // AMFSetID Row, sBit, len = [5, 6], 8 , 10
 func (a *GUTI5G) GetAMFSetID() (aMFSetID uint16) {
-	return (uint16(a.Octet[5])<<2 + uint16((a.Octet[6])&GetBitMask(8, 2))>>6)
+	return (uint16(a.Octet[5])<<2 + uint16(a.Octet[6]&GetBitMask(8, 2))>>6)
 }
 
 // GUTI5G 9.11.3.4
 // AMFSetID Row, sBit, len = [5, 6], 8 , 10
 func (a *GUTI5G) SetAMFSetID(aMFSetID uint16) {
-	a.Octet[5] = uint8((aMFSetID)>>2) & 255
+	a.Octet[5] = uint8(aMFSetID>>2) & 255
 	a.Octet[6] = a.Octet[6]&GetBitMask(6, 6) + uint8(aMFSetID&3)<<6
 }
 

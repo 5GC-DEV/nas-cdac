@@ -33,14 +33,14 @@ func (a *ABBA) SetIei(iei uint8) {
 
 // ABBA 9.11.3.10
 // Len Row, sBit, len = [], 8, 8
-func (a *ABBA) GetLen() (len uint8) {
+func (a *ABBA) GetLen() (n uint8) {
 	return a.Len
 }
 
 // ABBA 9.11.3.10
 // Len Row, sBit, len = [], 8, 8
-func (a *ABBA) SetLen(len uint8) {
-	a.Len = len
+func (a *ABBA) SetLen(n uint8) {
+	a.Len = n
 	a.Buffer = make([]uint8, a.Len)
 }
 

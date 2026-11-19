@@ -10,11 +10,10 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/5GC-DEV/nas-cdac"
-	"github.com/5GC-DEV/nas-cdac/logger"
-	"github.com/5GC-DEV/nas-cdac/nasMessage"
-	"github.com/5GC-DEV/nas-cdac/nasType"
-	"github.com/stretchr/testify/assert"
+	"github.com/5GC-DEV/nas-cdac/v2"
+	"github.com/5GC-DEV/nas-cdac/v2/logger"
+	"github.com/5GC-DEV/nas-cdac/v2/nasMessage"
+	"github.com/5GC-DEV/nas-cdac/v2/nasType"
 )
 
 type nasMessageIdentityResponseData struct {
@@ -41,7 +40,9 @@ var nasMessageIdentityResponseTable = []nasMessageIdentityResponseData{
 
 func TestNasTypeNewIdentityResponse(t *testing.T) {
 	a := nasMessage.NewIdentityResponse(0)
-	assert.NotNil(t, a)
+	if a == nil {
+		t.Fatal("Expected value not to be nil")
+	}
 }
 
 func TestNasTypeNewIdentityResponseMessage(t *testing.T) {
@@ -49,13 +50,17 @@ func TestNasTypeNewIdentityResponseMessage(t *testing.T) {
 		logger.NasMsgLog.Infoln("Test Cnt:", i)
 		a := nasMessage.NewIdentityResponse(0)
 		b := nasMessage.NewIdentityResponse(0)
-		assert.NotNil(t, a)
-		assert.NotNil(t, b)
+		if a == nil {
+			t.Fatal("Expected value not to be nil")
+		}
+		if b == nil {
+			t.Fatal("Expected value not to be nil")
+		}
 
-		a.ExtendedProtocolDiscriminator.SetExtendedProtocolDiscriminator(table.inExtendedProtocolDiscriminator)
-		a.SpareHalfOctetAndSecurityHeaderType.SetSecurityHeaderType(table.inSecurityHeader)
-		a.SpareHalfOctetAndSecurityHeaderType.SetSpareHalfOctet(table.inSpareHalfOctet)
-		a.IdentityResponseMessageIdentity.SetMessageType(table.inIdentityResponseMessageIdentity)
+		a.SetExtendedProtocolDiscriminator(table.inExtendedProtocolDiscriminator)
+		a.SetSecurityHeaderType(table.inSecurityHeader)
+		a.SetSpareHalfOctet(table.inSpareHalfOctet)
+		a.SetMessageType(table.inIdentityResponseMessageIdentity)
 
 		a.MobileIdentity = table.inMobileIdentity
 
@@ -64,7 +69,9 @@ func TestNasTypeNewIdentityResponseMessage(t *testing.T) {
 		logger.NasMsgLog.Debugln("Encode: ", a)
 
 		data := make([]byte, buff.Len())
-		buff.Read(data)
+		if _, err := buff.Read(data); err != nil {
+			t.Fatal(err)
+		}
 		b.DecodeIdentityResponse(&data)
 		logger.NasMsgLog.Debugln(data)
 		logger.NasMsgLog.Debugln("Decode: ", b)
@@ -72,6 +79,5 @@ func TestNasTypeNewIdentityResponseMessage(t *testing.T) {
 		if reflect.DeepEqual(a, b) != true {
 			t.Errorf("Not correct")
 		}
-
 	}
 }

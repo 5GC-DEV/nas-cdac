@@ -1,7 +1,6 @@
+// Copyright (C) 2026 Intel Corporation
 // Copyright 2019 free5GC.org
-//
 // SPDX-License-Identifier: Apache-2.0
-//
 
 package nasMessage
 
@@ -9,7 +8,7 @@ import (
 	"bytes"
 	"encoding/binary"
 
-	"github.com/5GC-DEV/nas-cdac/nasType"
+	"github.com/5GC-DEV/nas-cdac/v2/nasType"
 )
 
 type ULNASTransport struct {
@@ -24,6 +23,11 @@ type ULNASTransport struct {
 	*nasType.SNSSAI
 	*nasType.DNN
 	*nasType.AdditionalInformation
+	*nasType.MAPDUSessionInformation
+	*nasType.ReleaseAssistanceIndication
+	*nasType.Non3GPPAccessPathSwitchingIndication
+	AlternativeSNSSAI *nasType.SNSSAI
+	*nasType.PayloadContainerInformation
 }
 
 func NewULNASTransport(iei uint8) (uLNASTransport *ULNASTransport) {
@@ -32,62 +36,158 @@ func NewULNASTransport(iei uint8) (uLNASTransport *ULNASTransport) {
 }
 
 const (
-	ULNASTransportPduSessionID2ValueType    uint8 = 0x12
-	ULNASTransportOldPDUSessionIDType       uint8 = 0x59
-	ULNASTransportRequestTypeType           uint8 = 0x08
-	ULNASTransportSNSSAIType                uint8 = 0x22
-	ULNASTransportDNNType                   uint8 = 0x25
-	ULNASTransportAdditionalInformationType uint8 = 0x24
+	ULNASTransportPduSessionID2ValueType                   uint8 = 0x12
+	ULNASTransportOldPDUSessionIDType                      uint8 = 0x59
+	ULNASTransportRequestTypeType                          uint8 = 0x08
+	ULNASTransportSNSSAIType                               uint8 = 0x22
+	ULNASTransportDNNType                                  uint8 = 0x25
+	ULNASTransportAdditionalInformationType                uint8 = 0x24
+	ULNASTransportMAPDUSessionInformationType              uint8 = 0x0A
+	ULNASTransportReleaseAssistanceIndicationType          uint8 = 0x0F
+	ULNASTransportNon3GPPAccessPathSwitchingIndicationType uint8 = 0x4E
+	ULNASTransportAlternativeSNSSAIType                    uint8 = 0x5A
+	ULNASTransportPayloadContainerInformationType          uint8 = 0x09
 )
 
 func (a *ULNASTransport) EncodeULNASTransport(buffer *bytes.Buffer) {
-	binary.Write(buffer, binary.BigEndian, &a.ExtendedProtocolDiscriminator.Octet)
-	binary.Write(buffer, binary.BigEndian, &a.SpareHalfOctetAndSecurityHeaderType.Octet)
-	binary.Write(buffer, binary.BigEndian, &a.ULNASTRANSPORTMessageIdentity.Octet)
-	binary.Write(buffer, binary.BigEndian, &a.SpareHalfOctetAndPayloadContainerType.Octet)
-	binary.Write(buffer, binary.BigEndian, a.PayloadContainer.GetLen())
-	binary.Write(buffer, binary.BigEndian, &a.PayloadContainer.Buffer)
+	if err := binary.Write(buffer, binary.BigEndian, &a.ExtendedProtocolDiscriminator.Octet); err != nil {
+		return
+	}
+	if err := binary.Write(buffer, binary.BigEndian, &a.SpareHalfOctetAndSecurityHeaderType.Octet); err != nil {
+		return
+	}
+	if err := binary.Write(buffer, binary.BigEndian, &a.ULNASTRANSPORTMessageIdentity.Octet); err != nil {
+		return
+	}
+	if err := binary.Write(buffer, binary.BigEndian, &a.SpareHalfOctetAndPayloadContainerType.Octet); err != nil {
+		return
+	}
+	if err := binary.Write(buffer, binary.BigEndian, a.PayloadContainer.GetLen()); err != nil {
+		return
+	}
+	if err := binary.Write(buffer, binary.BigEndian, &a.PayloadContainer.Buffer); err != nil {
+		return
+	}
 	if a.PduSessionID2Value != nil {
-		binary.Write(buffer, binary.BigEndian, a.PduSessionID2Value.GetIei())
-		binary.Write(buffer, binary.BigEndian, &a.PduSessionID2Value.Octet)
+		if err := binary.Write(buffer, binary.BigEndian, a.PduSessionID2Value.GetIei()); err != nil {
+			return
+		}
+		if err := binary.Write(buffer, binary.BigEndian, &a.PduSessionID2Value.Octet); err != nil {
+			return
+		}
 	}
 	if a.OldPDUSessionID != nil {
-		binary.Write(buffer, binary.BigEndian, a.OldPDUSessionID.GetIei())
-		binary.Write(buffer, binary.BigEndian, &a.OldPDUSessionID.Octet)
+		if err := binary.Write(buffer, binary.BigEndian, a.OldPDUSessionID.GetIei()); err != nil {
+			return
+		}
+		if err := binary.Write(buffer, binary.BigEndian, &a.OldPDUSessionID.Octet); err != nil {
+			return
+		}
 	}
 	if a.RequestType != nil {
-		binary.Write(buffer, binary.BigEndian, &a.RequestType.Octet)
+		if err := binary.Write(buffer, binary.BigEndian, &a.RequestType.Octet); err != nil {
+			return
+		}
 	}
 	if a.SNSSAI != nil {
-		binary.Write(buffer, binary.BigEndian, a.SNSSAI.GetIei())
-		binary.Write(buffer, binary.BigEndian, a.SNSSAI.GetLen())
-		binary.Write(buffer, binary.BigEndian, a.SNSSAI.Octet[:a.SNSSAI.GetLen()])
+		if err := binary.Write(buffer, binary.BigEndian, a.SNSSAI.GetIei()); err != nil {
+			return
+		}
+		if err := binary.Write(buffer, binary.BigEndian, a.SNSSAI.GetLen()); err != nil {
+			return
+		}
+		if err := binary.Write(buffer, binary.BigEndian, a.SNSSAI.Octet[:a.SNSSAI.GetLen()]); err != nil {
+			return
+		}
 	}
 	if a.DNN != nil {
-		binary.Write(buffer, binary.BigEndian, a.DNN.GetIei())
-		binary.Write(buffer, binary.BigEndian, a.DNN.GetLen())
-		binary.Write(buffer, binary.BigEndian, &a.DNN.Buffer)
+		if err := binary.Write(buffer, binary.BigEndian, a.DNN.GetIei()); err != nil {
+			return
+		}
+		if err := binary.Write(buffer, binary.BigEndian, a.DNN.GetLen()); err != nil {
+			return
+		}
+		if err := binary.Write(buffer, binary.BigEndian, &a.DNN.Buffer); err != nil {
+			return
+		}
 	}
 	if a.AdditionalInformation != nil {
-		binary.Write(buffer, binary.BigEndian, a.AdditionalInformation.GetIei())
-		binary.Write(buffer, binary.BigEndian, a.AdditionalInformation.GetLen())
-		binary.Write(buffer, binary.BigEndian, &a.AdditionalInformation.Buffer)
+		if err := binary.Write(buffer, binary.BigEndian, a.AdditionalInformation.GetIei()); err != nil {
+			return
+		}
+		if err := binary.Write(buffer, binary.BigEndian, a.AdditionalInformation.GetLen()); err != nil {
+			return
+		}
+		if err := binary.Write(buffer, binary.BigEndian, &a.AdditionalInformation.Buffer); err != nil {
+			return
+		}
+	}
+	if a.MAPDUSessionInformation != nil {
+		if err := binary.Write(buffer, binary.BigEndian, &a.MAPDUSessionInformation.Octet); err != nil {
+			return
+		}
+	}
+	if a.ReleaseAssistanceIndication != nil {
+		if err := binary.Write(buffer, binary.BigEndian, &a.ReleaseAssistanceIndication.Octet); err != nil {
+			return
+		}
+	}
+	if a.Non3GPPAccessPathSwitchingIndication != nil {
+		if err := binary.Write(buffer, binary.BigEndian, a.Non3GPPAccessPathSwitchingIndication.GetIei()); err != nil {
+			return
+		}
+		if err := binary.Write(buffer, binary.BigEndian, a.Non3GPPAccessPathSwitchingIndication.GetLen()); err != nil {
+			return
+		}
+		if err := binary.Write(buffer, binary.BigEndian, &a.Non3GPPAccessPathSwitchingIndication.Octet); err != nil {
+			return
+		}
+	}
+	if a.AlternativeSNSSAI != nil {
+		if err := binary.Write(buffer, binary.BigEndian, a.AlternativeSNSSAI.GetIei()); err != nil {
+			return
+		}
+		if err := binary.Write(buffer, binary.BigEndian, a.AlternativeSNSSAI.GetLen()); err != nil {
+			return
+		}
+		if err := binary.Write(buffer, binary.BigEndian, a.AlternativeSNSSAI.Octet[:a.AlternativeSNSSAI.GetLen()]); err != nil {
+			return
+		}
+	}
+	if a.PayloadContainerInformation != nil {
+		if err := binary.Write(buffer, binary.BigEndian, &a.PayloadContainerInformation.Octet); err != nil {
+			return
+		}
 	}
 }
 
 func (a *ULNASTransport) DecodeULNASTransport(byteArray *[]byte) {
 	buffer := bytes.NewBuffer(*byteArray)
-	binary.Read(buffer, binary.BigEndian, &a.ExtendedProtocolDiscriminator.Octet)
-	binary.Read(buffer, binary.BigEndian, &a.SpareHalfOctetAndSecurityHeaderType.Octet)
-	binary.Read(buffer, binary.BigEndian, &a.ULNASTRANSPORTMessageIdentity.Octet)
-	binary.Read(buffer, binary.BigEndian, &a.SpareHalfOctetAndPayloadContainerType.Octet)
-	binary.Read(buffer, binary.BigEndian, &a.PayloadContainer.Len)
+	if err := binary.Read(buffer, binary.BigEndian, &a.ExtendedProtocolDiscriminator.Octet); err != nil {
+		return
+	}
+	if err := binary.Read(buffer, binary.BigEndian, &a.SpareHalfOctetAndSecurityHeaderType.Octet); err != nil {
+		return
+	}
+	if err := binary.Read(buffer, binary.BigEndian, &a.ULNASTRANSPORTMessageIdentity.Octet); err != nil {
+		return
+	}
+	if err := binary.Read(buffer, binary.BigEndian, &a.SpareHalfOctetAndPayloadContainerType.Octet); err != nil {
+		return
+	}
+	if err := binary.Read(buffer, binary.BigEndian, &a.PayloadContainer.Len); err != nil {
+		return
+	}
 	a.PayloadContainer.SetLen(a.PayloadContainer.GetLen())
-	binary.Read(buffer, binary.BigEndian, &a.PayloadContainer.Buffer)
+	if err := binary.Read(buffer, binary.BigEndian, &a.PayloadContainer.Buffer); err != nil {
+		return
+	}
 	for buffer.Len() > 0 {
 		var ieiN uint8
 		var tmpIeiN uint8
-		binary.Read(buffer, binary.BigEndian, &ieiN)
+		if err := binary.Read(buffer, binary.BigEndian, &ieiN); err != nil {
+			return
+		}
 		if ieiN >= 0x80 {
 			tmpIeiN = (ieiN & 0xf0) >> 4
 		} else {
@@ -96,28 +196,71 @@ func (a *ULNASTransport) DecodeULNASTransport(byteArray *[]byte) {
 		switch tmpIeiN {
 		case ULNASTransportPduSessionID2ValueType:
 			a.PduSessionID2Value = nasType.NewPduSessionID2Value(ieiN)
-			binary.Read(buffer, binary.BigEndian, &a.PduSessionID2Value.Octet)
+			if err := binary.Read(buffer, binary.BigEndian, &a.PduSessionID2Value.Octet); err != nil {
+				return
+			}
 		case ULNASTransportOldPDUSessionIDType:
 			a.OldPDUSessionID = nasType.NewOldPDUSessionID(ieiN)
-			binary.Read(buffer, binary.BigEndian, &a.OldPDUSessionID.Octet)
+			if err := binary.Read(buffer, binary.BigEndian, &a.OldPDUSessionID.Octet); err != nil {
+				return
+			}
 		case ULNASTransportRequestTypeType:
 			a.RequestType = nasType.NewRequestType(ieiN)
 			a.RequestType.Octet = ieiN
 		case ULNASTransportSNSSAIType:
 			a.SNSSAI = nasType.NewSNSSAI(ieiN)
-			binary.Read(buffer, binary.BigEndian, &a.SNSSAI.Len)
+			if err := binary.Read(buffer, binary.BigEndian, &a.SNSSAI.Len); err != nil {
+				return
+			}
 			a.SNSSAI.SetLen(a.SNSSAI.GetLen())
-			binary.Read(buffer, binary.BigEndian, a.SNSSAI.Octet[:a.SNSSAI.GetLen()])
+			if err := binary.Read(buffer, binary.BigEndian, a.SNSSAI.Octet[:a.SNSSAI.GetLen()]); err != nil {
+				return
+			}
 		case ULNASTransportDNNType:
 			a.DNN = nasType.NewDNN(ieiN)
-			binary.Read(buffer, binary.BigEndian, &a.DNN.Len)
+			if err := binary.Read(buffer, binary.BigEndian, &a.DNN.Len); err != nil {
+				return
+			}
 			a.DNN.SetLen(a.DNN.GetLen())
-			binary.Read(buffer, binary.BigEndian, a.DNN.Buffer[:a.DNN.GetLen()])
+			if err := binary.Read(buffer, binary.BigEndian, a.DNN.Buffer[:a.DNN.GetLen()]); err != nil {
+				return
+			}
 		case ULNASTransportAdditionalInformationType:
 			a.AdditionalInformation = nasType.NewAdditionalInformation(ieiN)
-			binary.Read(buffer, binary.BigEndian, &a.AdditionalInformation.Len)
+			if err := binary.Read(buffer, binary.BigEndian, &a.AdditionalInformation.Len); err != nil {
+				return
+			}
 			a.AdditionalInformation.SetLen(a.AdditionalInformation.GetLen())
-			binary.Read(buffer, binary.BigEndian, a.AdditionalInformation.Buffer[:a.AdditionalInformation.GetLen()])
+			if err := binary.Read(buffer, binary.BigEndian, a.AdditionalInformation.Buffer[:a.AdditionalInformation.GetLen()]); err != nil {
+				return
+			}
+		case ULNASTransportMAPDUSessionInformationType:
+			a.MAPDUSessionInformation = nasType.NewMAPDUSessionInformation(ieiN)
+			a.MAPDUSessionInformation.Octet = ieiN
+		case ULNASTransportReleaseAssistanceIndicationType:
+			a.ReleaseAssistanceIndication = nasType.NewReleaseAssistanceIndication(ieiN)
+			a.ReleaseAssistanceIndication.Octet = ieiN
+		case ULNASTransportNon3GPPAccessPathSwitchingIndicationType:
+			a.Non3GPPAccessPathSwitchingIndication = nasType.NewNon3GPPAccessPathSwitchingIndication(ieiN)
+			if err := binary.Read(buffer, binary.BigEndian, &a.Non3GPPAccessPathSwitchingIndication.Len); err != nil {
+				return
+			}
+			a.Non3GPPAccessPathSwitchingIndication.SetLen(a.Non3GPPAccessPathSwitchingIndication.GetLen())
+			if err := binary.Read(buffer, binary.BigEndian, &a.Non3GPPAccessPathSwitchingIndication.Octet); err != nil {
+				return
+			}
+		case ULNASTransportAlternativeSNSSAIType:
+			a.AlternativeSNSSAI = nasType.NewSNSSAI(ieiN)
+			if err := binary.Read(buffer, binary.BigEndian, &a.AlternativeSNSSAI.Len); err != nil {
+				return
+			}
+			a.AlternativeSNSSAI.SetLen(a.AlternativeSNSSAI.GetLen())
+			if err := binary.Read(buffer, binary.BigEndian, a.AlternativeSNSSAI.Octet[:a.AlternativeSNSSAI.GetLen()]); err != nil {
+				return
+			}
+		case ULNASTransportPayloadContainerInformationType:
+			a.PayloadContainerInformation = nasType.NewPayloadContainerInformation(ieiN)
+			a.PayloadContainerInformation.Octet = ieiN
 		default:
 		}
 	}

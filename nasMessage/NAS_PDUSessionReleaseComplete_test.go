@@ -10,10 +10,9 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/5GC-DEV/nas-cdac/logger"
-	"github.com/5GC-DEV/nas-cdac/nasMessage"
-	"github.com/5GC-DEV/nas-cdac/nasType"
-	"github.com/stretchr/testify/assert"
+	"github.com/5GC-DEV/nas-cdac/v2/logger"
+	"github.com/5GC-DEV/nas-cdac/v2/nasMessage"
+	"github.com/5GC-DEV/nas-cdac/v2/nasType"
 )
 
 type nasMessagePDUSessionReleaseCompleteData struct {
@@ -45,7 +44,9 @@ var nasMessagePDUSessionReleaseCompleteTable = []nasMessagePDUSessionReleaseComp
 
 func TestNasTypeNewPDUSessionReleaseComplete(t *testing.T) {
 	a := nasMessage.NewPDUSessionReleaseComplete(0)
-	assert.NotNil(t, a)
+	if a == nil {
+		t.Fatal("Expected value not to be nil")
+	}
 }
 
 func TestNasTypeNewPDUSessionReleaseCompleteMessage(t *testing.T) {
@@ -53,13 +54,17 @@ func TestNasTypeNewPDUSessionReleaseCompleteMessage(t *testing.T) {
 		t.Logf("Test Cnt:%d", i)
 		a := nasMessage.NewPDUSessionReleaseComplete(0)
 		b := nasMessage.NewPDUSessionReleaseComplete(0)
-		assert.NotNil(t, a)
-		assert.NotNil(t, b)
+		if a == nil {
+			t.Fatal("Expected value not to be nil")
+		}
+		if b == nil {
+			t.Fatal("Expected value not to be nil")
+		}
 
-		a.ExtendedProtocolDiscriminator.SetExtendedProtocolDiscriminator(table.inExtendedProtocolDiscriminator)
-		a.PDUSessionID.SetPDUSessionID(table.inPDUSessionID)
-		a.PTI.SetPTI(table.inPTI)
-		a.PDUSESSIONRELEASECOMPLETEMessageIdentity.SetMessageType(table.inPDUSESSIONRELEASECOMPLETEMessageIdentity)
+		a.SetExtendedProtocolDiscriminator(table.inExtendedProtocolDiscriminator)
+		a.SetPDUSessionID(table.inPDUSessionID)
+		a.SetPTI(table.inPTI)
+		a.SetMessageType(table.inPDUSESSIONRELEASECOMPLETEMessageIdentity)
 
 		a.Cause5GSM = nasType.NewCause5GSM(nasMessage.PDUSessionReleaseCompleteCause5GSMType)
 		a.Cause5GSM = &table.inCause5GSM
@@ -72,13 +77,14 @@ func TestNasTypeNewPDUSessionReleaseCompleteMessage(t *testing.T) {
 		logger.NasMsgLog.Debugln("Encode: ", a)
 
 		data := make([]byte, buff.Len())
-		buff.Read(data)
+		if _, err := buff.Read(data); err != nil {
+			t.Fatal(err)
+		}
 		logger.NasMsgLog.Debugln(data)
 		b.DecodePDUSessionReleaseComplete(&data)
 		logger.NasMsgLog.Debugln("Decode: ", b)
 		if reflect.DeepEqual(a, b) != true {
 			t.Errorf("Not correct")
 		}
-
 	}
 }
